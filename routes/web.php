@@ -40,3 +40,8 @@ Route::get('/registeration', [
         'uses' => 'Frontend\UserController@userregister',
         'as'   => 'registeration'
         ]);
+
+Route::get('/DoctorPanel', [
+        'uses' => 'Frontend\UserController@doctorpanel',
+        'as'   => 'doctor-panel'
+        ]);

@@ -25,10 +25,15 @@
 	<link href="{{ asset('css/menu.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/vendors.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/icon_fonts/css/all_icons_min.css') }}" rel="stylesheet">
-    
+     <link href="{{ asset('css/date_picker.css') }}" rel="stylesheet">
 	<!-- YOUR CUSTOM CSS -->
+        <link href="{{ asset('css/icon_fonts/css/all_icons_min.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-	
+        <link href="{{ asset('css/icon_fonts/css/all_icons_min.css') }}" rel="stylesheet">
+   
+    <!-- SPECIFIC CSS -->
+    <link href="css/blog.css" rel="stylesheet">
+    
 	<!-- Modernizr -->
 	<script src="{{ asset('js/modernizr.js') }}"></script>
 
@@ -60,11 +65,14 @@
 					</ul>
 					<div class="main-menu">
 						<ul>
+                                                    <li>
+								<a href="DoctorPanel">Doctor Panel</a>
+							</li>
 							<li>
 								<a href="appointments">Appointment</a>
 							</li>
 							<li>
-								<a href="register">Register</a>
+								<a href="registeration">Register</a>
 							</li>
 							<li>
 								<a href="appointment-detail" >Appointment Details</a>

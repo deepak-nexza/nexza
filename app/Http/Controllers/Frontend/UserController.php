@@ -57,6 +57,12 @@ class UserController extends Controller
         return view('frontend.registeration');
 
     }
+          public function doctorpanel()
+
+    {
+        return view('frontend.doctorpanel');
+
+    }
 
     /**
 
