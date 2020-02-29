@@ -37,7 +37,7 @@
 								</h5>
 							</div>
 
-							<div id="collapseOne_payment" class="collapse show" role="tabpanel" data-parent="#payment">
+							<div id="collapseOne_payment" class="collapse" role="tabpanel" data-parent="#payment">
 								<div class="card-body">
                                                                     <div class="container">
 			<div class="row">
@@ -141,26 +141,102 @@
 								</h5>
 							</div>
 
-							<div id="collapseOne_specification" class="collapse show" role="tabpanel" data-parent="#specification">
+							<div id="collapseOne_specification" class="collapse" role="tabpanel" data-parent="#specification">
 								<div class="card-body">
                                                                     <div class="container">
-			<div class="row">
-				<div class=" col-lg-12">
-				<div class="box_general_3 cart">
-					<div class="form_title">
-						<h3><strong><i class="indicator icon_minus_alt2"></i></strong>Your Details</h3>
-						<p>
-							Mussum ipsum cacilds, vidis litro abertis.
-						</p>
-					</div>
+                                                        <div class="row">
+                                                                <div class=" col-lg-12">
+                                                                <div class="box_general_3 cart">
+                                                                        <div class="form_title">
+                                                                                <h3><strong><i class="indicator icon_minus_alt2"></i></strong>Your Details</h3>
+                                                                                <p>
+                                                                                        Mussum ipsum cacilds, vidis litro abertis.
+                                                                                </p>
+                                                                        </div>
 					<div class="step">
 						<div class="row">
 							<div class="col-md-9 col-sm-9">
+                                                            <div class="form-group">
+							<label>About Professional Specification</label>
+							<textarea class="form-control" style="height: 130px;" placeholder="Write your review here ..."></textarea>
+						</div>
 								<div class="form-group">
 									<label>Specification</label>
                                                                         <input type="text" class="form-control" id="firstname_booking" name="firstname_booking" placeholder="Jhon"><br>
                                                                         <span class="btn_1"><strong>Add More</strong></span>
 								</div>
+							</div>
+						</div>
+                                            <!--End step -->
+					</div>
+					<hr>
+                                         <div class="row">
+                                            <input class="btn_1" type="submit" value="Submit">
+                                            </div>
+					<!--End step -->
+				</div>
+				</div>
+				<!-- /col -->
+                                    
+			</div>
+                                                                        
+			<!-- /row -->
+		</div>  
+								</div>
+							</div>
+						</div>
+						<!-- /card -->
+						<!-- /card -->
+						<!-- /card -->
+					</div>
+                                    <div role="tablist" class="add_bottom_45 accordion" id="price">
+						<div class="card">
+							<div class="card-header" role="tab">
+								<h5 class="mb-0">
+									<a data-toggle="collapse" href="#collapseOne_price" aria-expanded="true"><i class="indicator icon_minus_alt2"></i>Payment & Price </a>
+								</h5>
+							</div>
+
+							<div id="collapseOne_price" class="collapse" role="tabpanel" data-parent="#price">
+								<div class="card-body">
+                                                                    <div class="container">
+                                                        <div class="row">
+                                                                <div class=" col-lg-12">
+                                                                <div class="box_general_3 cart">
+                                                                        <div class="form_title">
+                                                                                <h3><strong><i class="indicator icon_minus_alt2"></i></strong>Your Details</h3>
+                                                                                <p>
+                                                                                        Mussum ipsum cacilds, vidis litro abertis.
+                                                                                </p>
+                                                                        </div>
+					<div class="step">
+						<div class="row">
+							<div class="col-md-9 col-sm-9">
+                                                            <div class="row">
+                                                                <div class="col-md-9 col-sm-9">
+                                                                     <div class="form-group">
+							<label>Payment for services</label>
+							<textarea class="form-control" style="height: 130px;" placeholder="Write your review here ..."></textarea>
+						</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-6 col-sm-6">
+                                                                    <div class="form-group">
+                                                                        <input type="text" class="form-control" id="firstname_booking" name="firstname_booking" placeholder="Service.....">
+                                                                        
+								    </div>
+                                                                    
+                                                                </div>
+                                                                <div class="col-md-3 col-sm-3">
+                                                                    
+                                                                    <input type="text" class="form-control" id="" name="price" placeholder="Price..."><br><aspan class="btn_1"><strong>Add</strong></span>
+                                                                    
+                                                                        
+                                                                </div>
+                                                            </div>
+                                                           
+								
 							</div>
 						</div>
                                             <!--End step -->
