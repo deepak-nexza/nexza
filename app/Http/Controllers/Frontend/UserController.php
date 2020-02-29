@@ -34,13 +34,29 @@ class UserController extends Controller
     public function index()
 
     {
-        dd(123);
-        $users = $this->user->getAll();
+//        dd(123);
+//        $users = $this->user->getAll();
 
-        return view('users.index',['users']);
+        return view('dashboard');
 
     }
 
+      public function appointments()
+
+    {
+//        dd(123);
+//        $users = $this->user->getAll();
+
+        return view('frontend.appointment');
+
+    }
+    
+          public function userregister()
+
+    {
+        return view('frontend.registeration');
+
+    }
 
     /**
 

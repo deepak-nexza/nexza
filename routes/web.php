@@ -30,3 +30,13 @@ Route::get('/dashboard', [
         'uses' => 'Frontend\UserController@index',
         'as'   => 'dashboard'
         ]);
+
+    Route::get('/appointments', [
+        'uses' => 'Frontend\UserController@appointments',
+        'as'   => 'appointment'
+        ]);
+
+Route::get('/registeration', [
+        'uses' => 'Frontend\UserController@userregister',
+        'as'   => 'registeration'
+        ]);
