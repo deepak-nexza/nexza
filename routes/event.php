@@ -14,6 +14,7 @@ Route::group(
         Route::group( 
             [ 'middleware' => ['auth']], function() { 
         Route::get('/myaccount',['as'=> 'myaccount','uses'=>'Event\Frontend\EventController@myaccount']);
+        Route::get('/create-event',['as'=> 'create_event','uses'=>'Event\Frontend\EventController@createEvent']);
 });
 });
     

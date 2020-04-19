@@ -284,19 +284,17 @@
 <script src="{{ asset('event/js/wow.js') }}"></script>
 <script src="{{ asset('event/js/script.js') }}"></script>
 
-
-    <script src="{{ asset('eventAdmin/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/plugins/fastclick/fastclick.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/dist/js/app.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
-    <script src="{{ asset('eventAdmin/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/plugins/chartjs/Chart.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/dist/js/pages/dashboard2.js') }}"></script>
-    <script src="{{ asset('eventAdmin/dist/js/demo.js') }}"></script>
-    
+     <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+         $(function () {
+                $('#datetimepicker').datetimepicker();
+            });
+    </script>
 <!-- Color Setting -->
 <script src="jcolor-settings.js"></script>
 </body>

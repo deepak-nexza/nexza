@@ -25,4 +25,14 @@ class EventController extends Controller
         return view('eventfrontend.dashboard');
     }
     
+     /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function createEvent()
+    {
+        return view('eventbackend.create_event');
+    }
+    
 }
