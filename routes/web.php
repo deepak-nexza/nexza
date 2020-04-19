@@ -14,16 +14,6 @@ Route::get('/', function () {
     return view('eventfrontend.index');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/dashboard', [
@@ -46,34 +36,13 @@ Route::get('/DoctorPanel', [
         'as'   => 'doctor-panel'
         ]);
 
-Auth::routes();
+
+Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+Route::get('/logut', 'Auth\LoginController@logout')->name('logout');
+
+Route::post('/register', 'Auth\RegisterController@register')->name('register');
+
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

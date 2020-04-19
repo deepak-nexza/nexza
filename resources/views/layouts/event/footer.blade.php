@@ -225,25 +225,34 @@
 
             <!--Body-->
             <div class="modal-body">
+             <form method="POST" action="{{ route('register') }}">
+                @csrf
               <div class="md-form form-sm mb-5">
-                <input type="email" id="modalLRInput12" class="form-control form-control-sm validate">
+                <input type="name" id="modalLRInput12" name ="name" class="form-control form-control-sm validate">
+                <label data-error="wrong" data-success="right" for="modalLRInput12">Your Name</label>
+              </div>
+                
+              <div class="md-form form-sm mb-5">
+                <input type="email" id="modalLRInput12" name ="email" class="form-control form-control-sm validate">
                 <label data-error="wrong" data-success="right" for="modalLRInput12">Your email</label>
               </div>
 
               <div class="md-form form-sm mb-5">
-                <input type="password" id="modalLRInput13" class="form-control form-control-sm validate">
-                <label data-error="wrong" data-success="right" for="modalLRInput13">Your password</label>
+                <input type="password" id="modalLRInput13" name="password" class="form-control form-control-sm validate">
+                <label data-error="wrong" data-success="right"  for="modalLRInput13">Your password</label>
               </div>
 
               <div class="md-form form-sm mb-4">
-                <input type="password" id="modalLRInput14" class="form-control form-control-sm validate">
-                <label data-error="wrong" data-success="right" for="modalLRInput14">Repeat password</label>
+                <input type="password" id="modalLRInput14" name="password-confirmation" class="form-control form-control-sm validate">
+                <label data-error="wrong" data-success="right"  for="modalLRInput14">Repeat password</label>
               </div>
 
-              <div class="text-center form-sm mt-2">
-               <a href="#" class="reply-btn theme-btn btn-style-one"><span class="btn-title">Sign Up</span></a>
+              <div class="text-center">
+                   <button type="submit" class="theme-btn">
+                                    {{ __('Register') }}
+                                </button>
               </div>
-
+             </form>
             </div>
             <!--Footer-->
             <div class="modal-footer">
@@ -264,19 +273,32 @@
 <!--Modal: Login / Register Form-->
 <!--Scroll to top-->
 <div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-angle-double-up"></span></div>
-<script src="event/js/jquery.js"></script>
-<script src="event/js/popper.min.js"></script>
-<script src="event/js/bootstrap.min.js"></script>
-<script src="event/js/jquery-ui.js"></script>
-<script src="event/js/jquery.fancybox.js"></script>
-<script src="event/js/appear.js"></script>
-<script src="event/js/owl.js"></script>
-<script src="event/js/jquery.countdown.js"></script>
-<script src="event/js/wow.js"></script>
-<script src="event/js/script.js"></script>
+<script src="{{ asset('event/js/jquery.js') }}"></script>
+<script src="{{ asset('event/js/popper.min.js') }}"></script>
+<script src="{{ asset('event/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('event/js/jquery-ui.js') }}"></script>
+<script src="{{ asset('event/js/jquery.fancybox.js') }}"></script>
+<script src="{{ asset('event/js/appear.js') }}"></script>
+<script src="{{ asset('event/js/owl.js') }}"></script>
+<script src="{{ asset('event/js/jquery.countdown.js') }}"></script>
+<script src="{{ asset('event/js/wow.js') }}"></script>
+<script src="{{ asset('event/js/script.js') }}"></script>
+
+
+    <script src="{{ asset('eventAdmin/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/fastclick/fastclick.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/dist/js/app.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/chartjs/Chart.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/dist/js/pages/dashboard2.js') }}"></script>
+    <script src="{{ asset('eventAdmin/dist/js/demo.js') }}"></script>
+    
 <!-- Color Setting -->
 <script src="jcolor-settings.js"></script>
 </body>
 
-<!-- Mirrored from expert-themes.com/html/eventrox/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Nov 2019 13:10:45 GMT -->
 </html>

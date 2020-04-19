@@ -38,6 +38,8 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapApiRoutes();
 
         $this->mapWebRoutes();
+        
+        $this->mapEventRoutes();
 
         //
     }
@@ -83,6 +85,20 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/application.php'));
+    }
+    
+     /**
+     * Define the "Access" routes for the application.
+     *
+     * These routes are related to guest session.
+     *
+     * @return void
+     */
+    protected function mapEventRoutes()
+    {
+        Route::prefix('event')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/event.php'));
     }
     
 }

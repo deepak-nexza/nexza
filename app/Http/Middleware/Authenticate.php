@@ -1,21 +1,91 @@
 <?php
-
 namespace App\Http\Middleware;
 
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Auth;
+use Closure;
+use Request;
+use Session;
+use Redirect;
+use App\B2c\Repositories\Libraries\CmLogger;
+use Illuminate\Contracts\Auth\Guard;
 
-class Authenticate extends Middleware
+class Authenticate
 {
     /**
-     * Get the path the user should be redirected to when they are not authenticated.
+     * The Guard implementation.
+     *
+     * @var Guard
+     */
+    protected $auth;
+
+    /**
+     * Route name excludes from redirection
+     *
+     * @var array
+     */
+    protected $excluded_routes = [
+        'backend_logout',
+        'login_password_reset',
+        'login_password_update',
+        'otp_authentication',
+        'get_city_state_by_postcode',
+        'get_state_postcode_by_city',
+        'auth_session_check',
+        'view_subdiv_industry',
+        'view_industry_group',
+        'view_industry_class',
+        'apply_promo_code',
+        'customer_document_doc_delete',
+        'customer_document_doc_download',
+        'customer_save_application',
+    ];
+
+    /**
+     * Create a new filter instance.
+     *
+     * @param  Guard  $auth
+     * @return void
+     */
+    public function __construct(Guard $auth)
+    {
+        $this->auth = $auth;
+    }
+
+    /**
+     * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return string
+     * @param  \Closure  $next
+     * @return mixed
      */
-    protected function redirectTo($request)
-    {
-        if (! $request->expectsJson()) {
-            return route('login');
+    public function handle($request, Closure $next)
+    {   
+        $route = $request->route()->getName();
+        if (!in_array($route, $this->excluded_routes) && $this->auth->guest()) {
+            if ($request->ajax()) {
+                return response('Unauthorized.', 401);
+            } else {
+                return redirect()->guest('/');
+            }
         }
+        // Add our Case Manager Activity tracking here
+        $domain = $request->server('HTTP_HOST');
+//        if(isset(\Auth::user()->block_status) && \Auth::user()->block_status == 1)
+//        {
+//            \Auth::logout();
+//            return redirect()->route('login');
+//        }
+
+        return $next($request);
+    }
+
+    /**
+     * Returns whether a use is required to update his/her password
+     *
+     * @return boolean
+     */
+    protected function passwordResetOnFirstLogin()
+    {
+        return (Auth::user()->is_password_set_onlogin === null);
     }
 }

@@ -6507,6 +6507,11 @@ img{
 ====================================================================
 
 ***/
+.adminwrapper {
+    position: relative;
+    padding: 60px 0 0px;
+    overflow: hidden;
+}
 
 .news-section{
 	position: relative;

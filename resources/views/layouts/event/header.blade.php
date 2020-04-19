@@ -6,16 +6,18 @@
 <meta charset="utf-8">
 <title>EventZ</title>
 <!-- Stylesheets -->
-<link href="event/css/bootstrap.css" rel="stylesheet">
-<link href="event/css/style.css" rel="stylesheet">
-<link href="event/css/responsive.css" rel="stylesheet">
+<link href="{{ asset('event/css/bootstrap.css') }}" rel="stylesheet">
+<link href="{{ asset('event/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('event/css/responsive.css') }}" rel="stylesheet">
 <!--Color Switcher Mockup-->
-<link href="event/css/color-switcher-design.css" rel="stylesheet">
-
+<link href="{{ asset('event/css/color-switcher-design.css') }}" rel="stylesheet">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- DataTables -->
 <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
 <link rel="icon" href="images/favicon.png" type="image/x-icon">
-
-<!-- Responsive -->
+@yield('cssData')   
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
@@ -71,7 +73,7 @@
                                 </li>
                               
                                 <li><a href="contact.php">Contact</a></li>
-                                
+                                  <!-- Authentication Links -->
                             </ul>
                         </div>
                     </nav>
@@ -83,11 +85,18 @@
                         <div class="search-box-outer">
                             <div class="search-box-btn"><span class="flaticon-search"></span></div>
                         </div>
-
-                        <!-- Button Box -->
+                        @if (Auth::guest())
                         <div class="btn-box">
                             <a href="" class="theme-btn btn-style-one" data-toggle="modal" data-target="#modalLRForm"><span class="btn-title">Create Event</span></a>
                         </div>
+                        @else
+                             <!-- Button Box -->
+                        <div class="btn-box">
+                            <a href="" class="theme-btn btn-style-one" ><span class="btn-title">My Account</span></a>
+                            <a href="{{ route('logout') }}" class="theme-btn btn-style-one" ><span class="btn-title">Logout</span></a>
+                        </div>
+                        @endif 
+                       
                     </div>
                 </div>
             </div>
@@ -109,8 +118,9 @@
     <!--End Main Header -->
     
     
-    
-    
+    @section('cssData')
+<link rel="stylesheet" href="{{ asset('eventAdmin//dist/css/AdminLTE.min.css') }}">
+@endsection
     
     
     
