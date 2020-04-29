@@ -40,6 +40,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
         
         $this->mapEventRoutes();
+        $this->mapAjaxRoutes();
 
         //
     }
@@ -99,6 +100,20 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('event')
              ->namespace($this->namespace)
              ->group(base_path('routes/event.php'));
+    }
+    
+     /**
+     * Define the "Access" routes for the application.
+     *
+     * These routes are related to guest session.
+     *
+     * @return void
+     */
+    protected function mapAjaxRoutes()
+    {
+        Route::prefix('ajax')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/ajax.php'));
     }
     
 }

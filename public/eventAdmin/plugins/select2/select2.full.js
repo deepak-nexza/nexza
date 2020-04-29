@@ -1380,6 +1380,7 @@ S2.define('select2/selection/base',[
         var $this = $(this);
 
         if (this == $select[0]) {
+            alert($select[0]);
           return;
         }
 
