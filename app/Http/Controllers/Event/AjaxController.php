@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Event;
 
 use Illuminate\Http\Request;
 use Session;
+use Auth;
 use App\Http\Controllers\Controller;
 use App\Repositories\Event\EventInterface as EventInterface;
 class AjaxController extends Controller
@@ -43,6 +44,18 @@ class AjaxController extends Controller
     {
         $state_id = (int) $request->get('state_id');
         $data = $this->event->stateDetails($state_id);
+        return $data;
+    }
+    
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getTicketList(Request $request)
+    {
+        $event_id = (int) $request->get('event_uid');
+        $data = $this->event->getEventListWithUid($event_id,(int) Auth::id());
         return $data;
     }
 }

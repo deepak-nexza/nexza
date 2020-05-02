@@ -6,7 +6,7 @@ use App\Repositories\Factory\Models\BaseModel;
 use App\Repositories\Entities\User\Exceptions\BlankDataExceptions;
 use App\Repositories\Entities\User\Exceptions\InvalidDataTypeExceptions;
 
-class Venue extends BaseModel
+class Ticket extends BaseModel
 {
 
     /**
@@ -14,14 +14,14 @@ class Venue extends BaseModel
      *
      * @var string
      */
-    protected $table = 'nex_venue';
+    protected $table = 'nex_event_ticket';
 
     /**
      * Custom primary key is set for the table
      *
      * @var integer
      */
-    protected $primaryKey = 'event_id';
+    protected $primaryKey = 'ticket_id';
 
     /**
      * Maintain created_at and updated_at automatically
@@ -42,35 +42,7 @@ class Venue extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [ 'event_id','user_id',
-            'category_id',
-            'event_type', 
-            'event_name', 
-            'event_uid',
-            'description', 
-            'banner_image',
-            'country_id',
-            'state_id',
-            'phone',
-            'booking_amt', 
-            'event_location', 
-            'booking_space', 
-            'start_date',
-            'end_date', 
-            'event_duration',
-            'event_privacy', 
-            'facebook', 
-            'twitter', 
-            'google', 
-            'created_at',
-            'updated_at', 
-            'created_by', 
-            'updated_by', 
-            'total_views', 
-            'total_reviews', 
-            'status', 
-            'terms',
-            'is_active'
+    protected $fillable = [ 'ticket_id', 'event_id', 'user_id', 'title', 'amt_per_person', 'type', 'ticket_duration', 'booking_space', 'start_date', 'end_date', 'message', 'nexza_amt', 'gatway_amt', 'nexza_per', 'gateway_per', 'customer_total', 'tnc', 'is_active', 'created_at', 'updated_at', 'updated_by', 'created_by'
             ];
 
     /**
@@ -92,13 +64,13 @@ class Venue extends BaseModel
      * @throws InvalidDataTypeExceptions
      * 
      */
-    public static function saveEvent($arrData,$id = null) 
+    public static function saveEventTicket($arrData,$id = null) 
         {  
             //Check Data is Array
             if (!is_array($arrData)) {
                 throw new InvalidDataTypeExceptions(trans('error_message.send_array'));
             }
-            $query = self::updateOrCreate(['event_id' => (int) $id], $arrData);
+            $query = self::updateOrCreate(['ticket_id' => (int) $id], $arrData);
             return $query ? $query : '';
 
         }
@@ -230,23 +202,24 @@ class Venue extends BaseModel
      *
      * @since 0.1
      */
-    public static function getEventDetails($id)
+    public static function getEventListWithUid($event_id=null,$user_id=null)
     {   
-        $returnData = self::select('*')->where('event_uid', $id)->first();
-        return $returnData;
-    }
-    
-    /**
-     * Get All state data
-     *
-     * @return list
-     */
-    public static function getAllStateData()
-    {
-       $result =  self::select('id', 'state_name')
-                ->where('is_active', config('b2c_common.ACTIVE'))
-                ->pluck('state_name', 'id');
-        return ($result ? : false);
+        
+
+         $result =  self::select('nex_event_ticket.*','v.event_uid','v.event_id','v.event_name')
+                    ->leftJoin('nex_venue as v', 'v.event_id', '=', 'nex_event_ticket.event_id')
+                    ->where('v.status', 1)
+                        ->where(function($query) use ($event_id) {
+                            if(!empty($event_id)){
+                              $query->where('v.event_id', $event_id);
+                            }
+                          })
+                    ->where(function($query) use ($user_id) {
+                        if(!empty($user_id)){
+                        $query->where('v.user_id', $user_id);
+                        }
+                      })->get();
+         return ($result ? : false);
     }
     
     /**
@@ -258,8 +231,12 @@ class Venue extends BaseModel
      *
      * @since 0.1
      */
-    public static function getStateData($state_id){
-        $returnData = self::select('state_name')->where('id', $state_id)->first();
-        return $returnData ? $returnData['state_name'] :false;
+    public static function getTicketDetails($arrTr=[]){
+        $returnData =  self::select('nex_event_ticket.*','v.event_uid','v.event_id','v.event_name')
+                    ->leftJoin('nex_venue as v', 'v.event_id', '=', 'nex_event_ticket.event_id')
+                    ->where('v.status', 1)
+                    ->where('nex_event_ticket.ticket_id', $arrTr['ticket_id'])
+                    ->where('nex_event_ticket.user_id', $arrTr['user_id'])->first();
+        return $returnData ? $returnData :false;
     }
 }

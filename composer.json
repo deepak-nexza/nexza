@@ -36,7 +36,9 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "Nexza\\Core\\": "Packages/Nexza/Core/src/"
+            "Nexza\\Core\\": "Packages/Nexza/Core/src/",
+            "Nexza\\Html\\": "Packages/Nexza/Html/src/",
+            "Nexza\\Otp\\": "Packages/Nexza/Otp/src/"
         },
         "classmap": [
             "database/seeds",

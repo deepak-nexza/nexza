@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/xampp-7.3/htdocs/nexza/public/js/eventbackend/event_ticket.js</file>
             <file>file:/D:/xampp-7.3/htdocs/nexza/bootstrap/app.php</file>
             <file>file:/D:/xampp-7.3/htdocs/nexza/.env</file>
             <file>file:/D:/xampp-7.3/htdocs/nexza/composer.json</file>
-            <file>file:/D:/xampp-7.3/htdocs/nexza/package/Nexza/Core/src/Support/DomainMasking.php</file>
             <file>file:/D:/xampp-7.3/htdocs/nexza/resources/views/eventbackend/upcoming_event.blade.php</file>
-            <file>file:/D:/xampp-7.3/htdocs/nexza/package/Nexza/Core/src/Support/UrlParamProtector.php</file>
             <file>file:/D:/xampp-7.3/htdocs/nexza/config/common.php</file>
             <file>file:/D:/xampp-7.3/htdocs/nexza/app/Providers/AppServiceProvider.php</file>
+            <file>file:/D:/xampp-7.3/htdocs/nexza/resources/views/eventbackend/event_ticket.blade.php</file>
+            <file>file:/D:/xampp-7.3/htdocs/nexza/resources/views/eventbackend/create_event.blade.php</file>
+            <file>file:/D:/xampp-7.3/htdocs/nexza/public/js/bootstrap-datepicker.js</file>
             <file>file:/D:/xampp-7.3/htdocs/nexza/bootstrap/cache/config.php</file>
         </group>
     </open-files>

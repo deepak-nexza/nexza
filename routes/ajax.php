@@ -15,6 +15,7 @@ Route::group(
             [ 'middleware' => ['auth']], function() { 
         Route::post('/getstatelist',['as'=> 'statelist','uses'=>'Event\AjaxController@stateList']);
         Route::post('/stateindividual',['as'=> 'stateindividual','uses'=>'Event\AjaxController@stateDetails']);
+        Route::post('/get-event-ticket',['as'=> 'get_event_ticket','uses'=>'Event\AjaxController@getTicketList']);
 });
 });
     

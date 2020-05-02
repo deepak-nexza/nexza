@@ -18,6 +18,8 @@ return [
         '2'=>'Private'],
     'uploadDir'=>'Eventupload',
     'url_encrypted'=>env('URL_ENCRYPTED',false),
+    'nexzoa_per'=>8,
+    'nexzoa_Gateway_fee'=>1.5,
 
    
 ];

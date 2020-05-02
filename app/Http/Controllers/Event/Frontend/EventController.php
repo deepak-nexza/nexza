@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Event\Frontend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest as eventRequest;
+use App\Http\Requests\eventTicketRequest as eventTicketRequest;
 use Session;
 use Helpers;
 use Illuminate\Validation\Validator; 
@@ -64,7 +65,7 @@ class EventController extends Controller
      */
     public function upcomingEvent()
     {
-        $eventList = $this->event->getEventList(false);
+        $eventList = $this->event->getEventList(false,(int) Auth::id());
         return view('eventbackend.upcoming_event',['eventlist'=>$eventList]);
     }
     
@@ -75,7 +76,7 @@ class EventController extends Controller
      */
     public function pastEvent()
     {
-        $eventList = $this->event->getEventList(true);
+        $eventList = $this->event->getEventList(true,(int) Auth::id());
         return view('eventbackend.past_event',['eventlist'=>$eventList]);
     }
     
@@ -86,7 +87,40 @@ class EventController extends Controller
      */
     public function eventTicket()
     {
-        return view('eventbackend.event_ticket');
+        $eventList = $this->event->getEventList(false,(int) Auth::id());
+        return view('eventbackend.event_ticket',['eventlist'=>$eventList]);
+    }
+    
+     /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function updateEventTicket(Request $request)
+    {
+        $user_id = $request->get('user_id');
+        $ticket_id = $request->get('ticket_id');
+        $ticketDetails = $this->event->getTicketDetails(['ticket_id'=>$ticket_id,'user_id'=>$user_id]);
+        $eventList = $this->event->getEventList(false,(int) Auth::id());
+        return view('eventbackend.event_ticket',['eventlist'=>$eventList,'ticketDetails'=>$ticketDetails,'ticket_id'=>$ticket_id]);
+    }
+    
+      /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function eventTicketlist(Request $request)
+    {
+        
+        $ticket_ID = (int) $request->get('ticket_id');     
+        $user_id = (int) $request->get('user_id'); 
+        if(!empty($ticket_ID) && !empty($user_id)){
+            $ticketDetails = $this->event->getTicketDetails(['ticket_id'=>$ticket_ID,'user_id'=>$user_id]);
+        }
+        $ticketDetails = !empty($ticketDetails)?$ticketDetails:null;
+        $eventList = $this->event->getEventList(false,(int) Auth::id());
+        return view('eventbackend.event_ticket_list',['eventlist'=>$eventList,'ticket_id'=>$ticket_ID,'user_id'=>$user_id,'ticketDetails'=>$ticketDetails]);
     }
     
     public function saveEvent(eventRequest $request)
@@ -101,7 +135,7 @@ class EventController extends Controller
         }
         $dateRange = $request->get('event_duration');
         $description = $request->get('description');
-        $geteventRange = explode('-',$dateRange);
+        $geteventRange = preg_split('/[\s][\-][\s]/',$dateRange);
         $eventDesc = Helpers::formatEditorData($description);
         $data = [];
         $data['event_name'] = $request->get('event_name');
@@ -136,7 +170,7 @@ class EventController extends Controller
         $data = [];
         $dateRange = $request->get('event_duration');
         $description = $request->get('description');
-        $geteventRange = explode('-',$dateRange);
+        $geteventRange = preg_split('/[\s][\-][\s]/',$dateRange);
         $eventDesc = Helpers::formatEditorData($description);
         $data['event_name'] = $request->get('event_name');
         $data['event_type'] = $request->get('event_type');
@@ -164,5 +198,42 @@ class EventController extends Controller
                 dd($ex->getMessage());
        }
     }
+    
+    
+    
+    public function saveEventTicket(eventTicketRequest $request)
+    {
+        try{
+        $ticket_id = $request->get('ticket_id');
+        $dateRange = $request->get('booking_duration');
+        $description = $request->get('message');
+        $geteventRange = preg_split('/[\s][\-][\s]/',$dateRange);
+        $eventDesc = Helpers::formatEditorData($description);
+        $data = [];
+        $data['title'] = $request->get('title');
+        $data['event_id'] = $request->get('event_type');
+        $data['type'] = $request->get('type');
+        $data['amt_per_person'] = $request->get('amt_per_person');
+        $data['ticket_duration'] = $dateRange;
+        $data['start_date'] = $geteventRange[0];
+        $data['end_date'] = $geteventRange[1];
+        $data['booking_space'] = $request->get('event_space');
+        $data['message'] = $description;
+        $data['user_id'] = Auth::id();
+        $calAmt = Helpers::calculateMoney((int)$request->get('amt_per_person'));
+        $data['nexza_amt'] = $calAmt['nexza_amt'];
+        $data['gatway_amt'] = $calAmt['gatway_amt'];
+        $data['customer_total'] = $calAmt['customer_total'];
+        $data['nexza_per'] = config('common.nexzoa_per');
+        $data['gateway_per'] = config('common.nexzoa_Gateway_fee');
+        
+        $id = !empty($ticket_id)?$ticket_id:null;
+        $retData = $this->event->saveEventTicket($data,$id);
+        return redirect()->route('list_event_ticket',['ticket_id'=>$id,'user_id'=>Auth::id()]);
+       } catch (\Exception $ex) {
+                dd($ex->getMessage());
+       }
+    }
+    
     
 }

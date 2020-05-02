@@ -177,6 +177,9 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Repositories\Providers\HealthDocServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Nexza\Html\HtmlServiceProvider::class,
+        Nexza\Otp\OtpServiceProvider::class,
+        
     ],
 
     /*
@@ -230,6 +233,7 @@ return [
         'Helpers' => App\Helpers\Helper::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        'Otp' => Nexza\Otp\Facades\Otp::class,
 
     ],
 

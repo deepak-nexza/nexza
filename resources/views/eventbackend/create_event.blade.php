@@ -93,6 +93,7 @@
                     <div class="form-group">
                     <label>Select status</label>
                     <select class="form-control select2 select2-hidden-accessible" id='status' onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option value="">Select Status</option>
                         <option value="1"  {{ ((isset($eventDetail->status) && $eventDetail->status== 1)? "selected":"") }} >Active</option>
                         <option value="0"  {{ ((isset($eventDetail->status) && $eventDetail->status== 0)? "selected":"") }} >InActive</option>
                     </select>

@@ -19,8 +19,11 @@ Route::group(
         Route::get('/upcoming-event',['as'=> 'upcoming_event','uses'=>'Event\Frontend\EventController@upcomingEvent']);
         Route::get('/past-event',['as'=> 'past_event','uses'=>'Event\Frontend\EventController@pastEvent']);
         Route::get('/event-ticket',['as'=> 'event_ticket','uses'=>'Event\Frontend\EventController@eventTicket']);
-        Route::post('/save-event',['as'=> 'save_event','uses'=>'Event\Frontend\EventController@saveEvent']);
         Route::post('/update-event',['as'=> 'update_event','uses'=>'Event\Frontend\EventController@updateEvent']);
+        Route::post('/save-event',['as'=> 'save_event','uses'=>'Event\Frontend\EventController@saveEvent']);
+        Route::post('/save-event-ticket',['as'=> 'save_event_ticket','uses'=>'Event\Frontend\EventController@saveEventTicket']);
+        Route::get('/update-event-ticket',['as'=> 'update_event_ticket','uses'=>'Event\Frontend\EventController@updateEventTicket']);
+        Route::get('/list-event-ticket',['as'=> 'list_event_ticket','uses'=>'Event\Frontend\EventController@eventTicketlist']);
 });
 });
     

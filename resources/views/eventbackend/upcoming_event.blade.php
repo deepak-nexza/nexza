@@ -45,7 +45,7 @@
                       @else
                       <td><span class="label label-success"></span>Private</td>
                       @endif
-                      @if(!empty($val['status']) &&  $val['event_privacy'] == 1)
+                      @if(!empty($val['status']) &&  $val['status'] == 1)
                       <td><span class="label label-success">Active</span></td>
                       @else
                       <td><span class="label label-danger">InActive</span></td>

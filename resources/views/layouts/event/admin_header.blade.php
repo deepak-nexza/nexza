@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('eventAdmin/dist/css/AdminLTE.min.css') }}">
     <link rel="stylesheet" href="{{ asset('eventAdmin/dist/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('eventAdmin/dist/css/skins/_all-skins.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('eventAdmin/plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{{ asset('eventAdmin/plugins/daterangepicker/daterangepicker-bs3.css') }}">
@@ -42,7 +43,9 @@
                      <li class="divider"></li>
                     <li><a href="{{ route('past_event')}}">Past Events</a></li>
                      <li class="divider"></li>
-                    <li><a href="{{ route('event_ticket')}}">Event Ticket</a></li>
+                    <li><a href="{{ route('event_ticket')}}">Create Event Ticket</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{{ route('list_event_ticket')}}">Event Tickets</a></li>
                       </ul>
                 </li>
               </ul>
@@ -50,7 +53,7 @@
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Account<span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Profile Settings</a></li>
+                    <li><a href="{{ route('profile') }}">Profile</a></li>
                      <li class="divider"></li>
                     <li><a href="#">Event Bookings</a></li>
                      <li class="divider"></li>
@@ -188,7 +191,7 @@
                           <a href="#" class="btn btn-default btn-flat">Profile</a>
                         </div>
                         <div class="pull-right">
-                          <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                          <a href="{{ route('logout') }}" class="btn btn-default btn-flat">Sign out</a>
                         </div>
                       </li>
                     </ul>
@@ -218,6 +221,8 @@
 
    <script src="{{ asset('eventAdmin/plugins/jQuery/jQuery-2.1.4.min.js') }} "></script>
     <script src="{{ asset('eventAdmin/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
      <script src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
      <script src="{{ asset('eventAdmin/plugins/daterangepicker/daterangepicker.js') }}"></script>
@@ -226,6 +231,7 @@
     <script src="{{ asset('eventAdmin/plugins/select2/select2.full.min.js') }}"></script>
     @stack('head')
     <script>
+        
     function changeSelect(event){
         
         var select2Value = $(event.target).val();
@@ -237,12 +243,18 @@
           todayHighlight: true,
           autoclose: true,
           });
+        $('.datepicker1').datepicker({ format: 'yyyy-mm-dd',
+          todayHighlight: true,
+          autoclose: true,
+          });
         $('#reservation').daterangepicker();
-        $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A'});
+        $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'YYYY-MM-DD h:mm A'});
+        $('#reservationtime1').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'YYYY-MM-DD h:mm A'});
         $(".timepicker").timepicker({
           showInputs: false
         });
       });
+      
     </script>
      <script src="https://cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>
     <script src="{{ asset('eventAdmin/pluginsbootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>

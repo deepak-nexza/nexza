@@ -48,4 +48,21 @@ class Helper
         return $data;
     }
     
+    /**
+     * All states
+     * 
+     * @return type
+     * 
+     */
+    public static  function calculateMoney($amt)
+    {
+        $getConfigNexamt = config('common.nexzoa_per');
+        $getConfigGateamt = config('common.nexzoa_Gateway_fee');
+        $nexzaAmt = ($amt * $getConfigNexamt)  / 100;
+        $gateAmt = ($amt * $getConfigGateamt)  / 100;
+        $customerAmt = $amt - $nexzaAmt -  $gateAmt;
+        $data = ['nexza_amt'=>$nexzaAmt,'gatway_amt'=>$getConfigGateamt,'customer_total'=>$customerAmt];
+        return $data;
+    }
+    
 }
