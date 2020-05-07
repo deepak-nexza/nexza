@@ -19,14 +19,24 @@
                   <h3 class="box-title">Create Event</h3>
                 </div>
             <div class="box-body">
-                
-              
-               @if(!empty($eventUid))
-                {{ Form::open(array('url' => route('update_event'),'method'=>'post', 'files' => true)) }}
+               
+               {!!
+        Form::open(
+        array(
+        'name' => 'NexzaForms',
+        'id' => 'NexzaForms',
+        'url'=>!empty($eventUid)?route('update_event'):route('save_event'),
+        'method'=>'POST',
+        'files' => true,
+        'autocomplete' => 'off',
+        'class'=>'formElement otp',
+        )
+        )
+        !!}
+         @if(!empty($eventUid))
                <input type="hidden" value="{{ $eventUid }}" name="event_uid" >
-               @else
-                {{ Form::open(array('url' => route('save_event'),'method'=>'post', 'files' => true)) }}
                @endif
+               
             <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />  
             <div class="row">
                 <div class="col-md-6">
@@ -126,7 +136,7 @@
               <div class="box-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
-                {{ Form::close() }}
+                {!! Form::close() !!}
             </div><!-- /.box-body -->
           </div><!-- /.box -->
 

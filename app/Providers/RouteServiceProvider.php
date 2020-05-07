@@ -41,6 +41,7 @@ class RouteServiceProvider extends ServiceProvider
         
         $this->mapEventRoutes();
         $this->mapAjaxRoutes();
+        $this->mapOtpRoutes();
 
         //
     }
@@ -114,6 +115,20 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('ajax')
              ->namespace($this->namespace)
              ->group(base_path('routes/ajax.php'));
+    }
+    
+     /**
+     * Define the "Access" routes for the application.
+     *
+     * These routes are related to guest session.
+     *
+     * @return void
+     */
+    protected function mapOtpRoutes()
+    {
+        Route::prefix('otp')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/otp.php'));
     }
     
 }

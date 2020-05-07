@@ -20,5 +20,12 @@ return [
     'image' => ':field should be in image format',
     'success_update' => 'Data Successfully updated',
     'success' => 'Data Saved Successfully',
+    'otpwindow' => 'Fill you one time otp',
+    'password_policy' => 'Password Policy',
+    'one_time_password_code' => 'One Time Password',
+    'otp_number' => 'Otp Number',
+    'resend_button' => 'Resend Otp',
+    'expire_in' => '5',
+    'submit_max_limit' => '3',
 
 ];

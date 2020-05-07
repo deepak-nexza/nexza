@@ -1,8 +1,8 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Validations\Zipcode;
+namespace App\Repositories\Libraries\Validations\Zipcode;
 
-use App\B2c\Repositories\Models\Master\Zipcode;
+use App\Repositories\Models\Master\Zipcode;
 
 class CheckZipcode
 {

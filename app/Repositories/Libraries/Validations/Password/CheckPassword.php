@@ -1,10 +1,10 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Validations\Password;
+namespace App\Repositories\Libraries\Validations\Password;
 
 use Auth;
 use Hash;
-use App\B2c\Repositories\Models\UserLastPassword;
+use App\Repositories\Models\UserLastPassword;
 
 class CheckPassword
 {

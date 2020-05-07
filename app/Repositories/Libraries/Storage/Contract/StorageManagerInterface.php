@@ -1,6 +1,6 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Storage\Contract;
+namespace App\Repositories\Libraries\Storage\Contract;
 
 interface StorageManagerInterface
 {

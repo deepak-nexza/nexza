@@ -1,11 +1,11 @@
 <?php
 
-namespace App\B2c\Repositories\Factory\Repositories;
+namespace App\Repositories\Factory\Repositories;
 
 use BadMethodCallException;
-use App\B2c\Repositories\Models\Master\Country;
-use App\B2c\Repositories\Models\Master\State;
-use App\B2c\Repositories\Models\Master\Disclosure;
+//use App\Repositories\Models\Master\Country;
+//use App\Repositories\Models\Master\State;
+//use App\Repositories\Models\Master\Disclosure;
 
 /**
  * Base class for all repository classes
@@ -121,54 +121,54 @@ abstract class BaseRepositories
         $this->app['config']->set($key, array_merge(require $path, $config));
     }
 
-    /**
-     * List all countries
-     *
-     * @param void
-     * @return mixed Illuminate\Database\Eloquent\Model | boolean
-     * @since 0.1
-     */
-    public function getCountries()
-    {
-        $result = Country::all()->where(
-            'status',
-            config('b2c_common.ACTIVE')
-        )->orderBy('country_name', 'ASC');
-
-        return $result ? : false;
-    }
-
-    /**
-     * List all states for a country
-     *
-     * @param interger $country_id
-     * @return mixed Illuminate\Database\Eloquent\Model | boolean
-     */
-    public function getStatesByCountry($country_id)
-    {
-        return Country::getAllStates($country_id);
-    }
-
-    /**
-     * List all cities for a state
-     *
-     * @param interger $state_id
-     * @return mixed Illuminate\Database\Eloquent\Model | boolean
-     */
-    public function getCitiesByState($state_id)
-    {
-        return State::getAllCities($state_id);
-    }
-
-    /**
-     * List all disclousre
-     *
-     * @return mixed Illuminate\Database\Eloquent\Model | boolean
-     */
-    public function getDisclousre()
-    {
-        return Disclosure::getAllDisclosure();
-    }
+//    /**
+//     * List all countries
+//     *
+//     * @param void
+//     * @return mixed Illuminate\Database\Eloquent\Model | boolean
+//     * @since 0.1
+//     */
+//    public function getCountries()
+//    {
+//        $result = Country::all()->where(
+//            'status',
+//            config('b2c_common.ACTIVE')
+//        )->orderBy('country_name', 'ASC');
+//
+//        return $result ? : false;
+//    }
+//
+//    /**
+//     * List all states for a country
+//     *
+//     * @param interger $country_id
+//     * @return mixed Illuminate\Database\Eloquent\Model | boolean
+//     */
+//    public function getStatesByCountry($country_id)
+//    {
+//        return Country::getAllStates($country_id);
+//    }
+//
+//    /**
+//     * List all cities for a state
+//     *
+//     * @param interger $state_id
+//     * @return mixed Illuminate\Database\Eloquent\Model | boolean
+//     */
+//    public function getCitiesByState($state_id)
+//    {
+//        return State::getAllCities($state_id);
+//    }
+//
+//    /**
+//     * List all disclousre
+//     *
+//     * @return mixed Illuminate\Database\Eloquent\Model | boolean
+//     */
+//    public function getDisclousre()
+//    {
+//        return Disclosure::getAllDisclosure();
+//    }
 
     /**
      * Handle calls to missing methods on the repository.

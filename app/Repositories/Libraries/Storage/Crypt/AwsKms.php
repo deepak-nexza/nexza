@@ -1,12 +1,12 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Storage\Crypt;
+namespace App\Repositories\Libraries\Storage\Crypt;
 
 use Exception;
 use Aws\Kms\KmsClient;
 use Aws\Kms\Exception\KmsException;
-use App\B2c\Repositories\Contracts\Traits\AwsSdkTrait;
-use App\B2c\Repositories\Libraries\Storage\Contract\ErrorHandlerTrait;
+use App\Repositories\Contracts\Traits\AwsSdkTrait;
+use App\Repositories\Libraries\Storage\Contract\ErrorHandlerTrait;
 
 class AwsKms
 {

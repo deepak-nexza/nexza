@@ -1,13 +1,13 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Storage;
+namespace App\Repositories\Libraries\Storage;
 
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
-use App\B2c\Repositories\Libraries\Storage\Factory;
+use App\Repositories\Libraries\Storage\Factory;
 
 class Cloud extends Factory
 {
@@ -71,7 +71,7 @@ class Cloud extends Factory
     /**
      * Set the storage driver
      *
-     * @return \App\B2c\Repositories\Libraries\Storage\Cloud
+     * @return \App\Repositories\Libraries\Storage\Cloud
      */
     protected function setStorage()
     {

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Storage;
+namespace App\Repositories\Libraries\Storage;
 
 use Exception;
 use Illuminate\Support\Facades\Storage;
-use App\B2c\Repositories\Libraries\Storage\Factory;
+use App\Repositories\Libraries\Storage\Factory;
 
 class Local extends Factory
 {
@@ -12,7 +12,7 @@ class Local extends Factory
     /**
      * Set the storage driver
      *
-     * @return \App\B2c\Repositories\Libraries\Storage\Local
+     * @return \App\Repositories\Libraries\Storage\Local
      */
     protected function setStorage()
     {

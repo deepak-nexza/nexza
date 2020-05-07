@@ -1,10 +1,10 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Storage;
+namespace App\Repositories\Libraries\Storage;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
-use App\B2c\Repositories\Libraries\Storage\Contract\StorageManagerInterface;
+use App\Repositories\Libraries\Storage\Contract\StorageManagerInterface;
 
 class StorageManager implements StorageManagerInterface
 {
@@ -38,14 +38,14 @@ class StorageManager implements StorageManagerInterface
      * Returns an instance of the local I/O class
      *
      * @staticvar boolean $local
-     * @return \App\B2c\Repositories\Libraries\Storage\Local
+     * @return \App\Repositories\Libraries\Storage\Local
      */
     protected function local()
     {
         static $local = false;
 
         if ($local === false) {
-            $local = App::make(\App\B2c\Repositories\Libraries\Storage\Local::class);
+            $local = App::make(\App\Repositories\Libraries\Storage\Local::class);
         }
 
         return $local;
@@ -55,14 +55,14 @@ class StorageManager implements StorageManagerInterface
      * Returns an instance of the cloud I/O class
      *
      * @staticvar boolean $cloud
-     * @return \App\B2c\Repositories\Libraries\Storage\Cloud
+     * @return \App\Repositories\Libraries\Storage\Cloud
      */
     protected function cloud()
     {
         static $cloud = false;
 
         if ($cloud === false) {
-            $cloud = App::make(\App\B2c\Repositories\Libraries\Storage\Cloud::class);
+            $cloud = App::make(\App\Repositories\Libraries\Storage\Cloud::class);
         }
 
         return $cloud;
@@ -72,14 +72,14 @@ class StorageManager implements StorageManagerInterface
      * Returns crypto class instance
      *
      * @staticvar boolean $crypto
-     * @return \App\B2c\Repositories\Libraries\Storage\Crypt\AwsKms
+     * @return \App\Repositories\Libraries\Storage\Crypt\AwsKms
      */
     public function crypt()
     {
         static $crypt = false;
 
         if ($crypt === false) {
-            $crypt = App::make(\App\B2c\Repositories\Libraries\Storage\Crypt\AwsKms::class);
+            $crypt = App::make(\App\Repositories\Libraries\Storage\Crypt\AwsKms::class);
         }
 
         return $crypt;

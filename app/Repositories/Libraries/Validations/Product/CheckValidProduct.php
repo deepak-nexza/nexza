@@ -1,10 +1,10 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Validations\Product;
+namespace App\Repositories\Libraries\Validations\Product;
 
 use Auth;
-use App\B2c\Repositories\Models\Master\Product;
-use App\B2c\Repositories\Models\Master\FinancePurpose;
+use App\Repositories\Models\Master\Product;
+use App\Repositories\Models\Master\FinancePurpose;
 
 class CheckValidProduct
 {

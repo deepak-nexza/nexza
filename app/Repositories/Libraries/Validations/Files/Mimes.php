@@ -1,6 +1,6 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Validations\Files;
+namespace App\Repositories\Libraries\Validations\Files;
 
 class Mimes
 {

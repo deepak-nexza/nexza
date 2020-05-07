@@ -18,41 +18,48 @@ Route::group(
 });
 });
     
+       Route::get('/login', 'Auth\LoginController@getLogin')->name('login');
+Route::post('/login', 'Auth\LoginController@postLogin')->name('login');
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+ 
+Route::get('/create-profile', 'Auth\RegisterController@createProfile')->name('create_profile');
+Route::post('/save-profile', 'Auth\RegisterController@saveProfile')->name('save_profile');
+    
 
 
 //
-//Route::get('/', function () {
-//    return view('eventfrontend.index');
-//});
-//
-//Route::get('/home', 'HomeController@index')->name('home');
-//
-//Route::get('/dashboard', [
-//        'uses' => 'Frontend\UserController@index',
-//        'as'   => 'dashboard'
-//        ]);
-//
-//    Route::get('/appointments', [
-//        'uses' => 'Frontend\UserController@appointments',
-//        'as'   => 'appointment'
-//        ]);
-//
-//Route::get('/registeration', [
-//        'uses' => 'Frontend\UserController@userregister',
-//        'as'   => 'registeration'
-//        ]);
-//
-//Route::get('/DoctorPanel', [
-//        'uses' => 'Frontend\UserController@doctorpanel',
-//        'as'   => 'doctor-panel'
-//        ]);
-//
+Route::get('/', function () {
+    return view('eventfrontend.index');
+});
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/dashboard', [
+        'uses' => 'Frontend\UserController@index',
+        'as'   => 'dashboard'
+        ]);
+
+    Route::get('/appointments', [
+        'uses' => 'Frontend\UserController@appointments',
+        'as'   => 'appointment'
+        ]);
+
+Route::get('/registeration', [
+        'uses' => 'Frontend\UserController@userregister',
+        'as'   => 'registeration'
+        ]);
+
+Route::get('/DoctorPanel', [
+        'uses' => 'Frontend\UserController@doctorpanel',
+        'as'   => 'doctor-panel'
+        ]);
+
 //
 //Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 //Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 //Route::get('/logut', 'Auth\LoginController@logout')->name('logout');
-//
-//Route::post('/register', 'Auth\RegisterController@register')->name('register');
+
+Route::post('/register', 'Auth\RegisterController@register')->name('register');
 //
 //
 Route::get('/home', 'HomeController@index')->name('home');

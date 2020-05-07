@@ -12,5 +12,6 @@ interface UserInterface {
 
 
     public function delete($id);
+    
 
 }

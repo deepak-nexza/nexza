@@ -19,13 +19,6 @@
                   <h3 class="box-title">Create Ticket Layout</h3>
                 </div>
             <div class="box-body">
-               
-                    @if(!empty($ticketID))
-                {{ Form::open(array('url' => route('update_event_ticket'),'method'=>'post')) }}
-               <input type="hidden" value="{{ $ticketID }}" name="event_uid" >
-               @else
-                {{ Form::open(array('url' => route('save_event_ticket'),'method'=>'post')) }}
-               @endif
             <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />  
             
             <div class="row">

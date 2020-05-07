@@ -20,10 +20,6 @@
 @yield('cssData')   
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
-<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
-<!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
-
 </head>
 
 <body>
@@ -87,7 +83,7 @@
                         </div>
                         @if (Auth::guest())
                         <div class="btn-box">
-                            <a href="" class="theme-btn btn-style-one" data-toggle="modal" data-target="#modalLRForm"><span class="btn-title">Create Event</span></a>
+                            <a href="{{ route('create_profile') }}" class="theme-btn btn-style-one" ><span class="btn-title">Create Event</span></a>
                         </div>
                         @else
                              <!-- Button Box -->
@@ -119,7 +115,7 @@
     
     
     @section('cssData')
-<link rel="stylesheet" href="{{ asset('eventAdmin//dist/css/AdminLTE.min.css') }}">
+<link rel="stylesheet" href="{{ asset('eventAdmin/dist/css/AdminLTE.min.css') }}">
 @endsection
     
     

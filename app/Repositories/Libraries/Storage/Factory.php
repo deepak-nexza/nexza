@@ -1,10 +1,10 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Storage;
+namespace App\Repositories\Libraries\Storage;
 
 use Exception;
 use BadMethodCallException;
-use App\B2c\Repositories\Libraries\Storage\Contract\ErrorHandlerTrait;
+use App\Repositories\Libraries\Storage\Contract\ErrorHandlerTrait;
 
 class Factory
 {

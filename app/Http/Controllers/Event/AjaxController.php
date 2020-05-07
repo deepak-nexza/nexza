@@ -58,4 +58,14 @@ class AjaxController extends Controller
         $data = $this->event->getEventListWithUid($event_id,(int) Auth::id());
         return $data;
     }
+    
+     /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function RegisterUser(Request $request)
+    {
+        dd($request->all());
+    }
 }

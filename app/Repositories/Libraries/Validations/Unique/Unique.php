@@ -1,6 +1,6 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries\Validations\Unique;
+namespace App\Repositories\Libraries\Validations\Unique;
 
 use DB;
 

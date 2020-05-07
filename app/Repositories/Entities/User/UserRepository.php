@@ -1219,7 +1219,7 @@ class UserRepository extends BaseRepositories implements UserInterface
     public function checkUserDetails($email, $password = "")
     {
         
-        $result = UserModel::where('email', $email)->first();
+        $result = User::where('email', $email)->first();
         $status = false;
         if (isset($result->password) && \Illuminate\Support\Facades\Hash::check($password, $result->password)) {
              $status =  $result;
@@ -1292,7 +1292,7 @@ class UserRepository extends BaseRepositories implements UserInterface
      */
     public function getAppUserByEmail($userId)
     {
-         $result = UserModel::where('id', $userId)->where('user_level_id',1)->first();
+         $result = User::where('id', $userId)->first();
          return $result ? : false;
     }
     

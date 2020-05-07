@@ -4,5 +4,4 @@
     <!--End Clients Section-->
 </section>
  
-
 @extends('layouts.event.footer')

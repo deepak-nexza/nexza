@@ -23,7 +23,20 @@
                     @endif
                 </div>
             <div class="box-body">
-               {{ Form::open(array('url' => route('save_event_ticket'),'method'=>'post')) }}
+                 {!!
+        Form::open(
+        array(
+        'name' => 'NexzaForms',
+        'id' => 'NexzaForms',
+        'url'=>route('save_event_ticket'),
+        'method'=>'POST',
+        'files' => true,
+        'autocomplete' => 'off',
+        'class'=>'formElement otp',
+        )
+        )
+        !!}
+                
                @if(!empty($ticket_id))
                <input type="hidden" value="{{ $ticket_id }}" name="ticket_id" >
                @endif
@@ -103,7 +116,7 @@
               <div class="box-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </div>
-                {{ Form::close() }}
+                {!! Form::close() !!}
             </div><!-- /.box-body -->
           </div><!-- /.box -->
 

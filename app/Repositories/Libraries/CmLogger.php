@@ -1,10 +1,10 @@
 <?php
 
-namespace App\B2c\Repositories\Libraries;
+namespace App\Repositories\Libraries;
 
 use Exception;
-use App\B2c\Repositories\Models\CmActivityLog;
-use App\B2c\Repositories\Models\CmActivityMeta;
+use App\Repositories\Models\CmActivityLog;
+use App\Repositories\Models\CmActivityMeta;
 
 class CmLogger
 {

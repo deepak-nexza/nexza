@@ -201,9 +201,6 @@ class LoginController extends Controller {
                 return redirect()->back()->withErrors($validator);
             }
 
-            if ($this->captchaCheck($request) == false) {
-                return redirect()->back()->withErrors(['captcha' => trans('messages.error.invalid_captcha')]);
-            }
             // the login attempts for this application. We'll key this by the username and
             // the IP address of the client making these requests into this application.
             if ($this->hasTooManyLoginAttempts($request)) {
@@ -218,121 +215,20 @@ class LoginController extends Controller {
             }
             // Check whether the email supplied is a valid user and has role of Customer
             $user = $this->userRepo->checkUserDetails($credentials["email"], $credentials["password"]);
-
-            if (isset($user) && !empty($user->id)) {
-                $curr_time = Helpers::getCurrentDateTime();
-                $updated_at = Helpers::getDateTimeInClientTz($user->updated_at, 'Y-m-d H:i:s', 'Y-m-d H:i:s');
-                $date1 = date_create($curr_time);
-                $date2 = date_create($updated_at);
-                $diff = date_diff($date2, $date1);
-                $yearDiff_hour = $diff->format('%h');
-                $yearDiff_min = $diff->format('%i');
-                $timeInMin = $yearDiff_hour * 60 + $yearDiff_min;
-                $block_time = Helpers::getSysConfigName(5)->toArray();
-                if ($timeInMin > $block_time['time'] && $user->otp_blocked == 1) {
-                    $attributes = [];
-                    $attributes['otp_blocked'] = 0;
-                    $attributes['updated_at'] = Helpers::getCurrentDateTime();
-                    $this->userRepo->updateUser($user->id, $attributes);
-                }
-
-                if ($user->otp_blocked == 1 && $timeInMin <= $block_time['time']) {
-                    //dd($user->method_type);
-                    if ($user->method_type == 1) {
-                        return redirect($this->loginPath())
-                                ->withInput($request->only('email'))
-                                ->withErrors([
-                                    'email' => [trans('error_message.otp_max_attempt')],
-                        ]);
-                    }
-                    if ($user->method_type == 2) {
-                        return redirect($this->loginPath())
-                                ->withInput($request->only('email'))
-                                ->withErrors([
-                                    'email' => ["You exceeded one-time verification code verification max attempt, try again after 60 mins."],
-                        ]);
-                    }
-                }
-            }
-
-            if (isset($user) && !empty($user->id)) {
-                $chkInfo = $this->userRepo->getAppUserByEmail($user->id);
-                if (empty($chkInfo)) {
-                    $user = "";
-                }
-            }
-            if (empty($user)) {
-                $this->incrementLoginAttempts($request);
-                Event::fire("user.login.failed", serialize(['email' => Input::get('email')]));
-                return redirect($this->loginPath())
-                        ->withInput($request->only('email'))
-                        ->withErrors([
-                            'email' => [trans('auth.failed')],
-                ]);
-            }
             /* Confirm user registered otp code or not */
-            $currentUserData = $this->userRepo->getUserDetail($user->id);
-            $otp_status = $currentUserData->is_otp_authenticate;
-            //put VALUE IN SESSION
-            $request->session()->put('otpUserId', $user->id);
-            if ($otp_status == 0) {
-                $userData = $this->userRepo->getUserDetail($user->id);
-                $arrUser = [
-                    "email" => $userData->email,
-                    "first_name" => '',
-                ];
-
-                /* First inactive all otp then send new */
-                /* Change OTP status */
-                $this->otpRepo->deactivateOtp($user->id);
-
-                /* Returns forward OTP */
-                $otp = (int) $this->otpRepo->getNewOtp();
-                if (!empty($otp)) {
-                    Event::fire("user.sendotp", serialize($arrUser));
-                    $otpUser = array();
-                    $otpUser["user_id"] = $user->id;
-                    $otpUser["otp"] = $otp;
-                    $otpUser["is_active"] = 1;
-                    $otpId = $this->otpRepo->insertOtp($otpUser);
-
-                    /* set logout session for temp purpose */
-                    $request->session()->put('otpUserId', $user->id);
-                    $request->session()->put('loginStatus', 4);
-                    $request->session()->put('password', $credentials["password"]);
-                    Session::put('resendOtp', 1);
-                    $request->session()->put('OTPScreen', time());
-                    return redirect()->route('resend_otp_url');
-                } else {
-                    return redirect()->route('login');
-                }
-            } else {
-                $userData = $this->userRepo->getUserDetail($user->id);
-                if ($this->attemptLogin($request)) {
-                    /**
-                     * Check and remove other session data for this user
-                     */
-                    $this->swapUserSession($user);
-                    /**
-                     * Remove token_once if it was there. Just in case :)
-                     */
-                    $this->userRepo->removeTokenOnce($user->id);
-
-                    /**
-                     * Track user login event
-                     */
-                    $this->logUserLoginEvent();
-                    /**
-                     * Remove existing token
-                     */
-                    Session::forget('_token');
+                if (!empty($user) && $this->attemptLogin($request) == true) {
                     $message = "Login Successfully";
-                    Helpers::trackUserActivity($message, $userData->id, $app_id = null);
+//                    Helpers::trackUserActivity($message, $userData->id, $app_id = null);
                     $this->sendLoginResponse($request);
-                    return redirect(route('front_dashboard', ['app_user_id' => $userData->id, 'app_id' => $userData->app_id]));
-                }
-            }
+                    return redirect(route('home', ['user_id' => $user->id]));
+                }else {
+                        // Reflash the session data in case we are in the middle of a redirect 
+                        Session::reflash('redirect');
+                        // Redirect to the login page.
+                        return redirect()->route('login')->withErrors(['Email' => 'Email','password' => 'Password invalid'])->withInput(Input::except('password'));
+                    }
         } catch (\Exception $e) {
+            dd($e->getMessage());
             if (empty($e->getMessage()) && $e->getStatusCode() == 400) {
                 throw $e;
             } else {

@@ -24,38 +24,31 @@ class ProfileRequest extends FormRequest
     public function rules()
     {
         $request = request();
-        dd($request->all());
-        if(!empty($request->get('event_uid'))){
-            $required = '';
-        }else{
-             $required = 'required';
-        }
-        $rules['title'] = $required;
-        $rules['type'] = $required.'|numeric';
-        $rules['event_space'] = $required.'|numeric';
-        $rules['amt_per_person'] = $required.'|numeric';
-        $rules['message'] = $required;
-        $rules['booking_duration'] ='regex:/[\d]{4}[\-][\d]{2}[\-][\d]{2}[\s]+[\d]{1,12}[:][\d]{1,12}[\s]+[A-Za-z]{2}[\s+][\-\s]+[\d]{4}[\-][\d]{2}[\-][\d]{2}[\s]+[\d]{1,12}[:][\d]{1,12}[\s]+[A-Za-z]{2}/';
-        $rules['event_type'] = $required.'|numeric';
+        $rules = [ 
+//            'phone' => ['required', 'isvalidchar'],
+            'email' => ['required', 'isvalidchar', 'email', 'unique:users', 'min:8', 'max:65'],
+            'password' => ['required', 'isvalidchar', 'regex:/^(?!.*(.)\1\1)(?=.*[A-Z])(?=.*[\\\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\<\>\'\;\.\?\:\"\`\|\/\+\-\_\=\,])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9\\\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\<\>\'\;\.\?\:\"\`\|\/\+\-\_\=\,]{8,50}$/'],
+            'password_confirmation' => ['required', 'isvalidchar', 'same:password', 'regex:/^(?!.*(.)\1\1)(?=.*[A-Z])(?=.*[\\\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\<\>\'\;\.\?\:\"\`\|\/\+\-\_\=\,])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9\\\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\<\>\'\;\.\?\:\"\`\|\/\+\-\_\=\,]{8,50}$/'],
+        ];
         return $rules;
     }
 
     public function messages()
     {
-        $messages = [];
-        $messages['title.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Event Heading'))]);
-        $messages['type.numeric'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Ticket Type'))]);
-        $messages['type.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Ticket Type'))]);
-        $messages['event_space.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Total Booking Space Available'))]);
-        $messages['event_space.numeric'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Total Booking Space Available'))]);
-        $messages['amt_per_person.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Booking Amount per individual'))]);
-        $messages['amt_per_person.numeric'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Booking Amount per individual'))]);
-        $messages['message.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Message'))]);
-        $messages['message.numeric'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Message'))]);
-        $messages['booking_duration.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Booking Start/End Date'))]);
-        $messages['event_type.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','event_type'))]);
-        $messages['event_type.numeric'] = trans('message.alpha',['field'=>strtoupper(preg_replace('/_/',' ','event_type'))]);
+         $messages =  [
+            'password.required' => trans('error_message.req_new_pass'),
+            'password_confirmation.required' => trans('error_message.req_conf_pass'),
+            'password.regex' => trans('error_message.password_regex'),
+            'password_confirmation.regex' => trans('error_message.cpassword_regex'),
+            'password_confirmation.same' => trans('error_message.same_as_password'),
+            'password.different' => trans('error_message.different_pass'),
+            'email.required' => trans('error_message.reg.valid_email_req'),
+            'email.email' => trans('error_message.reg.valid_email_format'),
+            'email.checkdomain' => trans('error_message.reg.valid_email_format'),
+            'biz_name.required' => trans('error_message.create_customer.biz_name_required'),          
+            'biz_name.min' => trans('error_message.create_customer.biz_name_min'),
+            'contact_number.required' => trans('error_message.create_customer.contac_required'),
+        ];
         return $messages;
     }
-    
 }

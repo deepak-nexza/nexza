@@ -225,7 +225,7 @@
 
             <!--Body-->
             <div class="modal-body">
-             <form method="POST" action="{{ route('register') }}">
+             <form method="POST" action="{{ route('save_profile') }}">
                 @csrf
               <div class="md-form form-sm mb-5">
                 <input type="name" id="modalLRInput12" name ="name" class="form-control form-control-sm validate">
@@ -270,6 +270,7 @@
     <!--/.Content-->
   </div>
 </div>
+@include('otp::otp')
 <!--Modal: Login / Register Form-->
 <!--Scroll to top-->
 <div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-angle-double-up"></span></div>
@@ -283,20 +284,46 @@
 <script src="{{ asset('event/js/jquery.countdown.js') }}"></script>
 <script src="{{ asset('event/js/wow.js') }}"></script>
 <script src="{{ asset('event/js/script.js') }}"></script>
-
      <script type="text/javascript">
-        $(document).ready(function () {
+         var messages = {
+            registerRoute:"{!! route('save_profile') !!}",
+            _token:"{{ csrf_token() }}",
+            resend_url:"{!! route('resend_otp') !!}",
+            otp_url: "{{ URL::route('otp_validate') }}",
+            otp_sent: "{{ Lang::get('error_message.otp_sent') }}",
+            otp_blank: "{{ Lang::get('error_message.otp_blank') }}",
+            otp_not_correct: "{{ trans('error_message.otp_not_correct') }}",
+            otp_inactive: "{{ Lang::get('error_message.otp_inactive') }}",
+            otp_expire: "{{ Lang::get('error_message.otp_expire') }}",
+            email_sent: "{{ Lang::get('error_message.email_sent')}}",
+            otp_attempt_left: "{{ trans('error_message.otp_attempt_left')}}",
+            otp_max_limit: "{{ trans('error_message.otp_max_limit')}}",
+            email_attempt_left: "{{ trans('error_message.reg.attempt_left')}}",
+            email_max_limit: "{{ trans('error_message.reg.max_limit')}}",
+            otp_authenticated : "{{ trans('error_message.otp_authenticated') }}",
+            login_url : "{{ URL::route('login')}}",
+            exception_error: "{{trans('error_message.exception_error')}}",
+            otp_submit_last_attempt : "{{ trans('error_message.otp_submit_last_attempt') }}",
+            otp_submit_max_limit : "{{ trans('error_message.otp_submit_max_limit') }}",
+            otp_max_attempt : "{{ trans('error_message.otp_max_attempt') }}",
+            promo_code_expired: "{{ trans('error_message.promo_code_expired') }}",
+            otp_resent : "{{ trans('error_message.otp_resent') }}",
+         };
+    </script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="{{ asset('event/js/common.js') }}"></script>
+<script src="{{ asset('event/js/registerJs.js') }}"></script>
+<script src="{{ asset('event/js/otp.js') }}"></script>
+  <script type="text/javascript">
+$(document).ready(function () {
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
                 $(this).toggleClass('active');
             });
         });
-         $(function () {
-                $('#datetimepicker').datetimepicker();
-            });
-    </script>
+</script>
 <!-- Color Setting -->
-<script src="jcolor-settings.js"></script>
+
 </body>
 
 </html>
