@@ -20,6 +20,7 @@ return [
     'url_encrypted'=>env('URL_ENCRYPTED',false),
     'nexzoa_per'=>8,
     'nexzoa_Gateway_fee'=>1.5,
+    'FROM_EMAIL'=>'no_reply@gmail.com',
 
    
 ];

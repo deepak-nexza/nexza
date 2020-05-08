@@ -354,81 +354,6 @@ class User extends Authenticatable
         return ($rowUpdate ? true : false);
     }
 
-    /**
-     * A user may have multiple roles.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    /**
-     * Assign the given role to the user.
-     *
-     * @param string $role
-     *
-     * @return mixed
-     */
-    public function assignRole($role_id)
-    {
-        return $this->roles()->sync(array($role_id));
-    }
-
-    /**
-     * Determine if the user has the given role.
-     *
-     * @param  mixed $role
-     * @return boolean
-     */
-    public function hasRole($role)
-    {
-        if (is_string($role)) {
-            return $this->roles->contains('name', $role);
-        }
-        return !!$role->intersect($this->roles)->count();
-    }
-
-    /**
-     * Determine if the user may perform the given permission.
-     *
-     * @param Permission $permission
-     *
-     * @return boolean
-     */
-    public function hasPermission(Permission $permission)
-    {
-        return $this->hasRole($permission->roles);
-    }
-
-    /**
-     * Get Roles by user id
-     *
-     * @param $user_id user id
-     *
-     * @return object roles
-     */
-    public static function getUserRoles($user_id)
-    {
-        /**
-         * Check id is not blank
-         */
-        if (empty($user_id)) {
-            throw new BlankDataExceptions(trans('error_message.no_data_found'));
-        }
-
-        /**
-         * Check id is not an integer
-         */
-        if (!is_int($user_id)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
-        }
-
-        $arrRoles = self::find($user_id)->roles;
-
-        return ($arrRoles ? : false);
-    }
 
     /**
      * Get password by username
@@ -503,49 +428,6 @@ class User extends Authenticatable
         return $users;
     }
     
-        /**
-     * Get all backend user data
-     *
-     *
-     * @return  array User List
-     *
-     * @since 0.1
-     *
-     */
-    public static function getBackendUsers()
-    {
-        $users = self::select(
-            'users.id',
-            'users.first_name',
-            'users.emp_id',
-            'users.email',
-            'roles.name as display_name',
-            'users.created_at',
-            'users.last_name',
-            'users.block_status'
-        )
-            ->join('role_user', 'users.id', '=', 'role_user.user_id')
-            ->join('roles', 'roles.id', '=', 'role_user.role_id')
-            ->where('roles.is_editable', '=', config('b2c_common.YES'))
-            ->backendUser();
-        return ($users ? $users : false);
-    }
-
-    /**
-     * Get backend user data w.r.t id
-     *
-     * @param integer $user_id
-     *
-     * @return array User List
-     */
-    public static function getBackendUser($user_id)
-    {
-        $users = self::with('roles')->backendUser()
-            ->where('id', $user_id)
-            ->get();
-
-        return $users;
-    }
 
     /**
      * Get the backend user detail associated with the user.
@@ -600,10 +482,9 @@ class User extends Authenticatable
      * @return integer | boollean
      */
 
-    public static function getUserIdByEmail($email, $usertype, $user_id = null)
+    public static function getUserIdByEmail($email, $usertype=null, $user_id = null)
     {
         $userObj = self::where('email', $email);
-        $userObj = $userObj->where('user_type', $usertype);
         
         if($user_id != null) {
             $userObj = $userObj->where('id', $user_id);
@@ -858,208 +739,6 @@ class User extends Authenticatable
 
 
     /**
-     * Get all backend user id w.r.t a parent role
-     *
-     * @param integer $role_id
-     *
-     * @return mixed
-     */
-    public static function getUsersListForParentRole($role_id)
-    {
-        $role_data = Role::getRole($role_id);
-        $data = $role_data->child()->get();
-        $childRoleId = Helpers::getAllRoleForParentRole($data);
-
-        $users = self::backendUser()->select('*')
-                ->with('roles')->whereHas(
-                    'roles',
-                    function ($query) use($childRoleId){
-                        $query->whereIn('id', $childRoleId);
-                    }
-                )->get();
-
-        return $users ? : false;
-    }
-
-
-    /**
-     * Count all registered users
-     *
-     * @param object $userRole
-     * @param string $fromDate
-     * @param string $toDate
-     *
-     * @return integer
-     */
-    public static function countLeads($userRole, $fromDate, $toDate)
-    {
-       if ($userRole->is_default_ml == 1) {
-            $users = self::join('sharelead', 'users.id', '=', 'sharelead.user_id')
-                //->leftJoin('app', 'users.id', '=', 'app.user_id')
-                ->where('users.lead_no', '!=', '')
-                ->where('users.block_status', '=', 0)
-                //->whereRaw(self::convertTz('sharelead.created_at') . ' >= ?', [$fromDate])
-                //->whereRaw(self::convertTz('sharelead.created_at') . ' <= ?', [$toDate])
-                ->whereRaw(self::convertTz('users.created_at') . ' >= ?', [$fromDate])
-                ->whereRaw(self::convertTz('users.created_at') . ' <= ?', [$toDate])
-                //->whereNull('users.id')
-                ->where('users.current_status', '=', config('b2c_common.NEW_LEAD_STATUS'))
-                ->distinct('sharelead.user_id')
-                ->count('sharelead.user_id');
-        } else {
-            $usersArr  = [];
-            $usersArr  = self::getUserListByParentRoleId($userRole->id);
-            $callback  = function ($out, $e) {
-                $out[] = $e['id'];
-                return $out;
-            };
-            $userIdsArr = array_reduce($usersArr, $callback, []);
-
-            $users = 0;
-            if (count($userIdsArr) > 0) {
-            $users = self::join('sharelead', 'users.id', '=', 'sharelead.user_id')
-                  //->leftJoin('app', 'users.id', '=', 'app.user_id')
-                  ->where('users.lead_no', '!=', '')
-                  ->where('users.block_status', '=', 0)
-                  ->whereIn('sharelead.to_id', $userIdsArr)
-                  //->whereRaw(self::convertTz('sharelead.created_at') . ' >= ?', [$fromDate])
-                  //->whereRaw(self::convertTz('sharelead.created_at') . ' <= ?', [$toDate])
-                  ->whereRaw(self::convertTz('users.created_at') . ' >= ?', [$fromDate])
-                  ->whereRaw(self::convertTz('users.created_at') . ' <= ?', [$toDate])
-                  //->whereNull('users.id')
-                  ->where('users.current_status', '=', config('b2c_common.NEW_LEAD_STATUS'))
-                  ->distinct('sharelead.user_id')
-                  ->count('sharelead.user_id');
-            }
-        }
-
-        return ($users > 0 ) ? $users : 0;
-    }
-
-
-    /**
-     * Get all backend user by role id
-     *
-     * @return array User List
-     */
-    public static function getUsersByRoleId($role_id)
-    {
-        $users = self::from('users as u')
-                ->where('user_type', '=', 1)
-                ->leftJoin('role_user as ur', 'ur.user_id', '=', 'u.id')
-                ->where('block_status', '=', 0)
-                ->where('role_id', '=', $role_id)
-                ->get();
-
-        return $users;
-    }
-
-
-    /**
-     * Get user's ids w.r.t role
-     *
-     * @param integer $role_id
-     *
-     * @return array
-     */
-    public static function getUserListByParentRoleId($role_id)
-    {
-        $users      = self::getUsersByRoleId($role_id)->toArray();
-        $childUsers = self::getUsersListForParentRole($role_id)->toArray();
-        $users = array_merge($users, $childUsers);
-        return $users;
-    }
-
-    /**
-     * Get Users By Hub Id
-     *
-     * @param int $hub_id
-     * @return mixed
-     */
-    public static function getHubUsers($hub_id)
-    {
-        $users = self::from('users as u')
-                ->select('u.id')
-                ->join('users_detail as ud', 'u.id', '=', 'ud.user_id')
-                ->where('u.user_type', '=', 1)
-                ->where('u.block_status', '=', 0)
-                ->where('ud.hub_id', '=', $hub_id)
-                ->lists('u.id');
-        return isset($users[0]) ? $users->toArray() : [];
-    }
-
-    /**
-     * Get all sales team unblocked user
-     *
-     * @return mixed array of user
-     */
-    public static function getCentralSalesTeamUserLists() {
-
-        $users = self::select('first_name', 'last_name', 'email')
-                ->join('role_user','role_user.user_id','=','users.id')
-                ->where('role_user.role_id', config('b2c_common.ROLE_CENTRAL_SALES_TEAM'))
-                ->where('user_type', '=', config('b2c_common.USER_BACKEND'))
-                ->where('block_status', config('b2c_common.NO'))
-                ->get();
-
-        return $users ?: false;
-    }
-    /**
-     * Get user by specific id
-     *
-     * @param integer $role_id
-     * @return array
-     */
-    public static function getAllUserByRole($role_id)
-    {
-        //Check id is not an integer
-
-        if (!is_int($role_id)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
-        }
-
-        $users = self::join('role_user', 'role_user.user_id', '=', 'users.id')
-            ->where('role_user.role_id', $role_id)
-            ->select('users.id')
-            ->get();
-
-        return $users;
-    }
-
-    /**
-     * Check backend lead access
-     *
-     * @param integer $loggedin_id
-     * @param integer $user_id
-     * @param object $userRole
-     *
-     * @return boolean
-     */
-    public static function checkLeadAccess($loggedin_id, $user_id, $userRole)
-    {
-        if ($userRole->id == config('b2c_common.ROLE_CENTRAL_SALES_TEAM')) {
-            $users = self::
-                From('users as u')
-                ->select('u.lead_owner_id')
-                ->where('u.id', '=', $user_id)
-                ->first();
-            return (($users['lead_owner_id'] == $loggedin_id) || ($users['lead_owner_id'] === null)) ? true : false;
-        } else {
-            $users = self::From('shareapp')
-                    ->where('shareapp.user_id', '=', $user_id)
-                    ->where('shareapp.to_id', '=', $loggedin_id)
-                    ->where('shareapp.is_owner', '=', config('b2c_common.YES'))->count();
-
-            return ($users > 0) ? true : false;
-        }
-    }
-    
-    public static function getAllApps()
-    {
-        
-    }
-    
-    /**
      * check email exist or not
      *
      * @param  string $email
@@ -1117,113 +796,10 @@ class User extends Authenticatable
     }
     
     
-    /**
-     * Get user data
-     *
-     * @param array $attributes
-     * @return array
-     * @throws InvalidDataTypeExceptions
-     */
-    public static function getBackendUserList($attributes = [], $select = [])
+    public static function findUser($id)
     {
-        /**
-         * Check $attributes is not array
-         */
-        if (!is_array($attributes)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.send_array'));
-        }
-
-        if (empty($select)) {
-            $select = ['*'];
-        }
-
-        $result = self::select($select);
-        
-        if (isset($attributes['user_level_id'])) {
-            $result = $result->whereIn('user_level_id', $attributes['user_level_id']);
-        }
-        if (isset($attributes['is_admin'])) {
-            $result = $result->where('is_admin', $attributes['is_admin']);
-        } else {
-            //$result = $result->where('is_admin', null);
-        }
-        if (isset($attributes['block_status'])) {
-            $result = $result->where('block_status', $attributes['block_status']);
-        }
-        if($attributes['current_owner'] == Auth::user()->id) {
-            $result = $result->where('id', '<>', Auth::user()->id);
-        }
-        $result = $result->get();
-
-        return ($result ? $result : false);
-    }
-    
-    /**
-     * Get user data
-     *
-     * @param array $attributes
-     * @return array
-     * @throws InvalidDataTypeExceptions
-     */
-    public static function getAllBackendUserData($attributes = [], $select = [])
-    {
-       
-        /**
-         * Check $attributes is not array
-         */
-        if (!is_array($attributes)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.send_array'));
-        }
-
-        if (empty($select)) {
-            $select = ['*'];
-        }
-
-        $result = self::select($select);
-        
-        if (isset($attributes['user_level_id'])) {
-            $result = $result->whereIn('user_level_id', $attributes['user_level_id']);
-        }
-        
-        if (isset($attributes['block_status'])) {
-            $result = $result->where('block_status', $attributes['block_status']);
-        }
-        
-        if (isset($attributes['is_admin'])) {
-            $result = $result->where('is_admin', $attributes['is_admin']);
-        }
-        
-        if (isset($attributes['biz_name'])) {
-            $result = $result->where('biz_name', 'LIKE', '%'.$attributes['biz_name'].'%')->groupBy('biz_name');
-        }
-        
-        if (isset($attributes['not_logged_in'])) {
-            $result = $result->where('id', '<>', Auth::user()->id);
-        }
-        $result = $result->get();
-        return ($result ? $result : false);
-    }
-    
-    /**
-     * Get user details
-     *
-     * @param integer $user_id
-     * @param integer $app_id
-     *
-     * @return mixed Array | Boolean false
-     * @throws InvalidDataTypeExceptions
-     */
-    
-    /**
-     * check employee id exist or not
-     *
-     * @param  string $email
-     * @return boolean
-     */
-    public static function checkEmpIdExit($emp_id)
-    {
-        $countRow = self::where('emp_id', $emp_id)->get();
-        return (count($countRow)>0 ? 'false' : 'true');
+        $data = self::where('id', $id)->first();
+        return ($data ? $data : 'true');
     }
     
     /**
@@ -1421,6 +997,32 @@ class User extends Authenticatable
                 ->where('nex_user.id', (int) $user_id)
                 ->first();
         return ($arrUser ? $arrUser : false);
+    }
+    
+     /**
+     * Get user details
+     *
+     * @param integer $user_id
+     * @param integer $app_id
+     *
+     * @return mixed Array | Boolean false
+     * @throws InvalidDataTypeExceptions
+     */
+    public static function getUserDetails($whereArr = [], $select=[]) {
+        /**
+         * Check id is not an integer
+         */
+        if (!is_array($whereArr)) {
+            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
+        }
+
+         if(empty($select)) {
+             $arrAppData = self::select('*');
+         } else {
+            $arrAppData = self::select($select);
+         }
+        $arrAppData =$arrAppData->where($whereArr)->first();
+        return ($arrAppData ? $arrAppData: false);
     }
     
 }

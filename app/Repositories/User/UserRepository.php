@@ -4,6 +4,7 @@ namespace App\Repositories\User;
 
 use App\Repositories\User\UserInterface as UserInterface;
 use App\Repositories\Models\User;
+use App\Repositories\Models\PasswordReset;
 
 class UserRepository  implements UserInterface
 
@@ -123,5 +124,78 @@ class UserRepository  implements UserInterface
             $status = false;
         }
           return $status;
+    }
+    
+     /**
+     * check Email exist or not
+     *
+     * @param  string $email
+     * @return boolean
+     */
+    public function checkEmailExistance($email, $old_email)
+    {
+        return User::checkEmailExistance($email, $old_email);
+    }
+
+    /**
+     * Save User Temp Password
+     *
+     * @param  array $userInfoTemp
+     * @return mixed
+     */
+    public function saveUserTempPassword($userInfoTemp, $user_id)
+    {
+        return UserTempPassword::saveUserTempPassword($userInfoTemp, $user_id);
+    }
+
+    /**
+     * Check if token is valid or not against email id
+     *
+     * @param  string $email
+     * @param  string $token
+     * @return integer
+     */
+    public function checkTokenValidForUser($email, $token)
+    {
+        return PasswordReset::checkTokenValidForUser($email, $token);
+    }
+
+    /**
+     * Check token expiration on page open
+     *
+     * @param type $token
+     */
+    public function checkTokenExiration($token)
+    {
+        $tokenData = Helpers::getPasswordResetTokenInfo($token);
+        if (!empty($tokenData['opened_at'])) {
+            $expirationTime = strtotime($tokenData['opened_at']) + config('auth.password.page_expire')*60;
+            if ($expirationTime < time()) {
+                Helpers::deletePasswordResetToken($token);
+            }
+        }
+    }
+    
+    /**
+     * Get UserID by Email and Type
+     *
+     * @param  string  $email
+     * @param  integer $usertype
+     * @return integer | boolean
+     */
+    public function getUserIdByEmail($emailOrEmplID)
+    {
+        return User::getUserIdByEmail($emailOrEmplID);
+    }
+    
+    /**
+     * Get All User Saved Passwords
+     *
+     * @param  integer $user_id
+     * @return mixed
+     */
+    public function getAllPasswordForUser($user_id)
+    {
+        return UserLastPassword::getAllPasswordForUser((int) $user_id);
     }
 }

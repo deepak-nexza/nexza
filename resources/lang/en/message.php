@@ -27,5 +27,6 @@ return [
     'resend_button' => 'Resend Otp',
     'expire_in' => '5',
     'submit_max_limit' => '3',
+    'password_changed_successfully' => 'Password Changed Successfully',
 
 ];

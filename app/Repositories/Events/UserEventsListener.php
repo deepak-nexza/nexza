@@ -472,23 +472,11 @@ class UserEventsListener extends BaseEvent
             );
             dd($mail_body);
             $subject =  $email_content->en_mail_subject;
-            Mail::send('email', ['varContent' => $mail_body,  'to' => $user["email"]
+            \Mail::send('email', ['varContent' => $mail_body,  'to' => $user["email"]
             ], function ($message) use ($user, $subject) {
-                $message->from(config('b2c_common.FRONTEND_FROM_EMAIL'), config('b2c_common.FRONTEND_FROM_EMAIL_NAME'));
+                $message->from(config('common.FROM_EMAIL'), config('common.FROM_EMAIL'));
                 $message->to($user['email'])->subject($subject);
             });
-            
-         //   self::addActivityLog(85, $subject, $activity);
-            
-
-//            $emailData['email_category_id'] = $email_content->email_cat_id;
-//            $emailData['email_template'] = $email_content->id;
-//            $emailData['template_type'] = $email_content->template_type;
-//            $emailData['subject'] = $email_content->mail_subject;
-//            $emailData['mail_content'] = $mail_body;
-//            $emailData['receiver_id'] = $user["id"];
-//            self::addSendEmailLog($emailData);
-
         }
     }
     

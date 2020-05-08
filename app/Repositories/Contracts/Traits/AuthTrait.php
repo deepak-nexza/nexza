@@ -1,5 +1,5 @@
 <?php
-namespace App\B2c\Repositories\Contracts\Traits;
+namespace App\Repositories\Contracts\Traits;
 
 use Auth;
 

@@ -48,7 +48,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('password/reset', 'Auth\PasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}/{id}', 'Auth\PasswordController@showResetForm')->name('password.reset');
-Route::post('password/reset', 'Auth\PasswordController@reset');
+Route::post('password/reset', 'Auth\PasswordController@reset')->name('password.update');
 
 Route::get('/profile', 'HomeController@openProfile')->name('profile');
 Route::get('/update-profile', 'HomeController@updateProfile')->name('update_profile');

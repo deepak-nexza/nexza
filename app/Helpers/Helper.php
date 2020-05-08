@@ -178,4 +178,17 @@ class Helper
         }
         return ['count' => $count, 'status' => true];
     }
+    
+      /**
+     * Get user details
+     * 
+     * @param array $whereArr
+     * @param array $select
+     * @return type
+     */
+    public static function getUserDetails($whereArr = [], $select=[])
+    {   
+        return App\Repositories\Models\User::getUserDetails($whereArr, $select);
+    }
+    
 }

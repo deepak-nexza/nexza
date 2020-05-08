@@ -8,7 +8,7 @@ trait UserSessionTrait
     /**
      * Swap a user session with a current one
      *
-     * @param \App\B2c\Repositories\Models\User $user
+     * @param \App\Repositories\Models\User $user
      *
      * @return boolean
      *

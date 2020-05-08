@@ -1,6 +1,6 @@
-<?php namespace App\B2c\Repositories\Contracts;
+<?php namespace App\Repositories\Contracts;
 
-use App\B2c\Repositories\Factory\Contracts\RepositoryInterface;
+use App\Repositories\Factory\Contracts\RepositoryInterface;
 
 /**
  * Application Interface

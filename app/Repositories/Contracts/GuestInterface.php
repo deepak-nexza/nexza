@@ -1,8 +1,8 @@
 <?php
 
-namespace App\B2c\Repositories\Contracts;
+namespace App\Repositories\Contracts;
 
-use App\B2c\Repositories\Factory\Contracts\RepositoryInterface;
+use App\Repositories\Factory\Contracts\RepositoryInterface;
 
 /**
  * Guest Interface
