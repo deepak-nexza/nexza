@@ -34,25 +34,6 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/dashboard', [
-        'uses' => 'Frontend\UserController@index',
-        'as'   => 'dashboard'
-        ]);
-
-    Route::get('/appointments', [
-        'uses' => 'Frontend\UserController@appointments',
-        'as'   => 'appointment'
-        ]);
-
-Route::get('/registeration', [
-        'uses' => 'Frontend\UserController@userregister',
-        'as'   => 'registeration'
-        ]);
-
-Route::get('/DoctorPanel', [
-        'uses' => 'Frontend\UserController@doctorpanel',
-        'as'   => 'doctor-panel'
-        ]);
 
 //
 //Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
@@ -63,6 +44,11 @@ Route::post('/register', 'Auth\RegisterController@register')->name('register');
 //
 //
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('password/reset', 'Auth\PasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}/{id}', 'Auth\PasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\PasswordController@reset');
 
 Route::get('/profile', 'HomeController@openProfile')->name('profile');
 Route::get('/update-profile', 'HomeController@updateProfile')->name('update_profile');

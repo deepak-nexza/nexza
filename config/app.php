@@ -173,7 +173,7 @@ return [
         App\Providers\HelperServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
+        App\Repositories\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Repositories\Providers\HealthDocServiceProvider::class,
 //        Collective\Html\HtmlServiceProvider::class,

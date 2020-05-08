@@ -1,17 +1,16 @@
 <?php
-
-namespace App\B2c\Repositories\Factory\Events;
+namespace App\Repositories\Factory\Events;
 use Auth;
 use Request;
-use App\Events\Event;
-use App\B2c\Repositories\Models\UserLog;
-use App\B2c\Repositories\Models\EmailSend;
-use App\B2c\Repositories\Models\ActivityLog;
-use App\B2c\Repositories\Models\ActivityEmail;
-use App\B2c\Repositories\Models\ApplicationTrack;
-use App\B2c\Repositories\Models\ApplicationAuditLog;
-use App\B2c\Repositories\Models\ApplicationAuditLogData;
-use App\B2c\Repositories\Models\SmsLog;
+use App\Events\Event as Event;
+use App\Repositories\Models\UserLog;
+use App\Repositories\Models\EmailSend;
+use App\Repositories\Models\ActivityLog;
+use App\Repositories\Models\ActivityEmail;
+use App\Repositories\Models\ApplicationTrack;
+use App\Repositories\Models\ApplicationAuditLog;
+use App\Repositories\Models\ApplicationAuditLogData;
+use App\Repositories\Models\SmsLog;
 
 abstract class BaseEvent extends Event
 {

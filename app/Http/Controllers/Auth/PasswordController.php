@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Input;
 use Event;
+use Illuminate\Events\Dispatcher;
 use Helpers;
 use Validator;
 use Password;
@@ -13,12 +14,11 @@ use App\Http\Controllers\Controller;
 use Hash;
 use Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\B2c\Repositories\Contracts\Traits\CaptchaTrait;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use App\Http\Controllers\Contracts\Traits\ThrottleLoginTraits;
-use App\B2c\Repositories\Contracts\Traits\UserSessionTrait;
+use App\Repositories\Contracts\Traits\UserSessionTrait;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\B2c\Repositories\Contracts\UserInterface as B2cUserRepoInterface;
+use App\Repositories\User\UserInterface as UserInterface;
 
 
 class PasswordController extends Controller
@@ -56,7 +56,6 @@ class PasswordController extends Controller
     */
 
     use SendsPasswordResetEmails,
-        CaptchaTrait,
         ThrottleLoginTraits,
         UserSessionTrait;
 
@@ -65,7 +64,7 @@ class PasswordController extends Controller
      *
      * @return void
      */
-    public function __construct(Password $passwords, B2cUserRepoInterface $userRepo, Session $session)
+    public function __construct(Password $passwords, UserInterface $userRepo, Session $session)
     {
         $this->userRepo = $userRepo;
         $this->passwords = $passwords;
@@ -151,7 +150,7 @@ class PasswordController extends Controller
     public function showLinkRequestForm()
     {
         if (\Auth::guest() === false) {
-           return redirect(route('front_dashboard'));
+           return redirect(route('home'));
         }
         return view('auth.passwords.email');
     }
@@ -166,45 +165,16 @@ class PasswordController extends Controller
     {
         
         $rules = array('email' => 'required|email|isvalidchar');
-        $input = Input::all();
+        $input = $request->all();
         $validator = Validator::make($input, $rules);
-        /**
-         * Checking Google Captcha is valid or not
-         */        
-        if ($this->captchaCheck($request) == false) {
-            return redirect()->back()->withErrors(['Sorry, Wrong Captcha'])->withInput();
-        }
-        //check if user is frontend user
-        //$validator->after(function ($validator) {
-            if ($this->isBackendUser($validator) || $this->isUserActive($validator)) {
+                if ($this->isUserActive($validator)) {
                 //$validator->errors()->add('invalid', trans('messages.error.invalid_user'));
                 return redirect()->back()->withErrors(['email' => trans('messages.error.invalid_user')]);
             }            
-        //});
-//        if ($validator->fails()) {
-//            $messages = $validator->messages();
-//            if ($messages->has('invalid')) {                
-//                return redirect()->back()->with('status',trans('messages.error.invalid_user'));
-//            } else {
-//                return redirect()->back()->withErrors(['email' => trans('messages.error.invalid_captcha')]);
-//            }
-//        }
         
         if (\Auth::guest() === false) {
-           return redirect(route('front_dashboard'));
+           return redirect(route('home'));
         }
-//        $response = $this->passwords->sendResetLink(
-//            $request->only('email'),
-//            function ($m) {
-//                $m->from(config('b2c_common.FRONTEND_FROM_EMAIL'), config('b2c_common.FRONTEND_FROM_EMAIL_NAME'));
-//                $m->subject($this->getEmailSubject());
-//            }
-//        );
-        
-//        $response = $this->broker()->sendResetLink(
-//            $request->only('email')
-//        );
-//        dd($response);
         
         $credentials = $request->only('email');
         $user = $this->userRepo->getUserByEmail($credentials['email']);
@@ -215,17 +185,9 @@ class PasswordController extends Controller
             $data['last_name'] = $user->last_name;
             $data['email'] = $user->email;
             $data['token'] = $token;
-            Event::fire("user.passwordrequested", serialize($data));
+            \Event::dispatch("user.passwordrequested", serialize($data));
         }
         return redirect()->back()->with('status', trans('passwords.sent_front'));
-//        switch ($response) {
-//            case Password::RESET_LINK_SENT:
-//                Event::fire("user.passwordrequested", serialize(['email' => $credentials["email"]]));
-//                return back()->with('status', trans($response));
-//
-//            case Password::INVALID_USER:
-//                return redirect()->back()->with('status', trans($response));
-//        }
     }
     
     /**
@@ -274,6 +236,7 @@ class PasswordController extends Controller
      */
     public function reset(Request $request)
     {   
+        dd(2);
         try {
             
             if ($this->captchaCheck($request) == false) {
