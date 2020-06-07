@@ -88,6 +88,7 @@ class User extends Authenticatable
         'is_created_from',
         'is_biz_name_update',
         'is_test_user',
+        'profile_image',
     ];
 
     /**
@@ -386,9 +387,9 @@ class User extends Authenticatable
      *
      * @return boolean
      */
-    public static function deleteUser($user_id, $arrUserData)
+    public static function deleteUser($email)
     {
-        $rowUpdate = self::find((int) $user_id)->update($arrUserData);
+        $rowUpdate = self::where(['email'=>$email])->delete();
 
         return ($rowUpdate ? true : false);
     }
@@ -599,145 +600,6 @@ class User extends Authenticatable
         return $user ? $user : false;
     }
 
-    /*
-     * Get Last Lead number
-     */
-    public static function getLastLeadNo($year)
-    {
-        $arrLeadResult = self::select("lead_no", "created_at")
-                        ->orderBy('id', 'desc')
-                        ->whereNotNull('lead_no')
-                        ->where('user_type', config('b2c_common.USER_FRONTEND'))
-            ->whereYear('created_at', '=', $year)
-            ->first();
-        return $arrLeadResult ?: false;
-    }
-
-    /**
-     * Get reporting manager
-     *
-     * @param integer $role_id
-     * @return array
-     */
-    public static function getReportingManager($role_id)
-    {
-        /**
-         * Check id is not blank
-         */
-        if (empty($role_id)) {
-            throw new BlankDataExceptions(trans('error_message.no_data_found'));
-        }
-
-        /**
-         * Check id is not an integer
-         */
-        if (!is_int($role_id)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
-        }
-
-        $rowData = Role::getRole($role_id);
-        $parent_role_id = isset($rowData->parent_role_id) ? $rowData->parent_role_id : null;
-        if($parent_role_id !== null){
-           $user = self::from('users')
-            ->select('users.first_name', 'users.last_name', 'users.id')
-            ->join('users_detail as ud', 'users.id', '=', 'ud.user_id')
-            ->where('users.user_type', '=', config('b2c_common.YES'))
-            ->where('users.block_status', '=', config('b2c_common.NO'))
-            ->with('roles')->whereHas(
-                    'roles',
-                    function ($query) use($parent_role_id) {
-                        $query->where('id', $parent_role_id);
-                    }
-                )->get();
-
-        return $user ? $user : false;
-        }
-    }
-
-    /**
-    * Get co listing for application assignment
-    *
-    * @param integer $role_id
-    * @param integer $region_type
-    *
-    * @return array
-    */
-    public static function getCOSupervisors($role_id, $region_type)
-    {
-        //Check id is not blank
-
-        if (empty($role_id)) {
-            throw new BlankDataExceptions(trans('error_message.no_data_found'));
-        }
-        //Check id is not an integer
-
-        if (!is_int($role_id)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
-        }
-
-        $arrUsers = self::from('users')
-                ->select(
-                    'users.id', 'users.first_name', 'users.last_name'
-                )
-                ->leftJoin('users_detail', 'users_detail.user_id', '=', 'users.id')
-                ->where('users.user_type', '=', 1)
-                ->where('users.block_status', 0)
-                ->where(function($query) use($region_type){
-                    if($region_type != '' && $region_type != 4){
-                        $query->where('users_detail.region_type', $region_type);
-                    }
-                })->with('roles')->whereHas(
-                    'roles',
-                    function ($query) use($role_id){
-                        $query->where('id', $role_id);
-                    }
-                )
-                ->get();
-
-        return ( $arrUsers ? : false );
-    }
-
-    /**
-     * Get backend user(co) list w.r.t CO Supervisor and SBLU Supervisior for case assignment process
-     *
-     * @param int $role_id
-     * @param int $reporting_manager_id
-     *
-     * @return mixed
-     */
-    public static function getSubordinatesForSupervisior($role_id, $reporting_manager_id)
-    {
-        //Check id is not blank
-
-        if (empty($role_id)) {
-            throw new BlankDataExceptions(trans('error_message.no_data_found'));
-        }
-        //Check id is not an integer
-
-        if (!is_int($role_id)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
-        }
-
-        $arrUsers = self::from('users')
-                ->select(
-                    'users.id', 'users.first_name', 'users.last_name'
-                )
-                ->leftJoin('users_detail', 'users_detail.user_id', '=', 'users.id')
-                ->where('users_detail.reporting_manager_id', '=', $reporting_manager_id)
-                ->where('users.user_type', '=', 1)
-                ->where('users.block_status', 0)
-                ->with('roles')->whereHas(
-                    'roles',
-                    function ($query) use($role_id){
-                        $query->where('id', $role_id);
-                    }
-                )
-                ->get();
-
-        return ( $arrUsers ? : false );
-    }
-
-
     /**
      * check email exist or not
      *
@@ -848,36 +710,6 @@ class User extends Authenticatable
         return ($result ? $result : false);
     }
     
-     /**
-     * Get user data
-     *
-     * @param array $attributes
-     * @return array
-     * @throws InvalidDataTypeExceptions
-     */
-    public static function getAllusersWithUserLevelID($attributes = [], $select = [])
-    {
-        /**
-         * Check $attributes is not array
-         */
-        if (!is_array($attributes)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.send_array'));
-        }
-
-        $result = self::select($select);
-        $splitArr = preg_split('/\s+/', $attributes['searchText']);
-        $firstName = empty($splitArr[0])?$attributes['searchText']:$splitArr[0];
-        $lastName = empty($splitArr[1])?$attributes['searchText']:$splitArr[1];
-        if (!empty($attributes['searchText']) && $attributes['searchText']!='search') {
-               $result = $result->whereRaw("concat(first_name,' ',last_name)  like '%".$attributes['searchText']."%'" );
-        }
-        $result = $result->whereIn('user_level_id', [config('b2c_common.BACKEND_USERLEVEL'),config('b2c_common.RM_USERLEVEL')]);
-        $result = $result->where('first_name', '!=', null);
-        $result = $result->where('last_name', '!=', null);
-        $result = $result->orderBy('last_name', 'ASC');
-        $result = $result->get();
-        return ($result ? $result : false);
-    }
     
     
     /**
@@ -887,10 +719,23 @@ class User extends Authenticatable
      * @return boolean
      * @throws InvalidDataTypeExceptions
      */
-    public static function checkBusinessName($business_name)
+    public static function checkEmailUnique($emilUique)
     {
-        $users = self:: where('biz_name', '=', $business_name)->count();
-        return($users >=1 ? true:false );      
+        $users = self:: where('email', '=', $emilUique)->first();
+        return($users? $users :false );      
+    }
+    
+    /**
+     * Get business name
+     *
+     * @param $business_name
+     * @return boolean
+     * @throws InvalidDataTypeExceptions
+     */
+    public static function checkIfPhone($ephoneUique)
+    {
+        $users = self:: where('contact_number', '=',(int) $ephoneUique)->first();
+        return($users? $users :false );      
     }
     
     /**

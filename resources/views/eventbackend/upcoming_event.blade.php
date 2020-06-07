@@ -2,7 +2,11 @@
 @section('content')
     
 <section class="content">
-
+@if(session()->has('message'))
+    <div class="alert alert-success">
+        {{ session()->get('message') }}
+    </div>
+@endif
           <!-- SELECT2 EXAMPLE -->
                <div class="box box-info">
             <div class="box-body">
@@ -37,7 +41,8 @@
                     <tr>
                       <td>{{$val['event_uid']}}</td>
                       <td>{{$val['event_name']}}</td>
-                      <td>{{$val['event_name']}}</td>
+                      @php $eventType = Helpers::getAllEvent()->pluck('name','id') @endphp
+                      <td>{{(!empty($eventType) && !empty($eventType[$val['event_type']])?$eventType[$val['event_type']]:'')}}</td>
                       <td>{{$val['start_date']}}</td>
                       <td>{{$val['end_date']}}</td>
                       @if(!empty($val['event_privacy']) &&  $val['event_privacy'] == 1)
@@ -50,7 +55,7 @@
                       @else
                       <td><span class="label label-danger">InActive</span></td>
                       @endif
-                      <td><a href="{{route('update_event',['event_uid'=>$val['event_uid']])}}"> Edit</a>/<a href="{{ route('create_event') }}">Delete</a></td>
+                      <td><a href="{{route('update_event',['event_uid'=>$val['event_uid']])}}"> Edit</a>/<a href="{{ route('delete_event',['delid'=>$val['event_id']]) }}">Delete</a></td>
                       
                     </tr>
                     @endforeach

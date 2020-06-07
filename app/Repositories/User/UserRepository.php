@@ -76,7 +76,7 @@ class UserRepository  implements UserInterface
     
     public function getUserProfile($id)
     {
-        return $this->user->deleteUser($id);
+        return $this->user->findUser($id);
     }
     
     public function getUserDetail($id)

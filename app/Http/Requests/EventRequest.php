@@ -38,6 +38,7 @@ class EventRequest extends FormRequest
         $rules['event_privacy'] = $required.'|numeric';
         $rules['event_location'] = $required;
         $rules['description'] = $required;
+        $rules['gst'] = $required.'|numeric|between:0,3';
         return $rules;
     }
 
@@ -59,6 +60,9 @@ class EventRequest extends FormRequest
         $messages['event_location.alpha'] = trans('message.alpha',['field'=>strtoupper(preg_replace('/_/',' ','event_location'))]);
         $messages['description.alpha'] = trans('message.alpha',['field'=>strtoupper(preg_replace('/_/',' ','description'))]);
         $messages['description.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','description'))]);
+        $messages['gst.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','gst'))]);
+        $messages['gst.numeric'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','gst'))]);
+        $messages['gst.between'] = trans('Invalid entry for gst');
         return $messages;
     }
     

@@ -158,6 +158,7 @@ use RegistersUsers,
             $arrUser = [];
             $arrUser["email"] = $email;
             $arrUser["password"] = bcrypt($pass);
+            $arrUser["contact_number"] = $request->get('phone');
             $arrUser["ip_address"] = $request->getClientIp();
             $arrUser["otp_blocked"] = 0;
             $arrUser["block_status"] = 0;
@@ -167,6 +168,7 @@ use RegistersUsers,
             $message = "Registration Successfully";
             return $user;
         } catch (\Exception $ex) {
+            dd($ex->getMessage());
             return redirect()->back()->withErrors(Helpers::getExceptionMessage($ex));
         }
     }
@@ -199,8 +201,7 @@ use RegistersUsers,
      */
     public function createOtpProcess($request, $user, $email, $pass) {
         try {
-            //$otp = $this->otpRepo->getNewOtp();
-            $otp = '654321';
+            $otp = $this->otpRepo->getNewOtp();
             $arrUser["otp"] = $otp;
             $arrUser["otp_status"] = "Signup OTP";
             $arrUser["user_id"] = $user->id;
@@ -222,6 +223,9 @@ use RegistersUsers,
                 $request->session()->put('loginStatus', 5);  // 5 use for registration
                 $request->session()->put('tempPassword', $pass);
                 $request->session()->put('OTPScreen', time());
+                $messageBody = 'Your otp code from nexzoa: '.$otp;
+                $resMsg = Helpers::sendSms($user->contact_number,$messageBody);
+                $s = $this->otpRepo->updateOtpStatus($user->id,$otp,$resMsg);
                 }
                 return true;
             } else {

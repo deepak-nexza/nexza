@@ -42,7 +42,7 @@ class Ticket extends BaseModel
      *
      * @var array
      */
-    protected $fillable = [ 'ticket_id', 'event_id', 'user_id', 'title', 'amt_per_person', 'type', 'ticket_duration', 'booking_space', 'start_date', 'end_date', 'message', 'nexza_amt', 'gatway_amt', 'nexza_per', 'gateway_per', 'customer_total', 'tnc', 'is_active', 'created_at', 'updated_at', 'updated_by', 'created_by'
+    protected $fillable = ['gst_by', 'ticket_id', 'event_id', 'user_id', 'title', 'amt_per_person', 'type', 'ticket_duration', 'booking_space', 'start_date', 'end_date', 'message', 'nexza_amt', 'gatway_amt', 'nexza_per', 'gateway_per', 'customer_total', 'tnc', 'is_active', 'created_at', 'updated_at', 'updated_by', 'created_by'
             ];
 
     /**
@@ -235,8 +235,71 @@ class Ticket extends BaseModel
         $returnData =  self::select('nex_event_ticket.*','v.event_uid','v.event_id','v.event_name')
                     ->leftJoin('nex_venue as v', 'v.event_id', '=', 'nex_event_ticket.event_id')
                     ->where('v.status', 1)
+                        ->where(function($query) use ($arrTr) {
+                            if(!empty($arrTr['ticket_id'])){
+                              $query->where('nex_event_ticket.ticket_id', $arrTr['ticket_id']);
+                            }
+                          })
+                        ->where(function($query) use ($arrTr) {
+                            if(!empty($arrTr['user_id'])){
+                              $query->where('nex_event_ticket.user_id', $arrTr['user_id']);
+                            }
+                          })
+                        ->where(function($query) use ($arrTr) {
+                            if(!empty($arrTr['user_id'])){
+                              $query->where('nex_event_ticket.user_id', $arrTr['user_id']);
+                            }
+                          })
                     ->where('nex_event_ticket.ticket_id', $arrTr['ticket_id'])
                     ->where('nex_event_ticket.user_id', $arrTr['user_id'])->first();
         return $returnData ? $returnData :false;
+    }
+    
+          /**
+     * Get State Name By id
+     *
+     * @param void()
+     *
+     * @return object roles
+     *
+     * @since 0.1
+     */
+    public static function closeTicket($userID,$ticketID){
+        
+         $delStatus = self::where(['user_id'=>$userID,'ticket_id'=>$ticketID])
+                ->delete();
+        return $delStatus ? $delStatus :false;
+    }
+              /**
+     * Get State Name By id
+     *
+     * @param void()
+     *
+     * @return object roles
+     *
+     * @since 0.1
+     */
+    public static function checkTicket($eventUID){
+            $returnData =  self::select('nex_event_ticket.*')
+                    ->leftJoin('nex_venue as v', 'v.event_id', '=', 'nex_event_ticket.event_id')
+                    ->where('v.event_id', $eventUID)->first();
+        return $returnData ? $returnData :false;
+    }
+    
+              /**
+     * Get State Name By id
+     *
+     * @param void()
+     *
+     * @return object roles
+     *
+     * @since 0.1
+     */
+    public static function getTicketList($event,$user_id){
+            $ticketList = self::select('*')
+            ->where('user_id',$user_id)
+                ->where('event_id',$event)
+            ->get();
+            return $ticketList ? $ticketList :false;
     }
 }

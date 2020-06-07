@@ -12,7 +12,7 @@
         )
         )
         !!}
-            <div class="modal-dialog modal-md">
+        <div class="modal-dialog modal-md" style="padding:10px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close icon-delete" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> 
@@ -21,7 +21,6 @@
                     <div class="row">
                     <div  class="col-md-12">
                         <div class="msghtml"></div>                        
-                        <h1>{{ trans('message.password_policy') }}</h1>
                         <p class="mb10">{{ trans('message.otpwindow') }}</p>
                         <div class="form-group mb-0">
                             <label class="fieldLabel" for="otp_vals">{{ trans('message.one_time_password_code') }}</label>

@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use App\Repositories\Factory\Events\BaseEvent;
 use App\Repositories\Models\Master\EmailTemplate;
+use Illuminate\Events\Dispatcher;
 
 class OtpEventsListener extends BaseEvent
 {
@@ -45,7 +46,7 @@ class OtpEventsListener extends BaseEvent
       );
      $sent = Mail::send('email', ['varContent' => $mail_body,  'to' => $user["email"]
                     ], function ($message) use ($user, $otp_content) {
-                        $message->from(config('b2c_common.FRONTEND_FROM_EMAIL'), config('b2c_common.FRONTEND_FROM_EMAIL_NAME'));
+                        $message->from(config('common.FROM_EMAIL'), config('common.FROM_EMAIL'));
                         $message->to($user["email"])->subject($otp_content->en_mail_subject);
                     });
       if ($sent) {
@@ -66,7 +67,12 @@ class OtpEventsListener extends BaseEvent
     { 
         $events->listen(
             'otp.sendotp',
-            'App\Repositories\Events\OtpEventsListener@sendOtp'
+            'Nexza\Otp\Events\OtpEventsListener@sendOtp'
+        );
+        
+        $events->listen(
+            'otp.finalRegister',
+            'Nexza\Otp\Events\OtpEventsListener@finalRegister'
         );
     }
 }

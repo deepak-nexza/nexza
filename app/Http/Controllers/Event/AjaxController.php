@@ -43,7 +43,7 @@ class AjaxController extends Controller
     public function stateDetails(Request $request)
     {
         $state_id = (int) $request->get('state_id');
-        $data = $this->event->stateDetails($state_id);
+        $data = $this->event->getstatetList($state_id,true);
         return $data;
     }
     
@@ -64,7 +64,18 @@ class AjaxController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function RegisterUser(Request $request)
+    public function checkTicket(Request $request)
+    {
+        dd($request->all());
+    }
+    
+    
+     /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function updateCandidate(Request $request)
     {
         dd($request->all());
     }

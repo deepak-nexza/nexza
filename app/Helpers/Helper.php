@@ -191,4 +191,73 @@ class Helper
         return App\Repositories\Models\User::getUserDetails($whereArr, $select);
     }
     
+    public static function sendSms($number, $message_body){   
+        $fields = array(
+            "sender_id" => "FSTSMS",
+            "message" => $message_body,
+            "language" => "english",
+            "route" => "p",
+            "numbers" => $number,
+        );
+        $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => config('event.sms_url'),
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => "",
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_SSL_VERIFYHOST => 0,
+              CURLOPT_SSL_VERIFYPEER => 0,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => "POST",
+              CURLOPT_POSTFIELDS => json_encode($fields),
+              CURLOPT_HTTPHEADER => array(
+                "authorization: ".config('event.sms_key'),
+                "accept: */*",
+                "cache-control: no-cache",
+                "content-type: application/json"
+              ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+            curl_close($curl);
+            if ($err) {
+              return $err;
+            } else {
+              return $response;
+            }                       // Close CURL
+    }
+    
+     /**
+     * Get user details
+     * 
+     * @param array $whereArr
+     * @param array $select
+     * @return type
+     */
+    public static function getEventCount($flag, $user_id)
+    {   
+        return App\Repositories\Models\Venue::getAllEvent($flag, $user_id);
+    }
+    
+     /**
+     * get all program type
+     * 
+     * @param array $attributes
+     * @param array $select
+     * @return array
+     */
+    public static function getCandidateDetails($formID) 
+    {
+        $data = \App\Repositories\Models\Candidate::getCandidateDetails(null);
+        foreach($data as $key=>$val){
+            $dataWithID = \App\Repositories\Models\Candidate::getCandidateDetails($formID.'-'.$val['id']);
+            if(!empty($dataWithID) && count($dataWithID)>0){
+                return $dataWithID[0];
+            }
+        }
+        return [];
+    }
+    
 }

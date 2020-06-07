@@ -3,7 +3,7 @@
 namespace App\Repositories\Libraries\Validations\Unique;
 
 use DB;
-
+use App\Repositories\Models\User;
 class Unique
 {
 
@@ -66,5 +66,47 @@ class Unique
         } else {
             return false;
         }
+    }
+    
+    /**
+     * Check if columns value are unique
+     *
+     * @param array $attribute
+     * @param array $value
+     * @param array $parameters
+     * @return boolean
+     */
+    public static function emailExists($attribute, $value, $parameters, $validator)
+    {
+        // Get table name from first parameter
+        $emailDtails = User::checkEmailUnique($value);
+        // Build the query
+        if(!empty($emailDtails) && $emailDtails->is_otp_authenticate==1){
+            return false;
+        }elseif(!empty($emailDtails) && $emailDtails->is_otp_authenticate==0){
+            User::deleteUser($value);
+            return true;
+        }
+        return true;
+    }
+    /**
+     * Check if columns value are unique
+     *
+     * @param array $attribute
+     * @param array $value
+     * @param array $parameters
+     * @return boolean
+     */
+    public static function isUniquePhone($attribute, $value, $parameters, $validator)
+    {
+        // Get table name from first parameter
+        $emailDtails = User::checkIfPhone($value);
+        // Build the query
+        if(!empty($emailDtails->contact_number)){
+            return false;
+        }elseif(empty($emailDtails->contact_number)){
+            return true;
+        }
+        return true;
     }
 }

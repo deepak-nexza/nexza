@@ -17,7 +17,7 @@ use Nexza\Otp\Repositories\Otp\OtpInterface;
 use App\Repositories\Contracts\ApplicationInterface;
 use App\Repositories\User\UserInterface as B2cUserRepoInterface;
 //use App\Repositories\Contracts\GuestInterface as B2cGuestRepoInterface;
-
+use Illuminate\Events\Dispatcher;
 class OtpController extends Controller {
 
     /**
@@ -125,12 +125,14 @@ class OtpController extends Controller {
                     $currentUserData = $this->userRepo->getUserDetail($uId);
                     $code = Session::get('loginStatus');
                     $credentials = ['email' => $currentUserData->email, 'password' => $varPassword];
+                    $arrUser["email"] = $currentUserData->email;
                     if ($credentials) {
                         /* Complete process change user otp status */
                         $currentUserData = $this->userRepo->getUserDetail($uId);
                         $arrOtpStatus = ["is_otp_authenticate" => 1];
                         $updateOTP = $this->userRepo->updateUser($uId, $arrOtpStatus);
-                        
+                        Event::dispatch("otp.finalRegister", serialize($arrUser));
+                        Session::flash('message', trans('Registeration Successful, Login Here'));
                 }
                 //Helpers::trackApplicationActivity($message, $currentUserData['id'], $currentUserData['app_id']);
                 return json_encode(['status' => $code, 'redirect' => $redirect_url]);
@@ -147,6 +149,7 @@ class OtpController extends Controller {
             }
             }
         } catch (Exception $e) {
+            dd($e->getMessage());
             return Helpers::getExceptionMessage($e);
         }
     }
@@ -247,9 +250,11 @@ class OtpController extends Controller {
                     $request->session()->put('loginStatus', 5);  // 5 use for registration
                     $request->session()->put('tempPassword', $userData->password);
                     $request->session()->put('OTPScreen', time());
-                    //Event for sending code
-
-//                    Event::fire("otp.sendotp", serialize($arrUser));
+//                    Event::dispatch("otp.sendotp", serialize($arrUser));
+                   $messageBody = 'Your otp code from nexzoa: '.$otp;
+                   $resMsg = Helpers::sendSms($userData->contact_number,$messageBody);
+                   $this->otpRepo->updateOtpStatus($uId,$otp,$resMsg);
+                    
                 }
             }
         } catch (\Exception $ex) {

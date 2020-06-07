@@ -12,4 +12,22 @@ $(document).ready(function() {
             $('.finalAmt').text(finalAmt);
         });
         $('.bkk_amt').keyup();
+        
+         $('#event_type').on("change", function (event){
+                var sval = $(event.target).val();
+                $.ajax({
+                    type: "POST",
+                    url: messages.checkTicket,
+                    data:{event_uid:sval,_token:messages._token},
+                    beforeSend: function() {
+                    },
+                    success: function(data){
+//                      if(data==1)
+//                      {
+//                          alert('Ticket already created for this event, Close it if new ticket need to create.');
+//                      }
+                    }
+                });
+
+        });
 });

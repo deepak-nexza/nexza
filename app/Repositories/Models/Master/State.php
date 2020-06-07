@@ -301,7 +301,13 @@ class State extends BaseModel
      * @since 0.1
      */
     public static function getStateData($country_id){
-        $returnData = self::select('name','id')->where('country_id', $country_id)->where('is_active', 1)->get();
+        $returnData = self::select('name','id')
+                 ->where(function($query)use($country_id){
+                    if(!empty($country_id)) {
+                        $query->where('country_id', $country_id);
+                    }
+                })
+                ->where('is_active', 1)->get();
         return $returnData ? $returnData :false;
     }
 }

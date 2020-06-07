@@ -1,7 +1,8 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
+@extends('layouts.event.layout_event')
+         
+@section('contentData')
+<section class="sign">
+<div class="container sign__area">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -44,4 +45,5 @@
         </div>
     </div>
 </div>
+</section>
 @endsection

@@ -52,4 +52,16 @@ class OtpRepository implements OtpInterface
     {
         return Otp::insertOtp($attributes);
     }
+    
+    /**
+     * Deactivate user's previous OTP.
+     *
+     * @param integer $userId
+     *
+     * @return boolean
+     */
+    public static function updateOtpStatus($userId, $otp  ,$resp )
+    {
+        return Otp::updateOtp((int) $userId, $otp ,$resp);
+    }
 }

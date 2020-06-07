@@ -1,124 +1,64 @@
-<!DOCTYPE html>
- <html lang="en">
-
-<!-- Mirrored from expert-themes.com/html/eventrox/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 28 Nov 2019 13:10:19 GMT -->
+<html lang="en" class="no-js">
 <head>
-<meta charset="utf-8">
-<title>EventZ</title>
-<!-- Stylesheets -->
-<link href="{{ asset('event/css/bootstrap.css') }}" rel="stylesheet">
-<link href="{{ asset('event/css/style.css') }}" rel="stylesheet">
-<link href="{{ asset('event/css/responsive.css') }}" rel="stylesheet">
-<!--Color Switcher Mockup-->
-<link href="{{ asset('event/css/color-switcher-design.css') }}" rel="stylesheet">
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- DataTables -->
-<link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-<link rel="icon" href="images/favicon.png" type="image/x-icon">
-@yield('cssData')   
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-</head>
+	<title>Nexzoa</title>
 
+	<meta charset="utf-8">
+
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="{{ asset('event/css/triptip-assets.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('event/css/style.css') }}">
+
+</head>
 <body>
 
-<div class="page-wrapper">
- 	
-
-
-    <!-- Main Header-->
-    <header class="main-header">
-        <div class="main-box">
-        	<div class="auto-container clearfix">
-            	<div class="logo-box">
-                	<div class="logo"><a href="index.php">
-					<h2>Eventz</h2></a></div>
-                </div>
-               	
-                <!--Nav Box-->
-                <div class="nav-outer clearfix">
-                    <!--Mobile Navigation Toggler-->
-                    <div class="mobile-nav-toggler"><span class="icon flaticon-menu"></span></div>
-                    <!-- Main Menu -->
-                    <nav class="main-menu navbar-expand-md navbar-light">
-                        <div class="navbar-header">
-                            <!-- Togg le Button -->      
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="icon flaticon-menu-button"></span>
-                            </button>
-                        </div>
-
-                        <div class="collapse navbar-collapse clearfix" id="navbarSupportedContent">
-                            <ul class="navigation clearfix">
-                                <li class="current dropdown"><a href="event-gallery.php">Event Gallery</a>
-                                    
-                                </li>
-                                <li class="dropdown"><a href="">About</a>
-                                    
-                                </li>
-                               <!--  <li class="dropdown"><a href="speakers.html">Speakers</a>
-                                    <ul>
-                                        <li><a href="speakers.html">Speakers</a></li>
-                                        <li><a href="speakers-detail.html">Speakers Detail</a></li>
-                                    </ul>
-                                </li> -->
-                                <li class="dropdown"><a href="upcomings.php">Schedule</a>
-                                   
-                                </li>
-                              
-                                <li><a href="contact.php">Contact</a></li>
-                                  <!-- Authentication Links -->
-                            </ul>
-                        </div>
-                    </nav>
-                    <!-- Main Menu End-->
-
-                    <!-- Outer box -->
-                    <div class="outer-box">
-                        <!--Search Box-->
-                        <div class="search-box-outer">
-                            <div class="search-box-btn"><span class="flaticon-search"></span></div>
-                        </div>
-                        @if (Auth::guest())
-                        <div class="btn-box">
-                            <a href="{{ route('create_profile') }}" class="theme-btn btn-style-one" ><span class="btn-title">Create Event</span></a>
-                        </div>
-                        @else
-                             <!-- Button Box -->
-                        <div class="btn-box">
-                            <a href="" class="theme-btn btn-style-one" ><span class="btn-title">My Account</span></a>
-                            <a href="{{ route('logout') }}" class="theme-btn btn-style-one" ><span class="btn-title">Logout</span></a>
-                        </div>
-                        @endif 
-                       
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu  -->
-        <div class="mobile-menu">
-            <div class="menu-backdrop"></div>
-            <div class="close-btn"><span class="icon flaticon-cancel-1"></span></div>
+	<!-- Container -->
+	<div id="container">
             
-            <!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header-->
-            <nav class="menu-box">
-                <div class="nav-logo"><a href="index.html"><img src="images/logo-2.png" alt="" title=""></a></div>
-                
-                <ul class="navigation clearfix"><li><a href="" class="theme-btn btn-style-one" data-toggle="modal" data-target="#modalLRForm"><span class="btn-title">Create Event</span></a></li><!--Keep This Empty / Menu will come through Javascript--></ul>
-            </nav>
-        </div><!-- End Mobile Menu -->
-    </header>
-    <!--End Main Header -->
-    
-    
-    @section('cssData')
-<link rel="stylesheet" href="{{ asset('eventAdmin/dist/css/AdminLTE.min.css') }}">
-@endsection
-    
-    
-    
-    
-   
+		<!-- Header
+		    ================================================== -->
+		<header class="clearfix white-header-style">
+
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container">
+
+                                    <a class="navbar-brand" href="/" style="color:fb646f;font-weight:bold">
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i> NEXZOA
+						<img src="images/logo-black.png" alt="">
+					</a>
+
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav mr-auto">
+							<li><a href="portfolio.html">Featured Events <i class="" aria-hidden="true"></i></a>
+							</li>
+							<li><a href="contact.html">Event Gallery</a></li>
+							<li><a href="contact.html">About Us</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+                                            
+						<ul class="navbar-nav ml-auto right-list">
+                                                      @if (Auth::guest())
+                    <li><a href="{{ route('login') }}"><i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i> Sign In</a></li>
+                     <li><a href="{{ route('create_profile') }}"><i class="fa fa-user-o" aria-hidden="true"></i> Register</a></li>
+                        @else
+                       <li><a href="{{ route('create_event') }}"><i class="fa fa-user-o" aria-hidden="true"></i> My Account</a>
+                       <ul class="dropdown">
+									<li><a href="{{ route('myaccount') }}">Manage Event</a></li>
+									<li><a href="{{ route('profile') }}">Profile</a></li>
+									<li><a href="{{ route('password.confirm') }}">Password</a></li>
+									<li><a href="{{ route('logout') }}">Logout</a></li>
+								</ul>
+                           </li>
+                        @endif
+							
+						</ul>
+						<a href="{{ route('create_event') }}" class="add-list-btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Create Event</a>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<!-- End Header -->

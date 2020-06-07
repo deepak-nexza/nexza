@@ -68,6 +68,9 @@ class Venue extends BaseModel
             'updated_by', 
             'total_views', 
             'total_reviews', 
+            'site_url',
+        'price',
+        'gst',
             'status', 
             'terms',
             'is_active'
@@ -159,12 +162,16 @@ class Venue extends BaseModel
      */
     public static function getAllEvent($flag=false,$user_id)
     {
-        
+        $adminConfig = config('common.ADMIN_ID');
         if($flag){ $comp = '<'; } else { $comp = '>'; }
         $arrCity = self::select('*')
-                
-            ->where('user_id',$user_id)
+             ->where(function($query)use($user_id,$adminConfig){
+                    if($user_id!=$adminConfig) {
+                        $query->where('user_id',$user_id);
+                    }
+                })
             ->where('start_date',$comp,date('Y-m-d h:i:s a'))
+            ->where('is_deleted','!=',1)
             ->orderBy('event_name', 'asc')
             ->get();
         return ($arrCity ? : false);
@@ -232,8 +239,14 @@ class Venue extends BaseModel
      */
     public static function getEventDetails($id)
     {   
-        $returnData = self::select('*')->where('event_uid', $id)->first();
-        return $returnData;
+        $result = self::select('nex_venue.*','nex_user.*','state.name as statname','state.id as state_id','ticket.*')
+        ->leftjoin('nex_user', 'nex_user.id', '=', 'nex_venue.user_id')
+        ->leftjoin('nex_mst_state as state', 'state.id', '=', 'nex_venue.state_id')
+        ->leftjoin('nex_event_ticket as ticket', 'ticket.event_id', '=', 'nex_venue.event_id');
+        $result->where('nex_venue.status', 1 );
+        $result->where('event_uid', $id);
+        $result  = $result->first();
+        return $result;
     }
     
     /**
@@ -262,4 +275,112 @@ class Venue extends BaseModel
         $returnData = self::select('state_name')->where('id', $state_id)->first();
         return $returnData ? $returnData['state_name'] :false;
     }
+    
+     /**
+     * Get All States of USA
+     *
+     * @return type
+     */
+    public static function getAllEventWithDetails($id=null)
+    {
+        
+        $result = self::select('*')
+            ->where('event_privacy', 1 )
+            ->where('status', 1 )
+                ->where(function($query)use($id){
+                    if(!empty($id)) {
+                        $query->where('event_uid', $id);
+                    }
+                })
+            ->orderBy('event_name', 'asc')
+            ->get();
+        return ($result ? $result : false);
+    }
+     /**
+     * Get All States of USA
+     *
+     * @return type
+     */
+    public static function getEventData($id)
+    {
+        
+        $result = self::select('*')
+            ->where('event_privacy', 1 )
+            ->where('status', 1 )
+                ->where(function($query)use($id){
+                    if(!empty($id)) {
+                        $query->where('event_uid', $id);
+                    }
+                })
+            ->orderBy('event_name', 'asc')
+            ->get();
+        return ($result ? $result : false);
+    }
+    
+     /**
+     * Get All States of USA
+     *
+     * @return type
+     */
+    public static function searchEvent($attr)
+    {
+         /**
+         * Check Data is Array
+         */
+        $data = [];
+        $rowperpage = config('common.DATA_LIMITER');
+        $row = !empty($attr['row'])?$attr['row']:0;
+        $result = self::select('nex_venue.*','emst.name as event_type','state.name as statname')
+                ->leftjoin('nex_mst_event_type as emst', 'nex_venue.event_type', '=', 'emst.id')
+                ->leftjoin('nex_mst_state as state', 'state.id', '=', 'nex_venue.state_id');
+       
+        if(!empty($attr['state_id'])) {
+            $result->where('nex_venue.state_id', $attr['state_id']);
+        }
+        if(!empty($attr['event_type'])) {
+            $result->where('nex_venue.event_type', $attr['event_type']);
+        }
+         if(!empty($attr['event_status'])){ 
+            $arrField = $attr['event_status'];
+                $result->where(function($query)use($arrField){
+                    if(in_array(1,$arrField)){
+                    $query->orwhere('nex_venue.start_date','>=',date('Y-m-d h:i:s a'));
+                }
+               if(in_array(2,$arrField)){
+                    $query->orwhere('nex_venue.end_date','<=',date('Y-m-d h:i:s a'));
+                }
+               
+            });
+        } 
+        
+//        if(!empty($attr['event_status']) && n_array(1){ 
+//            $result->where('nex_venue.start_date','>=',date('Y-m-d h:i:s a'));
+//        } 
+//        if(!empty($attr['event_status']) && $attr['event_status']==2){ 
+//            $result->where('nex_venue.end_date','<=',date('Y-m-d h:i:s a'));
+//        } 
+        
+        $result->where('nex_venue.event_privacy', 1 );
+        $result->where('nex_venue.status', 1 );
+        $resultCount = $result->count();
+        $result = $result->offset($row)->limit($rowperpage)->orderBy('nex_venue.event_id', 'DESC')->get();
+        $data = [$result,$resultCount];
+        return ($result ? $data:false);
+    }
+    
+       /**
+     * Get State Name By id
+     *
+     * @param void()
+     *
+     * @return object roles
+     *
+     * @since 0.1
+     */
+    public static function delEventdata($eid){
+         $delStatus = self::where(['event_id'=>$eid])
+                ->update(['is_deleted'=>1]);
+        return $delStatus ? $delStatus :false;
+    }
+    
 }

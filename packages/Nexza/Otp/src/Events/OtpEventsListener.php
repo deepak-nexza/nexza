@@ -40,30 +40,52 @@ class OtpEventsListener extends BaseEvent
       {
       $user = unserialize($user);
       $otp_content = EmailTemplate::getEmailTemplate("OTP");
-
+      $expName = explode('@', $user["email"]);
+      $name = $expName[0];
       if ($otp_content) {
       $mail_body = str_replace(
-      ['%otp'], [$user['otp']], $otp_content->mail_body
+      ['%name', '%otp'], [ucwords($name), $user['otp']], $otp_content->en_mail_body
       );
-      $sent = Mail::send('email', [
-      'varContent' => $mail_body,  'to' => $user["email"]
-      ], function ($message) use ($user, $otp_content) {
-
-      $message->to($user["email"], $user["first_name"])->subject($otp_content->mail_subject);
-
-      if (!empty($otp_content->reciepient_cc)) {
-      $message->cc($otp_content->reciepient_cc);
-      }
-      if (!empty($otp_content->reciepient_bcc)) {
-      $message->bcc($otp_content->reciepient_bcc);
-      }
-      });
+      $sent = Mail::send('email', ['varContent' => $mail_body,  'to' => $user["email"]
+                    ], function ($message) use ($user, $otp_content) {
+                        $message->from(config('common.FROM_EMAIL'), config('common.FROM_EMAIL'));
+                        $message->to($user["email"])->subject($otp_content->en_mail_subject);
+                    });
       if ($sent) {
       return true;
       }
       return false;
       } else {
-      //self::addActivityLog(config('b2c_common.activity_type.registration_success'), trans('activity_messages.mail_not_send'), $user);
+      }
+      }
+      
+    /**
+     * Event that would be fired for sending OTP, when first time user registers
+     *
+     * @param object $user User object on registration
+     *
+     * @since 0.1
+     */
+    public function finalRegister($user)
+      {
+      $user = unserialize($user);
+      $otp_content = EmailTemplate::getEmailTemplate("Registration");
+      $expName = explode('@', $user["email"]);
+      $name = $expName[0];
+      if ($otp_content) {
+      $mail_body = str_replace(
+      ['%name'], [ucwords($name)], $otp_content->en_mail_body
+      );
+      $sent = Mail::send('email', ['varContent' => $mail_body,  'to' => $user["email"]
+                    ], function ($message) use ($user, $otp_content) {
+                        $message->from(config('common.FROM_EMAIL'), config('common.FROM_EMAIL'));
+                        $message->to($user["email"])->subject($otp_content->en_mail_subject);
+                    });
+      if ($sent) {
+      return true;
+      }
+      return false;
+      } else {
       }
       }
       

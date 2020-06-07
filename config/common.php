@@ -18,9 +18,13 @@ return [
         '2'=>'Private'],
     'uploadDir'=>'Eventupload',
     'url_encrypted'=>env('URL_ENCRYPTED',false),
-    'nexzoa_per'=>8,
-    'nexzoa_Gateway_fee'=>1.5,
+    'nexzoa_per'=>9,
+    'nexzoa_Gateway_fee'=>2.9,
     'FROM_EMAIL'=>'no_reply@gmail.com',
+    'ADMIN_ID'=>'36',
+    'EVENT_STATUS'=>['1'=>'Upcoming status','2'=>'Closed status'],
+    'DATA_LIMITER'=>10,
+    'TAX_RATE'=>18,
 
    
 ];

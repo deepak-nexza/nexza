@@ -35,7 +35,7 @@ class EventTicketRequest extends FormRequest
         $rules['amt_per_person'] = $required.'|numeric';
         $rules['message'] = $required;
         $rules['booking_duration'] ='regex:/[\d]{4}[\-][\d]{2}[\-][\d]{2}[\s]+[\d]{1,12}[:][\d]{1,12}[\s]+[A-Za-z]{2}[\s+][\-\s]+[\d]{4}[\-][\d]{2}[\-][\d]{2}[\s]+[\d]{1,12}[:][\d]{1,12}[\s]+[A-Za-z]{2}/';
-        $rules['event_type'] = $required.'|numeric';
+        $rules['event_type'] = $required;
         return $rules;
     }
 
@@ -53,7 +53,6 @@ class EventTicketRequest extends FormRequest
         $messages['message.numeric'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Message'))]);
         $messages['booking_duration.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','Booking Start/End Date'))]);
         $messages['event_type.required'] = trans('message.required',['field'=>strtoupper(preg_replace('/_/',' ','event_type'))]);
-        $messages['event_type.numeric'] = trans('message.alpha',['field'=>strtoupper(preg_replace('/_/',' ','event_type'))]);
         return $messages;
     }
     

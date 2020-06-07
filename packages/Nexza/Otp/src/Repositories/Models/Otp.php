@@ -40,6 +40,7 @@ class Otp extends BaseModel
         'user_id',
         'otp',
         'is_active',
+        'message_response',
         'created_at',
         'created_by',
         'updated_at',
@@ -105,5 +106,18 @@ class Otp extends BaseModel
     {
         $otpInsert = self::updateOrCreate(['user_id' => (int) $user_id], $attributes);
         return ($otpInsert->id ?:false);
+    }
+    
+     /**
+     * Deactivate user's previous OTP.
+     *
+     * @param integer $userId
+     *
+     * @return boolean
+     */
+    public static function updateOtp($userId,$otp,$resp)
+    {
+        $result = self::where('user_id', (int) $userId)->where('otp', $otp)->where('is_active', 1)->update(['message_response' =>$resp]);
+        return ($result ? true : false);
     }
 }

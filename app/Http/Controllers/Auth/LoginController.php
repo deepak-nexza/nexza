@@ -13,14 +13,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Nexza\Otp\Repositories\Otp\OtpInterface;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\B2c\Repositories\Contracts\Traits\CaptchaTrait;
-use App\B2c\Repositories\Contracts\Traits\UserSessionTrait;
+use App\Repositories\Contracts\Traits\UserSessionTrait; 
 use App\Repositories\User\UserInterface  as B2cUserRepoInterface;
 
 class LoginController extends Controller {
 
-    use CaptchaTrait,
-        AuthenticatesUsers,
+    use AuthenticatesUsers,
         UserSessionTrait;
 
     /**
@@ -443,4 +441,6 @@ class LoginController extends Controller {
                             'email' => [trans('auth.failed')],
         ]);
     }
+    
+
 }

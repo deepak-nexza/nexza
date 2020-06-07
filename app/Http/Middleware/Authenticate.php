@@ -24,7 +24,7 @@ class Authenticate
      * @var array
      */
     protected $excluded_routes = [
-        'backend_logout',
+        'statelist',
         'login_password_reset',
         'login_password_update',
         'otp_authentication',

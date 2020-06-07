@@ -43,6 +43,16 @@
             <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />  
               <div class="row">
                 <div class="col-md-6">
+                    <input type="hidden" name="event_type" value="{{  !empty($ticketDetails->event_id)?$ticketDetails->event_id:''}}"  class="event_type">
+                     <div class="form-group">
+                    <label>Select Your Event</label>
+                    <select class="form-control select2 select2-hidden-accessible" id='event_type' onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option>Select Your Event</option>
+                        @foreach($eventlist as $item=>$val)
+                        <option value="{{$val->event_id}}"  {{ ((!empty($ticketDetails->event_id))? "selected":"") }}>{{$val->event_name}}</option>
+                        @endforeach
+                    </select>
+                  </div>
                  <div class="form-group">
                     <label>Ticket Title</label>
                     <input type="text" name="title" placeholder="Ticket Title" class="form-control" value="{{  !empty($ticketDetails->title)?$ticketDetails->title:''}}">
@@ -71,20 +81,11 @@
                     <label>Booking Amount per individual:</label>
                     <input type="text" name="amt_per_person" value="{{  !empty($ticketDetails->amt_per_person)?$ticketDetails->amt_per_person:''}}" placeholder="INR" class="form-control bkk_amt">
                     </div>
-                     <div class="form-group">
+<!--                     <div class="form-group">
                     <label>Booking Start/End Date:</label>
                     <input type="text" name='booking_duration' value="{{  !empty($ticketDetails->ticket_duration)?$ticketDetails->ticket_duration:''}}" placeholder="Booking Start/End Date" value="" class="form-control my-colorpicker1" id="reservationtime1">
-                 </div>
-                    <input type="hidden" name="event_type" value="{{  !empty($ticketDetails->event_id)?$ticketDetails->event_id:''}}"  class="event_type">
-                     <div class="form-group">
-                    <label>Select Your Event</label>
-                    <select class="form-control select2 select2-hidden-accessible" id='event_type' onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                        <option>Select Your Event</option>
-                        @foreach($eventlist as $item=>$val)
-                        <option value="{{$val->event_id}}"  {{ ((!empty($ticketDetails->event_id))? "selected":"") }}>{{$val->event_name}}</option>
-                        @endforeach
-                    </select>
-                  </div>
+                 </div>-->
+                    
                     <label>Amount BreakUp</label>
                     <div class="form-group">
                          <div class="table-responsive">
@@ -131,6 +132,7 @@
           _token: "{{ csrf_token() }}",
           currencyAmt: "{{ config('common.nexzoa_per') }}",
           gatewayAmt: "{{ config('common.nexzoa_Gateway_fee') }}",
+          checkTicket: "{!! route('check_ticket') !!}",
       };
       </script>
 @endpush

@@ -24,13 +24,12 @@ Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
  
 Route::get('/create-profile', 'Auth\RegisterController@createProfile')->name('create_profile');
 Route::post('/save-profile', 'Auth\RegisterController@saveProfile')->name('save_profile');
+
     
 
 
-//
-Route::get('/', function () {
-    return view('eventfrontend.index');
-});
+Route::get('/', 'GuestController@index')->name('/');
+Route::get('event-detail', 'GuestController@eventDetails')->name('event_detail');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -43,7 +42,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
 //
 //
-Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('password/reset', 'Auth\PasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\PasswordController@sendResetLinkEmail')->name('password.email');
@@ -51,5 +49,25 @@ Route::get('password/reset/{token}/{id}', 'Auth\PasswordController@showResetForm
 Route::post('password/reset', 'Auth\PasswordController@reset')->name('password.update');
 
 Route::get('/profile', 'HomeController@openProfile')->name('profile');
-Route::get('/update-profile', 'HomeController@updateProfile')->name('update_profile');
+//Route::get('/update-profile', 'HomeController@updateProfile')->name('update_profile');
+Route::post('/search', 'HomeController@search')->name('search');
+Route::get('/search', 'HomeController@search')->name('search');
+Route::post('/searchlist', 'HomeController@searchlist')->name('searchlist');
+Route::get('/event-detail/{name}', 'HomeController@eventDetailPage')->name('event_detail');
+Route::post('/toSearch', 'HomeController@toSearchList')->name('search_list');
+Route::get('/about', 'GuestController@aboutUs')->name('about');
+Route::get('/contact', 'GuestController@contactus')->name('contact');
+Route::get('/event-gallery', 'GuestController@event_gallery')->name('event_gallery');
+Route::get('/privacy-policy', 'GuestController@privacy_policy')->name('privacy_policy');
+Route::get('disclaimer/', 'GuestController@disclaimer')->name('disclaimer');
+Route::get('t-c/', 'GuestController@tandc')->name('t_c');
+
+
+///booking
+
+Route::get('/book/{name}', 'GuestController@bookEvent')->name('book_event');
+Route::post('/book/{name}/candidates', 'GuestController@bookEventCandidates')->name('book_event_candidates');
+Route::post('/saveCandidate', 'GuestController@saveCandidate')->name('save_candidate');
+Route::get('/pay/{event}', 'GuestController@payNow')->name('pay');
+Route::get('/thankyou', 'GuestController@thankyou')->name('thankyou');
 

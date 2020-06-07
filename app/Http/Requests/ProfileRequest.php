@@ -25,8 +25,8 @@ class ProfileRequest extends FormRequest
     {
         $request = request();
         $rules = [ 
-//            'phone' => ['required', 'isvalidchar'],
-            'email' => ['required', 'isvalidchar', 'email', 'unique:users', 'min:8', 'max:65'],
+            'email' => ['required', 'isvalidchar', 'email', 'uniqueData:nex_user,email', 'min:8', 'max:65'],
+            'phone' => ['required', 'isvalidchar','uniquPhone:nex_user,phone,','regex:/^[7-9][0-9]{9}$/'],
             'password' => ['required', 'isvalidchar', 'regex:/^(?!.*(.)\1\1)(?=.*[A-Z])(?=.*[\\\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\<\>\'\;\.\?\:\"\`\|\/\+\-\_\=\,])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9\\\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\<\>\'\;\.\?\:\"\`\|\/\+\-\_\=\,]{8,50}$/'],
             'password_confirmation' => ['required', 'isvalidchar', 'same:password', 'regex:/^(?!.*(.)\1\1)(?=.*[A-Z])(?=.*[\\\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\<\>\'\;\.\?\:\"\`\|\/\+\-\_\=\,])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9\\\~\!\@\#\$\%\^\&\*\(\)\[\]\{\}\<\>\'\;\.\?\:\"\`\|\/\+\-\_\=\,]{8,50}$/'],
         ];
@@ -45,9 +45,10 @@ class ProfileRequest extends FormRequest
             'email.required' => trans('error_message.reg.valid_email_req'),
             'email.email' => trans('error_message.reg.valid_email_format'),
             'email.checkdomain' => trans('error_message.reg.valid_email_format'),
-            'biz_name.required' => trans('error_message.create_customer.biz_name_required'),          
-            'biz_name.min' => trans('error_message.create_customer.biz_name_min'),
-            'contact_number.required' => trans('error_message.create_customer.contac_required'),
+            'email.unique_data' => trans('Emil has already been taken'),
+            'phone.uniqu_phone' => trans('Phone has already been taken'),
+            'phone.required' => trans('Phone Required'),          
+            'phone.isvalidchar' => trans('\\\\'),
         ];
         return $messages;
     }

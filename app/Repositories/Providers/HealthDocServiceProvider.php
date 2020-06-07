@@ -32,11 +32,14 @@ class HealthDocServiceProvider extends ServiceProvider
         Validator::extend('checkdomain', function ($attribute, $value, $parameters) {
             return BlockedEmails::isEmailAllowed($value);
         });
-        Validator::extend('checkindustry', function ($attribute, $value, $parameters) {
-            return Helpers::validateIndustry($parameters);
-        });
         Validator::extend('unique_multiple', function ($attribute, $value, $parameters, $validator) {
             return Unique::isUnique($attribute, $value, $parameters, $validator);
+        });
+        Validator::extend('uniquPhone', function ($attribute, $value, $parameters, $validator) {
+            return Unique::isUniquePhone($attribute, $value, $parameters, $validator);
+        });
+        Validator::extend('uniqueData', function ($attribute, $value, $parameters, $validator) {
+            return Unique::emailExists($attribute, $value, $parameters, $validator);
         });
         Validator::extend('checkmime', function ($attribute, $value, $parameters, $validator) {
             return (new Mimes($attribute, $value, $parameters, $validator))->isValid();

@@ -2,6 +2,11 @@
 @section('content')
     
 <section class="content">
+    @if(session()->has('message'))
+    <div class="alert alert-success">
+        {{ session()->get('message') }}
+    </div>
+@endif
 @if ($errors->any())
 		    <div class="alert alert-danger">
 		    	<strong>Whoops!</strong> Please correct errors and try again!.
@@ -16,9 +21,10 @@
           <!-- SELECT2 EXAMPLE -->
                <div class="box box-info">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Create Ticket Layout</h3>
+                  <h3 class="box-title">Ticket List</h3>
                 </div>
             <div class="box-body">
+                <button style="background:red"><a  href="{{ route('event_ticket') }}" style="color:white">Add Event Tickets</a></button>
             <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />  
             
             <div class="row">

@@ -9,6 +9,7 @@ $(document).ready(function() {
              var sval = $(event.target).val();
                 getTicketLIst(sval);             
         });
+        
 });
 function getTicketLIst(sval){
     $.ajax({

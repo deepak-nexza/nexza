@@ -14,7 +14,7 @@ class Eventype extends BaseModel
      *
      * @var string
      */
-    protected $table = 'nex_mst_venue_type';
+    protected $table = 'nex_mst_event_type';
 
     /**
      * Custom primary key is set for the table
@@ -28,14 +28,14 @@ class Eventype extends BaseModel
      *
      * @var boolean
      */
-    public $timestamps = true;
+    public $timestamps = false;
 
     /**
      * Maintain created_by and updated_by automatically
      *
      * @var boolean
      */
-    public $userstamps = true;
+    public $userstamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -126,7 +126,7 @@ class Eventype extends BaseModel
      * @throws InvalidDataTypeExceptions
      * @throws BlankDataExceptions
      */
-    public static function saveState($arrData, $id)
+    public static function saveEventCategory($arrData, $id)
     {
         /**
          * Check array is not
@@ -187,11 +187,10 @@ class Eventype extends BaseModel
      *
      * @return list
      */
-    public static function getAllStateData()
+    public static function getAllEventCat()
     {
-       $result =  self::select('id', 'state_name')
-                ->where('is_active', config('b2c_common.ACTIVE'))
-                ->pluck('state_name', 'id');
+       $result =  self::select('*')
+                ->get();
         return ($result ? : false);
     }
     
@@ -204,8 +203,28 @@ class Eventype extends BaseModel
      *
      * @since 0.1
      */
-    public static function getStateData($state_id){
-        $returnData = self::select('state_name')->where('id', $state_id)->first();
-        return $returnData ? $returnData['state_name'] :false;
+    public static function getEventCatDetails($id){
+        $returnData = self::select('*')->where('id', $id)->first();
+        return $returnData ? $returnData :false;
+    }
+    
+     /**
+     * Set State Active or Inactive.
+     *
+     * @param integer $state_id
+     * @param integer $status
+     * @return type
+     * @throws InvalidDataTypeExceptions
+     */
+    public static function deleteEventCategory($e_id)
+    {
+        if (!is_int($e_id)) {
+            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
+        }
+
+        $data = self::where('id', (int) $e_id)
+                ->delete();
+
+        return ($data ? (int) $data : false);
     }
 }

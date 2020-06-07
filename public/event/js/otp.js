@@ -9,6 +9,8 @@ try {
             cache: false,
             async: true,
             success: function (data) {
+                 $('.otpsubmit').text('Submit');
+                 $(".errmsg").html("");
                 var code = data.status;
                 var button_id = data.button_id;
                 if (code == 0) {
@@ -28,16 +30,16 @@ try {
                     window.location.href = messages.login_auth_url;
                     return false;
                 } else if (code == 5 || code == 3 ) {
-                    htmlContent = bootStarpDangerAlert('Success');
+                    htmlContent = bootStarpDangerAlert('Registration Successful');
                      $('.msghtml').html(htmlContent);
-                    window.location.href = messages.login_url;
+                    window.location.href = messages.login_url+'?login=login';
                     return false;
                } else if (code == 6) {
                     htmlContent = bootStarpDangerAlert(messages.otp_authenticated);
                     $('.msghtml').html(htmlContent);
                     return false;
                 } else if (code == 7) {
-                    window.location.href = messages.login_url;
+                      window.location.href = messages.login_url+'?login=login';
                     return false;
                 }else if (code == 8) {
                     htmlContent = bootStarpSuccessAlert(messages.otp_submit_last_attempt);
@@ -54,18 +56,14 @@ try {
                     var p = window.parent;
                     p.jQuery('#otpreg').modal('hide');
                     p.jQuery('#loginmodal').find('.modal-header').addClass('hidden');
-                    $('#promo_expiry_modal').modal({ backdrop: 'static', keyboard: false });
-                    $('.promo_code_exriry').attr('data-rel', data.redirect);
-                    $.growl.notice({title: "Success", message: messages.promo_code_expired, duration: 2200});
                  }  else if (code == 11) {
                     htmlContent = bootStarpDangerAlert('You exceeded one-time verification code verification max attempt, try again after 60 mins.');
                     $('.msghtml').html("");
-                    // $('.errmsg').html(htmlContent);
-                    //$.growl.notice({title: "Success", message: htmlContent, duration: 3200});
                     parent.window.location.href = messages.login_url;
                     return false;
                 }
             },   error: function (data) {
+                $('.otpsubmit').text('submit');
                 if (data.status == 401) {
                     window.location.href = messages.login_url;
                     return false;
@@ -165,7 +163,7 @@ try {
 //        });
 
         $(".otpsubmit").on("click", function () {
-           
+          $('.otpsubmit').text('Please Wait......');
            var isValid = $("#NexzaForms").valid();
                 if (isValid) {
                 var otpVal = $("#otp_vals").val();
@@ -185,8 +183,7 @@ try {
                 var userOtpstatus=checkUserOtp(blackbox,otpVal,status,button_id, loginPassword);
             }
             else {
-                var otp_error = messages.otp_req_webtag;
-                var otp_incorrect = messages.otp_not_correct_webtag;
+                $('.otpsubmit').text('submit');
             }
         });
         $(document).on("keypress", ".numberCls", function (evt) {
@@ -201,6 +198,8 @@ try {
         });
        
         $('#resent_code').click(function () {
+            $("#resent_code").text('resending otp...');
+           $(".otpsubmit").hide();
            $.ajax({
                 url: messages.resend_url,
                 type: 'POST',
@@ -209,7 +208,7 @@ try {
                 async: true,
                 data: { _token: messages._token},
                 success: function (result) {
-                    $( "#resent_code").show();
+                    $( "#resent_code").text('Resend Otp');
                     $( "#resent_code").bind( "click" );
                     $("#resent_code").show();
                     $(".otpsubmit ").show();
@@ -230,7 +229,10 @@ try {
                         htmlContent = bootStarpSuccessAlert(messages.otp_resent);
                         $('.msghtml').html(htmlContent);
                     }
-                }
+                },
+                error: function (data) {
+                $("#resent_code").text('Resend Otp');
+            }
             });
         });
        

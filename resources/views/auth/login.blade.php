@@ -1,7 +1,8 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
+@extends('layouts.event.layout_event')
+         
+@section('contentData')
+<section class="sign">
+<div class="container sign__area">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -59,7 +60,7 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    <a href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                             </div>
@@ -70,4 +71,6 @@
         </div>
     </div>
 </div>
+    <!--End Clients Section-->
+</section>
 @endsection
