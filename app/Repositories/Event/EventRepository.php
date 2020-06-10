@@ -277,4 +277,13 @@ class EventRepository implements EventInterface
         {  
             return order::updateOrder($arrData, $attr);
         }
+        
+          public static function getOrderDetails($id) 
+        {  
+            return order::getOrder($id);
+        }
+         public static function getCandidateDetail($arr) 
+        {  
+            return candidate::getCandidateDetail($arr);
+        }
 }

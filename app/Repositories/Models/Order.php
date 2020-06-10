@@ -35,7 +35,6 @@ class Order extends BaseModel
      *
      * @var boolean
      */
-    public $userstamps = true;
 
     /**
      * The attributes that are mass assignable.
@@ -49,6 +48,11 @@ class Order extends BaseModel
         'payment_response',
         'status', 
         'session_id',
+        'Payment_frm_gtwy',
+        'methods',
+        'gatway_order_id',
+        'email',
+        'phone',
         'created_at',
         'updated_at',
         'updated_by',
@@ -109,11 +113,15 @@ class Order extends BaseModel
      *
      * @return type
      */
-    public static function getAllEvent($flag=false,$user_id)
+    public static function getOrder($arr)
     {
-        $arrCity = self::select('*')
-            ->get();
-        return ($arrCity ? : false);
+        if (!is_array($arr)) {
+            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
+        }
+        $arrData = self::select('*')
+                ->where($arr)
+            ->first();
+        return ($arrData ? $arrData : false);
     }
 
 

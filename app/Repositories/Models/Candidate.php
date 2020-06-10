@@ -325,6 +325,22 @@ class Candidate extends BaseModel
             ->get();
         return ($result ? $result : false);
     }
+        /**
+     * Get All States of USA
+     *
+     * @return type
+     */
+    public static function getCandidateDetail($arr)
+    {
+        if (!is_array($arr)) {
+            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
+        }
+        $arrData = self::select('*')
+                ->where($arr)
+            ->get();
+        return ($arrData ? $arrData : false);
+    }
+
     
      /**
      * Get All States of USA

@@ -259,5 +259,10 @@ class Helper
         }
         return [];
     }
+    public static function getTicketDetails($arr) 
+    {
+        $data = \App\Repositories\Models\ticket::getTicketDetails($arr);
+        return $data ? $data : false;
+    }
     
 }

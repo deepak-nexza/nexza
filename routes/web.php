@@ -68,6 +68,13 @@ Route::get('t-c/', 'GuestController@tandc')->name('t_c');
 Route::get('/book/{name}', 'GuestController@bookEvent')->name('book_event');
 Route::post('/book/{name}/candidates', 'GuestController@bookEventCandidates')->name('book_event_candidates');
 Route::post('/saveCandidate', 'GuestController@saveCandidate')->name('save_candidate');
-Route::get('/pay/{event}', 'GuestController@payNow')->name('pay');
+Route::post('/pay/{event}', 'GuestController@payNow')->name('pay');
 Route::get('/thankyou', 'GuestController@thankyou')->name('thankyou');
+
+Route::get('paywithrazorpay', 'RazorpayController@payWithRazorpay')->name('paywithrazorpay');
+// Post Route For Makw Payment Request
+Route::get('payment-success', 'RazorpayController@payment')->name('payment_success');
+Route::post('payment', 'RazorpayController@payment')->name('payment');
+Route::post('dopayment', 'RazorpayController@dopayment')->name('dopayment');
+Route::get('receipt/{order}/success', 'RazorpayController@receipt')->name('receipt');
 

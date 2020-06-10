@@ -53,4 +53,26 @@ $('.'+buttonLoad).text('Save Details');
 });
 
 
+$('.razorpay-payment-button').css('display','none');
+$('.checkout').on('click',function(e){
+    $.ajax({
+        type: "POST",
+        url: messages.payroute,
+        data: {_token:messages._token},
+        success: function (data) {
+            alert(data.order)
+          if(data){
+              $('#data').val(data.order);
+              $('#finalPayRazor').submit();
+          }
+        },
+        error: function (data) {
+            alert('something went wrong');
+        }
+    }); 
+
+});
+
+
+
 });

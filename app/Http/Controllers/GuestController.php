@@ -295,8 +295,7 @@ class GuestController extends Controller
             $this->event->updateCandidate(['order_id'=>$retData['order_id']],['session_id'=>$retData['session_id']]);
             $this->event->updateCandidate(['session_id'=>null],['order_id'=>$retData['order_id']]);
             $this->event->updateOrder(['session_id'=>null],['order_id'=>$retData['order_id']]);
-            return redirect()->route('thankyou');
-            
+            return ['order' => \Scramble::encrypt($retData['order_id'])];
        } catch (\Exception $ex) {
                 return response(Helpers::getExceptionMessage($ex));
        }
