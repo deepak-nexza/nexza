@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Event\Frontend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest as eventRequest;
+use App\Http\Requests\EventRequestForDesc as eventRequestForDesc;
 use App\Http\Requests\EventTicketRequest as eventTicketRequest;
 use Session;
 use Helpers;
@@ -58,20 +59,20 @@ class EventController extends Controller
      */
     public function createEvent(Request $request)
     {
-        $eventUid = $request->get('event_uid');
+        $eventid = $request->get('event_id');
         $countryList = Helpers::countryList()->toArray();
         $stateList = Helpers::stateList()->toArray();
         $eventlist = Helpers::getAllEvent()->toArray();
         $mode = config('common.privacy_mode');
-        if(!empty($eventUid)){
-        $eventDetail = $this->event->getEventDetails($eventUid);
+        if(!empty($eventid)){
+        $eventDetail = $this->event->getEventDetailsByID($eventid);
         }
         return view('eventbackend.create_event',[
             'country_list'=>$countryList,
             'state_list'=>$stateList,
             'mode'=>$mode,
             'eventDetail'=>!empty($eventDetail)?$eventDetail:null,
-            'eventUid'=>!empty($eventUid)?$eventUid:null,
+            'eventid'=>!empty($eventid)?$eventid:null,
             'eventlist'=>$eventlist]);
     }
     
@@ -102,10 +103,13 @@ class EventController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function eventTicket()
+    public function eventTicket(Request $request)
     {
+        $eventid = $request->get('event_id');
+        $eventDetail = $this->event->getEventDetailsByID($eventid);
+        $ticketDetails = $this->event->getAllEventWithUid($eventDetail['event_id']);
         $eventList = $this->event->getEventList(false,(int) Auth::id());
-        return view('eventbackend.event_ticket',['eventlist'=>$eventList]);
+        return view('eventbackend.event_ticket',['eventlist'=>$eventList,'ticketDetail'=>$ticketDetails,'eventDetail'=>$eventDetail]);
     }
     
      /**
@@ -140,71 +144,23 @@ class EventController extends Controller
         $eventList = $this->event->getEventList(false,(int) Auth::id());
         return view('eventbackend.event_ticket_list',['eventlist'=>$eventList,'ticket_id'=>$ticket_ID,'user_id'=>$user_id,'ticketDetails'=>$ticketDetails]);
     }
+      /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function eventdescription(Request $request)
+    {
+        $event_data = $request->get('event_data');     
+        return view('eventbackend.event_description',['eventDetail'=>$event_data]);
+    }
     
     public function saveEvent(eventRequest $request)
     {
-        try{
-        if($files=$request->file('banner_image')){
-            $name=$files->getClientOriginalName();
-            $storage_path = public_path(); 
-            $uploadDir = config('common.uploadDir');
-            $uploadPath = $storage_path.'/'.$uploadDir;
-            $files->move($uploadPath,$name);
-        }
-        $dateRange = $request->get('event_duration');
-        $description = $request->get('description');
-        $geteventRange = preg_split('/[\s][\-][\s]/',$dateRange);
-        $eventDesc = Helpers::formatEditorData($description);
+        
         $data = [];
-        $data['event_name'] = $request->get('event_name');
-        $data['event_type'] = $request->get('event_type');
-        $data['country_id'] = $request->get('country_id');
-        $data['state_id'] = $request->get('state_id');
-        $data['event_duration'] = $request->get('event_duration');
-        $data['event_privacy'] = $request->get('event_privacy');
-        $data['status'] = $request->get('status');
-        $data['event_location'] = $request->get('event_location');
-        $data['description'] = $request->get('description');
-        $data['banner_image'] = $name;
-        $data['start_date'] = $geteventRange[0];
-        $data['end_date'] = $geteventRange[1];
-        $data['user_id'] = Auth::id();
-        $data['site_url'] = $request->get('websiteurl');
-        $data['price'] = $request->get('min_amount');
-        $data['gst'] = $request->get('gst');
-        $id = null;
-        $retData = $this->event->saveEvent($data,$id);
-        $createEventID = 'NEX'.$retData['event_type'].$retData['event_id'].$retData['user_id'];
-        $datas['event_uid'] = $createEventID;
-        $this->event->updateEvent($datas,['event_id'=>$retData['event_id']]);
-        return redirect('event/upcoming-event');
-       } catch (\Exception $ex) {
-                return response(Helpers::getExceptionMessage($ex));
-       }
-    }
-    
-    
-    public function updateEvent(eventRequest $request)
-    {
-        $eventUid = $request->get('event_uid');
         try{
-        $data = [];
-        $dateRange = $request->get('event_duration');
-        $description = utf8_encode($request->get('description'));
-        $geteventRange = preg_split('/[\s][\-][\s]/',$dateRange);
-        $eventDesc = Helpers::formatEditorData($description);
-        $data['event_name'] = $request->get('event_name');
-        $data['event_type'] = $request->get('event_type');
-        $data['country_id'] = $request->get('country_id');
-        $data['state_id'] = $request->get('state_id');
-        $data['event_duration'] = $request->get('event_duration');
-        $data['event_privacy'] = $request->get('event_privacy');
-        $data['status'] = $request->get('status');
-        $data['event_location'] = $request->get('event_location');
-        $data['description'] = utf8_encode($request->get('description'));
-        $data['site_url'] = $request->get('websiteurl');
-        $data['price'] = $request->get('min_amount');
-        if($files=$request->file('banner_image')){
+        if(!empty($files=$request->file('banner_image'))){
             $name=$files->getClientOriginalName();
             $storage_path = public_path(); 
             $uploadDir = config('common.uploadDir');
@@ -212,11 +168,45 @@ class EventController extends Controller
             $files->move($uploadPath,$name);
             $data['banner_image'] = $name;
         }
+        $dateRange = $request->get('event_duration');
+        $description = $request->get('description');
+        $geteventRange = preg_split('/[\s][\-][\s]/',$dateRange);
+        $eventDesc = Helpers::formatEditorData($description);
+        $data['event_name'] = $request->get('event_name');
+        $data['event_type'] = $request->get('event_type');
+        $data['country_id'] = $request->get('country_id');
+        $data['state_id'] = $request->get('state_id');
+        $data['event_duration'] = $request->get('event_duration');
+        $data['event_privacy'] = $request->get('event_privacy');
+        $data['status'] = $request->get('status');
+        $data['event_location'] = $request->get('event_location');
+        
         $data['start_date'] = $geteventRange[0];
         $data['end_date'] = $geteventRange[1];
         $data['user_id'] = Auth::id();
-        $this->event->updateEvent($data,['event_uid'=>$eventUid]);
-        return redirect('event/upcoming-event')->with('success', [trans('message.success_update')]);
+        $data['site_url'] = $request->get('websiteurl');
+        $data['price'] = $request->get('min_amount');
+        $data['gst'] = $request->get('gst');
+        $id = !empty($request->get('event_id'))?$request->get('event_id'):null;
+        $retData = $this->event->saveEvent($data,$id);
+        if(empty($id)){
+        $createEventID = 'NEX'.$retData['event_type'].$retData['event_id'].$retData['user_id'];
+        $datas['event_uid'] = $createEventID;
+        $this->event->updateEvent($datas,['event_id'=>$retData['event_id']]);}
+        return redirect()->route('event_desc',['event_data'=>$retData]);
+       } catch (\Exception $ex) {
+                return response(Helpers::getExceptionMessage($ex));
+       }
+    }
+    
+    
+    public function saveDesc(eventRequestForDesc $request)
+    {
+        $eventid = $request->get('event_id');
+        try{
+        $data['description'] = utf8_encode($request->get('description'));
+        $this->event->saveEvent($data,$eventid);
+        return redirect()->route('event_ticket',['event_id'=>$eventid])->with('success', [trans('message.success_update')]);
        } catch (\Exception $ex) {
                 return response(Helpers::getExceptionMessage($ex));
        }
@@ -234,7 +224,9 @@ class EventController extends Controller
         $eventDesc = Helpers::formatEditorData($description);
         $data = [];
         $data['title'] = $request->get('title');
-        $data['event_id'] = $request->get('event_type');
+        $event_uid = $request->get('event_uid');
+        $event_id = $request->get('event_id');
+        $data['event_id'] = $request->get('event_id');
         $data['type'] = $request->get('type');
         $data['amt_per_person'] = $request->get('amt_per_person');
 //        $data['ticket_duration'] = $dateRange;
@@ -252,7 +244,7 @@ class EventController extends Controller
         $id = !empty($ticket_id)?$ticket_id:null;
         $retData = $this->event->saveEventTicket($data,$id);
         $id = !empty($retData['ticket_id'])?$retData['ticket_id']:$id;
-        return redirect()->route('list_event_ticket',['ticket_id'=>$id,'user_id'=>Auth::id()]);
+        return redirect()->route('event_ticket',['event_uid'=>$event_uid,'event_id'=>$event_id]);
        } catch (\Exception $ex) {
                 return response(Helpers::getExceptionMessage($ex));
        }
@@ -374,7 +366,25 @@ class EventController extends Controller
        }
     }
     
-  
+   public function submitEvent(Request $request)
+    {
+       try{
+        $STATUS = Config('common.submitted');
+        $eventid = (int) $request->get('event_id');
+        $submitVal = (int) $request->get('submitVal');
+        if(empty($submitVal)){
+            abort(400);
+        }
+        $eventDetail = $this->event->getEventDetailsByID($eventid);
+        $data['event_status'] = (int) $STATUS;
+        $this->event->saveEvent($data,$eventid);
+        $event_name = preg_replace('/\s+/', '-', $eventDetail['event_name']);
+        return redirect()->route('event_detail',['event_id'=>$eventid.'-'.$eventDetail['event_uid']])->with('success', [trans('message.success_update')]);
+       } catch (\Exception $ex) {
+                return response(Helpers::getExceptionMessage($ex));
+       }
+    }
+    
     
    
 }

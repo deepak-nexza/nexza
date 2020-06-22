@@ -3895,7 +3895,8 @@ li:hover > .megadropdown {
   font-weight: 300; }
 
 .explore .select2-container--default .select2-selection--single .select2-selection__arrow {
-  top: 0.75rem; }
+  /*top: 0.75rem;*/
+}
 
 .explore__form-desc {
   font-size: 0.9375rem;

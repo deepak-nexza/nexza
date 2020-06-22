@@ -36,6 +36,9 @@ Route::group(
         Route::get('/event-category-list', 'Event\Frontend\EventController@eventCategory_list')->name('eventCategory_list');
         Route::get('/delete-event-category', 'Event\Frontend\EventController@deleteEventCategory')->name('del_eve_list');
         Route::get('/event-category', 'Event\Frontend\EventController@eventCategory')->name('eve_cat');
+        Route::get('/event-description', 'Event\Frontend\EventController@eventdescription')->name('event_desc');
+        Route::post('/save-description', 'Event\Frontend\EventController@saveDesc')->name('save_desc');
+        Route::post('/submit-event', 'Event\Frontend\EventController@submitEvent')->name('submit_event');
        
 });
 });

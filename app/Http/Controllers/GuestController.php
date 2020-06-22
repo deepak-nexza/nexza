@@ -211,7 +211,6 @@ class GuestController extends Controller
             $ticketID =  \Scramble::decrypt($val);
             $canArr[$ticketID] = $quantity[$key];
          }
-          
         try{
             $data['event_uid'] = $euid;
             $eventDetail = $this->event->getEventDetails($data['event_uid']);

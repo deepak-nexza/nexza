@@ -286,4 +286,14 @@ class EventRepository implements EventInterface
         {  
             return candidate::getCandidateDetail($arr);
         }
+         public static function getAllEventWithUid($event_id) 
+        {  
+            return ticket::getAllEventWithUid($event_id);
+        }
+        
+        public static function getEventDetailsByID($eventid) 
+        {  
+            return Venue::getEventDetailsByID($eventid);
+        }
+        
 }

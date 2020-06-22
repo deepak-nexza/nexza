@@ -30,14 +30,7 @@ class Authenticate
         'otp_authentication',
         'get_city_state_by_postcode',
         'get_state_postcode_by_city',
-        'auth_session_check',
-        'view_subdiv_industry',
-        'view_industry_group',
-        'view_industry_class',
-        'apply_promo_code',
-        'customer_document_doc_delete',
-        'customer_document_doc_download',
-        'customer_save_application',
+        
     ];
 
     /**

@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/xampp7.2/htdocs/nexza/config/common.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/resources/views/eventbackend/event_description.blade.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/app/Repositories/Models/Venue.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/resources/views/eventfrontend/event_detail.blade.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/public/js/eventbackend/currency.min.js</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/resources/views/eventbackend/event_ticket.blade.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/app/Http/Controllers/Event/Frontend/EventController.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/app/Repositories/Event/EventRepository.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/routes/event.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/resources/views/eventbackend/create_event.blade.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/resources/views/layouts/event/admin_layout_event.blade.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/public/js/eventbackend/event_ticket.js</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/app/Repositories/Event/EventInterface.php</file>
+            <file>file:/D:/xampp7.2/htdocs/nexza/app/Repositories/Entities/User/Exceptions/InvalidDataTypeExceptions.php</file>
+        </group>
+    </open-files>
 </project-private>

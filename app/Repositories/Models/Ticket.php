@@ -141,6 +141,20 @@ class Ticket extends BaseModel
             ->get();
         return ($arrCity ? : false);
     }
+    
+    /**
+     * Get All States of USA
+     *
+     * @return type
+     */
+    public static function getAllEventWithUid($event_id)
+    {
+        
+        $ticketLIst = self::select('*')
+            ->where('event_id',$event_id)
+            ->get();
+        return ($ticketLIst ?$ticketLIst : false);
+    }
 
 
     /**

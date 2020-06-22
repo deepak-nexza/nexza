@@ -1,4 +1,4 @@
-@extends('layouts.event.admin_layout_event')
+@extends('layouts.event.layout_event')
          
 
 @section('contentData')

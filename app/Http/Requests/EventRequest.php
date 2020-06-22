@@ -33,11 +33,14 @@ class EventRequest extends FormRequest
         $rules['event_type'] = $required.'|numeric';
         $rules['country_id'] = $required.'|numeric';
         $rules['state_id'] = $required.'|numeric';
-        $rules['banner_image'] = $required;
+        if(!empty($request->get('banner_image'))){
+            
+            $rules['banner_image'] = $required;
+        }
         $rules['event_duration'] ='regex:/[\d]{4}[\-][\d]{2}[\-][\d]{2}[\s]+[\d]{1,12}[:][\d]{1,12}[\s]+[A-Za-z]{2}[\s+][\-\s]+[\d]{4}[\-][\d]{2}[\-][\d]{2}[\s]+[\d]{1,12}[:][\d]{1,12}[\s]+[A-Za-z]{2}/';
         $rules['event_privacy'] = $required.'|numeric';
         $rules['event_location'] = $required;
-        $rules['description'] = $required;
+        if(!empty($request->get('description'))) { $rules['description'] = $required; }
         $rules['gst'] = $required.'|numeric|between:0,3';
         return $rules;
     }

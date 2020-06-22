@@ -25,6 +25,7 @@ return [
     'EVENT_STATUS'=>['1'=>'Upcoming status','2'=>'Closed status'],
     'DATA_LIMITER'=>10,
     'TAX_RATE'=>18,
+    'STATUS'=>['Progress'=>1,'description'=>2,'Ticket'=>3,'Submitted'=>4,],
 
    
 ];

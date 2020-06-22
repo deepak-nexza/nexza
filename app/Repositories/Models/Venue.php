@@ -239,16 +239,25 @@ class Venue extends BaseModel
      */
     public static function getEventDetails($id)
     {   
-        $result = self::select('nex_venue.*','nex_user.*','state.name as statname','state.id as state_id','ticket.*')
-        ->leftjoin('nex_user', 'nex_user.id', '=', 'nex_venue.user_id')
+        $result = self::select('nex_venue.*','nex_user.*','state.name as statname','state.id as state_id')
+        ->join('nex_user', 'nex_user.id', '=', 'nex_venue.user_id')
         ->leftjoin('nex_mst_state as state', 'state.id', '=', 'nex_venue.state_id')
         ->leftjoin('nex_event_ticket as ticket', 'ticket.event_id', '=', 'nex_venue.event_id');
-        $result->where('nex_venue.status', 1 );
-        $result->where('event_uid', $id);
+        $result->where('nex_venue.event_uid', $id);
         $result  = $result->first();
         return $result;
     }
     
+     public static function getEventDetailsByID($id)
+    {   
+        $result = self::select('nex_venue.*','nex_user.*','state.name as statname','state.id as state_id')
+        ->join('nex_user', 'nex_user.id', '=', 'nex_venue.user_id')
+        ->leftjoin('nex_mst_state as state', 'state.id', '=', 'nex_venue.state_id')
+        ->leftjoin('nex_event_ticket as ticket', 'ticket.event_id', '=', 'nex_venue.event_id');
+        $result->where('nex_venue.event_id', $id);
+        $result  = $result->first();
+        return $result;
+    }
     /**
      * Get All state data
      *

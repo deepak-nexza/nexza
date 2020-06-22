@@ -12,6 +12,10 @@ use Illuminate\Routing\UrlGenerator as BaseUrlGenerator;
 class UrlGenerator extends BaseUrlGenerator
 {
 
+       protected $non_enc_routes = [
+            'event-detail',
+        ];
+       
     /**
      * Get the URL to a named route.
      *
@@ -24,7 +28,6 @@ class UrlGenerator extends BaseUrlGenerator
      */
     public function route($name, $parameters = [], $absolute = true)
     {
-
         $encryptedParameters = $parameters;
 
         if (Auth::guest() === false && Config::get('common.url_encrypted', false) === true) {

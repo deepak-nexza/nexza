@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Session;
 class UrlParamProtector
 {
 
+        protected $non_enc_routes = [
+            'event_detail',
+            'event_desc',
+        ];
+     
     /**
      * Session key.
      *
@@ -165,6 +170,7 @@ class UrlParamProtector
      */
     public function reveal(Request &$request)
     {
+        $open_call = in_array($request->segment(1), $this->non_enc_routes);
         if (Config::get('common.url_encrypted', false) === true) {
             $this->request = $request;
 
