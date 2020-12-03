@@ -51,6 +51,7 @@ class Venue extends BaseModel
             'banner_image',
             'country_id',
             'state_id',
+            'city_id',
             'phone',
             'booking_amt', 
             'event_location', 
@@ -61,7 +62,9 @@ class Venue extends BaseModel
             'event_privacy', 
             'facebook', 
             'twitter', 
-            'google', 
+            'instagram', 
+            'event_status',
+            'youtube', 
             'created_at',
             'updated_at', 
             'created_by', 
@@ -69,8 +72,8 @@ class Venue extends BaseModel
             'total_views', 
             'total_reviews', 
             'site_url',
-        'price',
-        'gst',
+            'price',
+            'gst',
             'status', 
             'terms',
             'is_active'
@@ -163,6 +166,7 @@ class Venue extends BaseModel
     public static function getAllEvent($flag=false,$user_id)
     {
         $adminConfig = config('common.ADMIN_ID');
+        $comp = '';
         if($flag){ $comp = '<'; } else { $comp = '>'; }
         $arrCity = self::select('*')
              ->where(function($query)use($user_id,$adminConfig){
@@ -170,7 +174,8 @@ class Venue extends BaseModel
                         $query->where('user_id',$user_id);
                     }
                 })
-            ->where('start_date',$comp,date('Y-m-d h:i:s a'))
+                ->where('start_date',$comp,date('Y-m-d h:i:s a'))
+            
             ->where('is_deleted','!=',1)
             ->orderBy('event_name', 'asc')
             ->get();
@@ -250,9 +255,10 @@ class Venue extends BaseModel
     
      public static function getEventDetailsByID($id)
     {   
-        $result = self::select('nex_venue.*','nex_user.*','state.name as statname','state.id as state_id')
+        $result = self::select('nex_venue.*','nex_user.*','state.name as statname','state.id as state_id','city.id as city_id')
         ->join('nex_user', 'nex_user.id', '=', 'nex_venue.user_id')
         ->leftjoin('nex_mst_state as state', 'state.id', '=', 'nex_venue.state_id')
+        ->leftjoin('nex_mst_city as city', 'city.id', '=', 'nex_venue.city_id')
         ->leftjoin('nex_event_ticket as ticket', 'ticket.event_id', '=', 'nex_venue.event_id');
         $result->where('nex_venue.event_id', $id);
         $result  = $result->first();
@@ -392,4 +398,29 @@ class Venue extends BaseModel
         return $delStatus ? $delStatus :false;
     }
     
+    /**
+     * Get All States of USA
+     *
+     * @return type
+     */
+    public static function getEventListWithArr($arr,$user_id)
+    {
+        $adminConfig = config('common.ADMIN_ID');
+        $arrCity = self::select('*')
+        ->where(function($query)use($user_id,$adminConfig){
+               if($user_id!=$adminConfig) {
+                   $query->where('user_id',$user_id);
+               }
+        })
+        ->where(function($query)use($arr){
+               if(!empty($arr)) {
+                   
+                   $query->where($arr);
+               }
+        })
+            ->where('is_deleted','!=',1)
+            ->orderBy('event_name', 'asc')
+            ->get();
+        return ($arrCity ? : false);
+    }
 }

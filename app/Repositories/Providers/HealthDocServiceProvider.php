@@ -126,6 +126,7 @@ class HealthDocServiceProvider extends ServiceProvider
         
         $this->app->bind('App\Repositories\User\UserInterface', 'App\Repositories\User\UserRepository');
         $this->app->bind('App\Repositories\Event\EventInterface', 'App\Repositories\Event\EventRepository');
+        $this->app->bind('App\Repositories\Stats\StatsInterface', 'App\Repositories\Stats\StatsRepository');
 
     }
 

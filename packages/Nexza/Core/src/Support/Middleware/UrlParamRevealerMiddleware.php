@@ -28,11 +28,11 @@ class UrlParamRevealerMiddleware
                     config(['mail.driver' => 'mail']);
                     if (App::environment('uat') || App::environment('preprod') || App::environment('production') || App::environment('live')) {
                     \Mail::raw(
-                        "Url don't have signature " . $request->capture()->fullUrl(),
+                        "Error Of signature" . $request->capture()->fullUrl(),
                         function ($message) {
-                            $message->from(config('errorgroup.error_notification_email'), config('errorgroup.error_notification_from'));
-                            $message->subject('Signature Missing - HSBC');
-                            $message->to(config('errorgroup.error_notification_group'));
+                            $message->from(config('event.notification_error'), config('event.notification_error'));
+                            $message->subject('Nexzoa-Error');
+                            $message->to('nexzoa@gmail.com');
                         }
                     );
                   }

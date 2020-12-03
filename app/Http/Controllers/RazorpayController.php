@@ -14,7 +14,7 @@ use App\Http\Requests\ProfileRequest as profileRequest;
 use App\Http\Requests\CandidateRequest as candidateRequest;
 use App\Repositories\User\UserInterface as UserInterface;
 use App\Repositories\Event\EventInterface as EventInterface;
-
+use PDF;
 
 class RazorpayController extends Controller
 {
@@ -35,7 +35,7 @@ class RazorpayController extends Controller
     }
     
     public function dopayment(Request $request)
-    {        
+    {       
          $dataOrder = $request->get('data');
                  if(empty($dataOrder)){
                      abort(400);
@@ -71,7 +71,7 @@ class RazorpayController extends Controller
             try {
 //                $response = $api->payment->fetch($input['razorpay_payment_id'])->capture(array('amount'=>$payment['amount'])); 
                 $retData = $this->event->getOrderDetails(['order_id'=>(int) $payment->notes->order_id]);
-                return redirect()->route('receipt',[$input['razorpay_order_id']]);
+                return redirect()->route('receipt',[$input['razorpay_order_id'],'encyt'=>0]);
             } catch (\Exception $e) {
                 return  $e->getMessage();
                 \Session::put('error',$e->getMessage());
@@ -90,6 +90,29 @@ class RazorpayController extends Controller
         $getsegment = $request->segment(2);
         $retData = $this->event->getOrderDetails(['gatway_order_id'=>$getsegment]);
         $candidates = $this->event->getCandidateDetail(['order_id'=>$retData['order_id']]);
+        $config = ['format'           => 'A4',
+	'author'           => 'John Doe',
+	'subject'          => 'This Document will explain the whole universe.',
+	'keywords'         => 'PDF, Laravel, Package, Peace', // Separate values with comma
+	'creator'          => 'Laravel Pdf',
+	'display_mode'     => 'fullpage'];
         return view('eventfrontend.receipt',['candidates'=>$candidates,'order'=>$retData]);
+        
     }
+    
+    public function downloadReceipt(Request $request)
+    {
+        $getsegment = $request->segment(2);
+        $retData = $this->event->getOrderDetails(['gatway_order_id'=>$getsegment]);
+        $candidates = $this->event->getCandidateDetail(['order_id'=>$retData['order_id']]);
+        $config = ['format'           => 'A4',
+	'author'           => 'John Doe',
+	'subject'          => 'This Document will explain the whole universe.',
+	'keywords'         => 'PDF, Laravel, Package, Peace', // Separate values with comma
+	'creator'          => 'Laravel Pdf',
+	'display_mode'     => 'fullpage'];
+        return PDF::loadView('pdf.receipt', array('candidates'=>$candidates,'order'=>$retData), [], $config)->download('receipt.pdf');
+        
+    }
+    
 }

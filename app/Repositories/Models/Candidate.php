@@ -5,6 +5,7 @@ namespace App\Repositories\Models;
 use App\Repositories\Factory\Models\BaseModel;
 use App\Repositories\Entities\User\Exceptions\BlankDataExceptions;
 use App\Repositories\Entities\User\Exceptions\InvalidDataTypeExceptions;
+use Auth;
 
 class Candidate extends BaseModel
 {
@@ -408,4 +409,33 @@ class Candidate extends BaseModel
         return $delStatus ? $delStatus :false;
     }
     
+     /**
+     * Get All States of USA
+     *
+     * @return type
+     */
+    public static function getOrdersDetails($order_id,$event_id)
+    {
+        $result = self::select('nex_event_candidates.*','ticket.*','venue.event_name')
+                ->join('nex_event_ticket as ticket', 'nex_event_candidates.event_id', '=', 'ticket.event_id')
+                ->join('nex_venue as venue', 'venue.event_id', '=', 'ticket.event_id');
+                 $result->where(function($query)use($event_id){
+                    if(!empty($event_id)) {
+                        $query->where('nex_event_candidates.event_id', $event_id);
+                    }
+                });
+                 $result->where(function($query)use($order_id){
+                    if(!empty($order_id)) {
+                        $query->where('nex_event_candidates.order_id', $order_id);
+                    }
+                });
+                $result->where(function($query)use($order_id , $event_id){
+                    if(empty($order_id) && empty($event_id)) {
+                        $query->where('nex_event_candidates.event_id', null);
+                    }
+                });
+                $result->orderBy('id', 'desc');
+                $candidArr = $result->get();
+        return ($candidArr ? $candidArr : false);
+    }
 }

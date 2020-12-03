@@ -1946,9 +1946,9 @@
 			                '<th colspan="7" class="datepicker-title"></th>'+
 			              '</tr>'+
 							'<tr>'+
-								 '<th class="prev"></th>' +
+								 '<th ><i class="prev fa fa-arrow-left"></th>' +
 								'<th colspan="5" class="datepicker-switch"></th>'+
-								'<th class="next"></th>' +
+								'<th><i class="next fa fa-arrow-right"></i></th>' +
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',

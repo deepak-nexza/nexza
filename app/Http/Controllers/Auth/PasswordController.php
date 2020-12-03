@@ -296,7 +296,6 @@ class PasswordController extends Controller
     {
         $user_id = $this->getValidUserId($input);
         $validuser = $this->isValid($user_id, $input['password']);
-        dd($validuser);
         if ($validuser) {
            return true;
         }

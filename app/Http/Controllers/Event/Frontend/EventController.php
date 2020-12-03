@@ -9,6 +9,7 @@ use Session;
 use Helpers;
 use Illuminate\Validation\Validator; 
 use App\Repositories\Event\EventInterface as EventInterface;
+use App\Repositories\Stats\StatsInterface as StatsInterface;
 use Auth;
 use App\Repositories\User\UserInterface as UserInterface;
 
@@ -20,11 +21,13 @@ class EventController extends Controller
      * @return void
      */
     private $event;
+    private $stats;
     
-    public function __construct(UserInterface $user,EventInterface $event)
+    public function __construct(UserInterface $user,EventInterface $event,StatsInterface $stats)
     {
         $this->event = $event;
         $this->user = $user;
+        $this->stats = $stats;
       $this->middleware('auth');
     }
 
@@ -62,14 +65,19 @@ class EventController extends Controller
         $eventid = $request->get('event_id');
         $countryList = Helpers::countryList()->toArray();
         $stateList = Helpers::stateList()->toArray();
+        
         $eventlist = Helpers::getAllEvent()->toArray();
         $mode = config('common.privacy_mode');
+        $eventDetail = [];
+        $cityList = [];
         if(!empty($eventid)){
         $eventDetail = $this->event->getEventDetailsByID($eventid);
+        $cityList = Helpers::cityList($eventDetail->state_id?$eventDetail->state_id:null)->toArray();
         }
         return view('eventbackend.create_event',[
             'country_list'=>$countryList,
             'state_list'=>$stateList,
+            'city_list'=>$cityList,
             'mode'=>$mode,
             'eventDetail'=>!empty($eventDetail)?$eventDetail:null,
             'eventid'=>!empty($eventid)?$eventid:null,
@@ -108,7 +116,7 @@ class EventController extends Controller
         $eventid = $request->get('event_id');
         $eventDetail = $this->event->getEventDetailsByID($eventid);
         $ticketDetails = $this->event->getAllEventWithUid($eventDetail['event_id']);
-        $eventList = $this->event->getEventList(false,(int) Auth::id());
+        $eventList = $this->event->getEventListWithArr(['event_status'=>Config('common.STATUS.Submitted')],(int) Auth::id());
         return view('eventbackend.event_ticket',['eventlist'=>$eventList,'ticketDetail'=>$ticketDetails,'eventDetail'=>$eventDetail]);
     }
     
@@ -121,9 +129,13 @@ class EventController extends Controller
     {
         $user_id = $request->get('user_id');
         $ticket_id = $request->get('ticket_id');
-        $ticketDetails = $this->event->getTicketDetails(['ticket_id'=>$ticket_id,'user_id'=>$user_id]);
+        $ticketDetails=[];
+        if(!empty($ticket_id) && !empty($user_id)){
+            $ticketDetails = $this->event->getTicketDetails(['ticket_id'=>$ticket_id,'user_id'=>$user_id,'edit'=>1]);
+        }
+        $eventDetail = $this->event->getEventDetailsByID($ticketDetails[0]['event_id']);
         $eventList = $this->event->getEventList(false,(int) Auth::id());
-        return view('eventbackend.event_ticket',['eventlist'=>$eventList,'ticketDetails'=>$ticketDetails,'ticket_id'=>$ticket_id]);
+        return view('eventbackend.event_ticket',['eventlist'=>$eventList,'ticketDetail'=>$ticketDetails,'eventDetail'=>$eventDetail,'edit'=>1]);
     }
     
       /**
@@ -160,14 +172,6 @@ class EventController extends Controller
         
         $data = [];
         try{
-        if(!empty($files=$request->file('banner_image'))){
-            $name=$files->getClientOriginalName();
-            $storage_path = public_path(); 
-            $uploadDir = config('common.uploadDir');
-            $uploadPath = $storage_path.'/'.$uploadDir;
-            $files->move($uploadPath,$name);
-            $data['banner_image'] = $name;
-        }
         $dateRange = $request->get('event_duration');
         $description = $request->get('description');
         $geteventRange = preg_split('/[\s][\-][\s]/',$dateRange);
@@ -176,10 +180,15 @@ class EventController extends Controller
         $data['event_type'] = $request->get('event_type');
         $data['country_id'] = $request->get('country_id');
         $data['state_id'] = $request->get('state_id');
+        $data['city_id'] = $request->get('city_id');
         $data['event_duration'] = $request->get('event_duration');
         $data['event_privacy'] = $request->get('event_privacy');
         $data['status'] = $request->get('status');
         $data['event_location'] = $request->get('event_location');
+        $data['twitter'] = $request->get('twitter');
+        $data['facebook'] = $request->get('facebook');
+        $data['youtube'] = $request->get('youtube');
+        $data['instagram'] = $request->get('instagram');
         
         $data['start_date'] = $geteventRange[0];
         $data['end_date'] = $geteventRange[1];
@@ -188,6 +197,9 @@ class EventController extends Controller
         $data['price'] = $request->get('min_amount');
         $data['gst'] = $request->get('gst');
         $id = !empty($request->get('event_id'))?$request->get('event_id'):null;
+        if(!$id){
+            $data['event_status'] = Config('common.STATUS.Progress');
+        }
         $retData = $this->event->saveEvent($data,$id);
         if(empty($id)){
         $createEventID = 'NEX'.$retData['event_type'].$retData['event_id'].$retData['user_id'];
@@ -205,7 +217,19 @@ class EventController extends Controller
         $eventid = $request->get('event_id');
         try{
         $data['description'] = utf8_encode($request->get('description'));
+        if(!empty($files=$request->file('banner_image'))){
+            $name=$files->getClientOriginalName();
+            $storage_path = public_path(); 
+            $uploadDir = config('common.uploadDir');
+            $uploadPath = $storage_path.'/'.$uploadDir;
+            $files->move($uploadPath,$name);
+            $data['banner_image'] = $name;
+        }
         $this->event->saveEvent($data,$eventid);
+        if(auth()->user()->is_admin){
+            $this->event->saveEvent(['event_status'=>Config('common.STATUS.Submitted')],$eventid);
+            return redirect()->route('upcoming_event');
+        }
         return redirect()->route('event_ticket',['event_id'=>$eventid])->with('success', [trans('message.success_update')]);
        } catch (\Exception $ex) {
                 return response(Helpers::getExceptionMessage($ex));
@@ -218,19 +242,19 @@ class EventController extends Controller
     {
         try{
         $ticket_id = $request->get('ticket_id');
-//        $dateRange = $request->get('booking_duration');
+        $start_time = $request->get('ticket_start_time');
         $description = $request->get('message');
-//        $geteventRange = preg_split('/[\s][\-][\s]/',$dateRange);
         $eventDesc = Helpers::formatEditorData($description);
         $data = [];
         $data['title'] = $request->get('title');
         $event_uid = $request->get('event_uid');
         $event_id = $request->get('event_id');
-        $data['event_id'] = $request->get('event_id');
+        $data['event_id'] = !empty($request->get('event_id'))?$request->get('event_id'):$request->get('event_type');
+        $data['event_type'] = $request->get('event_type');
         $data['type'] = $request->get('type');
         $data['amt_per_person'] = $request->get('amt_per_person');
 //        $data['ticket_duration'] = $dateRange;
-//        $data['start_date'] = $geteventRange[0];
+         $data['start_date'] = $start_time;
 //        $data['end_date'] = $geteventRange[1];
         $data['booking_space'] = $request->get('event_space');
         $data['message'] = $description;
@@ -242,9 +266,14 @@ class EventController extends Controller
         $data['nexza_per'] = config('common.nexzoa_per');
         $data['gateway_per'] = config('common.nexzoa_Gateway_fee');
         $id = !empty($ticket_id)?$ticket_id:null;
+        $ticketStatus = $this->event->getEventDetailsByID($data['event_id']);
         $retData = $this->event->saveEventTicket($data,$id);
-        $id = !empty($retData['ticket_id'])?$retData['ticket_id']:$id;
+        $id = !empty($id)?$id:$retData['ticket_id'];
+        if(!empty($ticketStatus->event_status) && $ticketStatus->event_status == Config('common.STATUS.Submitted')){
+        return redirect()->route('list_event_ticket',['event_uid'=>$event_uid,'event_id'=>$event_id]);
+        } else{
         return redirect()->route('event_ticket',['event_uid'=>$event_uid,'event_id'=>$event_id]);
+         }
        } catch (\Exception $ex) {
                 return response(Helpers::getExceptionMessage($ex));
        }
@@ -369,22 +398,53 @@ class EventController extends Controller
    public function submitEvent(Request $request)
     {
        try{
-        $STATUS = Config('common.submitted');
+        $STATUS = Config('common.STATUS.Submitted');
         $eventid = (int) $request->get('event_id');
         $submitVal = (int) $request->get('submitVal');
-        if(empty($submitVal)){
-            abort(400);
-        }
         $eventDetail = $this->event->getEventDetailsByID($eventid);
         $data['event_status'] = (int) $STATUS;
         $this->event->saveEvent($data,$eventid);
         $event_name = preg_replace('/\s+/', '-', $eventDetail['event_name']);
-        return redirect()->route('event_detail',['event_id'=>$eventid.'-'.$eventDetail['event_uid']])->with('success', [trans('message.success_update')]);
+        return redirect()->route('event_detail',['event_id'=>$eventid.'-'.$eventDetail['event_uid'],'encyt'=>0])->with('success', [trans('message.success_update')]);
        } catch (\Exception $ex) {
                 return response(Helpers::getExceptionMessage($ex));
        }
     }
     
     
-   
+   public function orders(Request $request)
+    {
+        $bookings = $this->stats->getOrders();
+        return view('eventbackend.orders',['bookings'=>$bookings]);
+    }
+    
+   public function ordersDetails(Request $request)
+    {
+        $order_id = $request->get('order_id');
+        $orderDetails = $this->stats->getOrdersDetails($order_id,null);
+        return view('eventbackend.ordersDetails',['orderDetails'=>$orderDetails]);
+    }
+    
+   public function totalCandidates(Request $request)
+    {
+       $eventList = $this->event->getEventList(false,(int) Auth::id());
+       $orderDetails = $this->stats->getOrdersDetails(null, null);
+        return view('eventbackend.total_candidates',['orderDetails'=>$orderDetails,'eventList'=>$eventList]);
+    }
+    
+    public function bankDetails()
+    {
+       $userProfile = $this->user->getUserProfile(Auth::id());
+        return view('eventbackend.bank_details',['user'=>$userProfile]);
+    }
+    public function savebankDetails(Request $request)
+    {
+        $data = [];
+        $data['account_number'] = !empty($request->get('account_number'))?$request->get('account_number'):null;
+        $data['account_name'] = !empty($request->get('account_name'))?$request->get('account_name'):null;
+        $data['ifsc_code'] = !empty($request->get('ifsc_code'))?$request->get('ifsc_code'):null;
+        $data['gst_number'] = !empty($request->get('gst_number'))?$request->get('gst_number'):null;
+        $this->user->updateUser(Auth::id(),$data);
+        return redirect()->back()->with('message', 'Bank details saved successfully');
+    }
 }

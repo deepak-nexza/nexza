@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Request;
 
 class Application extends BaseApplication
 {
-       protected $non_enc_routes = [
-            'event-detail',
-            'event_desc',
-        ];
+       
     /**
      * Register all of the base service providers.
      *

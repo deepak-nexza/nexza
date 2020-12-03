@@ -7,6 +7,7 @@ use Session;
 use Auth;
 use App\Http\Controllers\Controller;
 use App\Repositories\Event\EventInterface as EventInterface;
+use App\Repositories\Stats\StatsInterface as StatsInterface;
 class AjaxController extends Controller
 {
     /**
@@ -17,9 +18,10 @@ class AjaxController extends Controller
     private $event;
     
     
-    public function __construct(EventInterface $event)
+    public function __construct(EventInterface $event,StatsInterface $stats)
     {
         $this->event = $event;
+         $this->stats = $stats;
         $this->middleware('auth');
     }
 
@@ -32,6 +34,18 @@ class AjaxController extends Controller
     {
         $country_id = (int) $request->get('country_id');
         $data = $this->event->getstatetList($country_id);
+        return $data;
+    }
+    
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function getCityList(Request $request)
+    {
+        $state_id = (int) $request->get('state_id');
+        $data = $this->event->getCityList($state_id);
         return $data;
     }
     
@@ -78,5 +92,13 @@ class AjaxController extends Controller
     public function updateCandidate(Request $request)
     {
         dd($request->all());
+    }
+    
+        
+   public function serachCandiByEvent(Request $request)
+    {
+       $event_id = $request->get('event_id');
+       $candidateDetails = $this->stats->getCandidatesWithEvent(null,$event_id);
+       return $candidateDetails;
     }
 }

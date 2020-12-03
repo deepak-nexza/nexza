@@ -100,11 +100,11 @@ class HomeController extends Controller
         foreach($eventlistData[0] as $key=>$val)
         {
             $preg_replace = preg_replace('/\s+/', '-', $val['event_name']);
-            $html .= '<div class="item" id="list_'.$val['event_uid'].'">';
+            $html .= '<div class="item border-bottom"  id="list_'.$val['event_uid'].'">';
 
                                 $html .= '<div class="place-post list-style">';
                                         $html .= '<div class="place-post__gal-box">';
-                                                $html .= '<a href="'.route('event_detail',['name'=>$preg_replace.'-'.$val['event_uid']]).'"><img class="place-post__image" src="'.asset('/').'Eventupload/'.$val['banner_image'].'" alt="place-image"></a>';
+                                                $html .= '<a href="'.route('event_detail',['name'=>$preg_replace.'-'.$val['event_uid'],'encyt'=>0]).'"><img class="place-post__image" src="'.asset('/').'Eventupload/'.$val['banner_image'].'" alt="place-image"></a>';
                                                $html .= '<span class="place-post__rating">₹ '.!empty($val['price'])?''.$val['price']:'Free'.'</span>';
                                                 $html .= '<a class="place-post__like" href="#"><i class="fa fa-heart-o" aria-hidden="true"></i></a>';
                                         $html .= '</div>';
@@ -115,11 +115,11 @@ class HomeController extends Controller
                                                $html .= ' </p>';
                                                
                                                 $html .= '<h2 class="place-post__title">';
-                                                     $html .= '   <a href="'.route('event_detail',['name'=>$preg_replace.'-'.$val['event_uid']]).'">'.$val['event_name'].'</a>';
+                                                     $html .= '   <a href="'.route('event_detail',['name'=>$preg_replace.'-'.$val['event_uid'],'encyt'=>0]).'">'.$val['event_name'].'</a>';
                                                 $html .= '</h2>';
                                                 $html .= '<p class="place-post__description">';
                                                         $html .= '<span class="place-post__description-review">';
-                                                           $html .= ' <a class="btn-default btn-default-red" href="'.route('event_detail',['name'=>$preg_replace.'-'.$val['event_uid'],'for'=>'booking']).'" >';
+                                                           $html .= ' <a class="btn-default btn-default-red" href="'.route('event_detail',['name'=>$preg_replace.'-'.$val['event_uid'],'for'=>'booking','encyt'=>0]).'" >';
     									$html .= 'Book Now';
 								$html .= '</a>';
                                                         $html .= '</span>';

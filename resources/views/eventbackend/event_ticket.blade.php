@@ -20,15 +20,15 @@
                 @endif  
                 @if(sizeof($ticketDetail) > 0)
                 @foreach($ticketDetail as $keyOne=>$ticketDetails)
+                
                 <div id="accordion" style="margin-bottom:5px;">
-
                     <div class="card" >
                         <div class="card-header" style="color:#000;background: #fb646f">
                             <a class="card-link" style="color:#fff;font-weight: bold;" data-toggle="collapse" href="#{{$ticketDetails['ticket_id']}}" >
-                                 <span class="fa fa-calendar" style="  ">{{!empty($ticketDetails->ticket_id) ? ' '. \Carbon\Carbon::parse($eventDetail['start_date'])->format('j F, Y ').' '.'    -    '.$ticketDetails->title.'' : ''}}</span>
+                                 <span class="fa fa-calendar" style="  ">{{!empty($eventDetail['start_date']) ? ' '. \Carbon\Carbon::parse($eventDetail['start_date'])->format('j F, Y ').' '.'    -    '.$ticketDetails['title'].'' : ''}}</span>
                             </a>
                         </div>
-                        <div id="{{$ticketDetails['ticket_id']}}" class="collapse " data-parent="#accordion">
+                        <div id="{{$ticketDetails['ticket_id']}}" class="collapse {{ ((sizeof($ticketDetail) == 1  && $eventDetail->event_status !=Config('common.STATUS.Progress')) || (!empty($eventDetail['event_status']) && $eventDetail->event_status == Config('common.STATUS.Submitted')))?'show':''}} " data-parent="#accordion">
                             <div class="card-body">
                                 <!-- SELECT2 EXAMPLE -->
                                 {!!
@@ -42,9 +42,9 @@
                                 'autocomplete' => 'off',
                                 'class'=>'formElement otp',
                                 Form::pkey() => [
-                                'event_id' => $eventDetail['event_id'],
-                                'user_id' => $eventDetail['user_id'],
-                                'event_uid' => $eventDetail['event_uid'],
+                                'event_id' => isset($eventDetail['event_id']) ? $eventDetail['event_id'] : null,
+                                'user_id' => isset($eventDetail['user_id']) ? $eventDetail['user_id'] : null,
+                                'event_uid' => isset($eventDetail['event_uid']) ? $eventDetail['event_uid'] : null,
                                 'ticket_id' => $ticketDetails['ticket_id'],
                                 ],
                                 )
@@ -65,6 +65,7 @@
                                 <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />  
                                 <div class="row">
                                     <div class="col-md-6">
+                                        @if(empty($eventDetail['event_id']))
                                         <input type="hidden" name="event_type" value="{{  !empty($ticketDetails->event_id)?$ticketDetails->event_id:''}}"  class="event_type">
                                         <div class="form-group">
                                             <label>Select Your Event</label>
@@ -75,6 +76,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @endif
                                         <div class="form-group">
                                             <label>Ticket Title</label>
                                             <input type="text" name="title" placeholder="Ticket Title" class="form-control" value="{{  !empty($ticketDetails->title)?$ticketDetails->title:''}}">
@@ -82,13 +84,16 @@
                                         <input type="hidden" name="type" value="{{  !empty($ticketDetails->type)?$ticketDetails->type:''}}"  class="t_type">
                                         <div class="form-group">
                                             <label>Ticket Type</label>
-                                            <select class="form-control select2 select2-hidden-accessible" id="t_type" onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                            <select class="add-listing__input js-example-basic-multiple" id="t_type" onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                                 <option value="">Select Ticket Type</option>
                                                 <option value="1" {{ ((isset($ticketDetails->type) && $ticketDetails->type== 1)? "selected":"") }}>Paid</option>
                                                 <option value="2" {{ ((isset($ticketDetails->type) && $ticketDetails->type== 2)? "selected":"") }}>Free</option>
                                             </select>
                                         </div>
-                                      
+                                        <div class="form-group">
+                                            <label>Event Start Time In Ticket</label>
+                                            <input type="text" name="ticket_start_time" placeholder="Event Start Time For This Ticket" class="form-control input-append date form_datetime" data-date="{{  !empty($ticketDetails->start_date)?$ticketDetails->start_date:''}}" data-date-format="yyyy-mm-dd - HH:ii p"  value="{{  !empty($ticketDetails->start_date)?$ticketDetails->start_date:''}}">
+                                        </div>
                                         <label>Message Deliver Via Ticket</label>
                                         <div class="form-group">
                                             <textarea  name="message" cols="40"  placeholder="Message Deliver Via Ticket">{{  !empty($ticketDetails->message)?$ticketDetails->message:''}}</textarea>
@@ -149,12 +154,13 @@
                 </div> 
                 @endforeach
                 @endif
+                @if(empty($edit))
                  <div id="accordion">
 
                     <div class="card" >
                         <div class="card-header" style="color:#000;background: #fb646f">
                             <a class="card-link" style="color:#fff;font-weight: bold;" data-toggle="collapse" href="#new" >
-                               Add Ticket For ( {{ !empty($eventDetail->event_name)?$eventDetail->event_name:'' }}  )<span style="color:#000"></span>
+                               Add Ticket For ( {{ !empty($eventDetail->event_name)?$eventDetail->event_name:'For Your Event List' }}  )<span style="color:#000"></span>
                             </a>
                         </div>
                         <div id="new" class="collapse show" data-parent="#accordion">
@@ -179,25 +185,26 @@
                                 )
                                 !!}
 
-                                <br>
 
                                 <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />  
                                 <div class="row">
                                     <div class="col-md-6">
+                                        @if(empty($eventDetail['event_id']))
                                         <input type="hidden" name="event_type" value=""  class="event_type">
                                         <div class="form-group">
                                             <label>Select Your Event </label>
-                                            <select class="form-control select2 select2-hidden-accessible" id='event_type' onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true" required>
+                                            <select class="add-listing__input js-example-basic-multiple" id='event_type' onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true" required>
                                                 <option>Select Your Event</option>
                                                 @foreach($eventlist as $item=>$val)
                                                 <option value="{{$val->event_id}}"  {{ ((!empty($eventDetail->event_id) && $eventDetail->event_id == $val->event_id)? "selected":"") }}>{{$val->event_name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @endif
                                         <input type="hidden" name="type" value=""  class="t_type">
                                         <div class="form-group">
                                             <label>Ticket Type</label>
-                                            <select class="form-control select2 select2-hidden-accessible" id="t_type" onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true" required>
+                                            <select class="add-listing__input js-example-basic-multiple" id="t_type" onchange="changeSelect(event)" style="width: 100%;" tabindex="-1" aria-hidden="true" required>
                                                 <option value="">Select Ticket Type</option>
                                                 <option value="1" >Paid</option>
                                                 <option value="2" >Free</option>
@@ -206,6 +213,10 @@
                                         <div class="form-group">
                                             <label>Ticket Title</label>
                                             <input type="text" name="title" placeholder="Ticket Title" class="form-control" value="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Event Start Time In Ticket</label>
+                                            <input type="text" name="ticket_start_time" placeholder="Event Start Time For This Ticket" class="form-control input-append date form_datetime" data-date="" data-date-format="yyyy-mm-dd - HH:ii p" data-link-field="dtp_input1" value="">
                                         </div>
                                       
                                         <label>Message Deliver Via Ticket</label>
@@ -267,20 +278,22 @@
 
 
                 </div> 
-                
+                @endif
             </div><!-- /.box-body -->
             
         </div><!-- /.box -->
         <br>
         <br>
                                     <div class="row">
-                                        <div class="col-md-6" style="text-align: right">
+                                        @if(!empty($eventDetail->event_status) && $eventDetail->event_status == Config('common.STATUS.Progress'))
+                                            <div class="col-md-6" style="text-align: right">
 
-                                            <a href="{{route('event_desc',['event_id'=>!empty($eventDetail->event_id)?$eventDetail->event_id:'','event_data'=>$eventDetail])}}"><button type="button" class="btn btn-primary" style="float:right;cursor:pointer;">Back</button></a>
-                                        </div>
+                                                <a href="{{route('event_desc',['event_id'=>!empty($eventDetail->event_id)?$eventDetail->event_id:'','event_data'=>$eventDetail])}}"><button type="button" class="btn btn-primary" style="float:right;cursor:pointer;">Back</button></a>
+                                            </div>
+                                        @endif
                                      <div class="col-md-6" style="text-align: left">
 
-                                        @if(!empty($ticketDetail) && sizeof($ticketDetail) > 0)
+                                        @if(!empty($ticketDetail) && sizeof($ticketDetail) > 0  && !empty($eventDetail->event_status) && $eventDetail->event_status == Config('common.STATUS.Progress'))
                                         {!!
                                 Form::open(
                                 array(
@@ -310,14 +323,15 @@
 </section>
 @endsection
 @push('head')
-<script src="{{ asset('js/eventbackend/currency.min.js')}}"></script>
-<script src="{{ asset('js/eventbackend/event_ticket.js')}}"></script>
 <script>
 var messages = {
     _token: "{{ csrf_token() }}",
     currencyAmt: "{{ config('common.nexzoa_per') }}",
     gatewayAmt: "{{ config('common.nexzoa_Gateway_fee') }}",
     checkTicket: "{!! route('check_ticket') !!}",
+    ticketCount: "{!! sizeof($ticketDetail) !!}",
 };
 </script>
+<script src="{{ asset('js/eventbackend/currency.min.js')}}"></script>
+<script src="{{ asset('js/eventbackend/event_ticket.js')}}"></script>
 @endpush

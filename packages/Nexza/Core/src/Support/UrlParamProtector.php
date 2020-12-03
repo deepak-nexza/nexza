@@ -13,7 +13,7 @@ class UrlParamProtector
 {
 
         protected $non_enc_routes = [
-            'event_detail',
+            'event-detail',
             'event_desc',
         ];
      
@@ -85,7 +85,6 @@ class UrlParamProtector
         }
 
         $routeKey = 'route__'.$routeName.(empty($paramToString) ? '' : '-'.$paramToString);
-
         return $routeKey;
     }
 
@@ -121,6 +120,7 @@ class UrlParamProtector
      */
     protected function isValidGuid($guid)
     {
+         
         foreach (session::get($this->sessionKey) as $key => $value) {
             if (! isset($value['guid'])) {
                 list($innerKey, $val) = each($value);
@@ -170,7 +170,6 @@ class UrlParamProtector
      */
     public function reveal(Request &$request)
     {
-        $open_call = in_array($request->segment(1), $this->non_enc_routes);
         if (Config::get('common.url_encrypted', false) === true) {
             $this->request = $request;
 

@@ -41,7 +41,7 @@ class EventRequest extends FormRequest
         $rules['event_privacy'] = $required.'|numeric';
         $rules['event_location'] = $required;
         if(!empty($request->get('description'))) { $rules['description'] = $required; }
-        $rules['gst'] = $required.'|numeric|between:0,3';
+        if(empty(auth()->user()->is_admin)) { $rules['gst'] = $required.'|numeric|between:0,3'; }
         return $rules;
     }
 

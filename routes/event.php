@@ -39,6 +39,14 @@ Route::group(
         Route::get('/event-description', 'Event\Frontend\EventController@eventdescription')->name('event_desc');
         Route::post('/save-description', 'Event\Frontend\EventController@saveDesc')->name('save_desc');
         Route::post('/submit-event', 'Event\Frontend\EventController@submitEvent')->name('submit_event');
+        Route::get('/orders', 'Event\Frontend\EventController@orders')->name('event_orders');
+        Route::get('/orders-details', 'Event\Frontend\EventController@ordersDetails')->name('get_order_details');
+        Route::get('/event-candidates', 'Event\Frontend\EventController@totalCandidates')->name('candidates_registered');
+        Route::get('/add-bank', 'Event\Frontend\EventController@bankDetails')->name('bank_details');
+        Route::post('/save-add-bank', 'Event\Frontend\EventController@savebankDetails')->name('save_account_details');
+        Route::get('/payment-dashboard', 'Event\Frontend\StatsController@paystats')->name('paymentDashboard');
+        Route::get('/request-payment', 'Event\Frontend\StatsController@requestpayment')->name('requestpayment');
+        Route::post('/save-requested-payment', 'Event\Frontend\StatsController@saveRequestedPayment')->name('save_payment_request');
        
 });
 });

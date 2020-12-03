@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', ''),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -179,6 +179,8 @@ return [
 //        Collective\Html\HtmlServiceProvider::class,
         Nexza\Html\HtmlServiceProvider::class,
         Nexza\Otp\OtpServiceProvider::class,
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+//        Elibyy\TCPDF\ServiceProvider::class,
         
     ],
 
@@ -234,7 +236,8 @@ return [
 //        'Form' => Collective\Html\FormFacade::class,
 //        'Html' => Collective\Html\HtmlFacade::class,
         'Otp' => Nexza\Otp\Facades\Otp::class,
-'Scramble' => App\Libraries\Scramble::class,
+        'Scramble' => App\Libraries\Scramble::class,
+        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
     ],
 
 ];

@@ -5,7 +5,7 @@ namespace App\Repositories\Models;
 use App\Repositories\Factory\Models\BaseModel;
 use App\Repositories\Entities\User\Exceptions\BlankDataExceptions;
 use App\Repositories\Entities\User\Exceptions\InvalidDataTypeExceptions;
-
+use Auth;
 class Order extends BaseModel
 {
 
@@ -44,6 +44,8 @@ class Order extends BaseModel
     protected $fillable = [
         'order_id', 
         'order_amt',
+        'user_id',
+        'event_id',
         'transaction_id',
         'payment_response',
         'status', 
@@ -201,12 +203,14 @@ class Order extends BaseModel
      *
      * @return list
      */
-    public static function getAllStateData()
+    public static function getAllOrders()
     {
-       $result =  self::select('id', 'state_name')
-                ->where('is_active', config('b2c_common.ACTIVE'))
-                ->pluck('state_name', 'id');
-        return ($result ? : false);
+        $result = self::select('nex_event_order.*','nex_venue.*','nex_event_order.status as paystatus')
+        ->leftjoin('nex_venue', 'nex_venue.event_id', '=', 'nex_event_order.event_id');
+                $result->where('nex_event_order.user_id', (int) Auth::id());
+            $result->orderBy('nex_event_order.order_id', 'desc');
+            $results = $result->get();
+        return ($results ? $results : false);
     }
     
     /**

@@ -53,7 +53,7 @@ Route::get('/profile', 'HomeController@openProfile')->name('profile');
 Route::post('/search', 'HomeController@search')->name('search');
 Route::get('/search', 'HomeController@search')->name('search');
 Route::post('/searchlist', 'HomeController@searchlist')->name('searchlist');
-Route::get('/event-detail/{name}', 'HomeController@eventDetailPage')->name('event_detail');
+Route::get('/event-detail/{any}', 'HomeController@eventDetailPage')->name('event_detail');
 Route::post('/toSearch', 'HomeController@toSearchList')->name('search_list');
 Route::get('/about', 'GuestController@aboutUs')->name('about');
 Route::get('/contact', 'GuestController@contactus')->name('contact');
@@ -77,4 +77,9 @@ Route::get('payment-success', 'RazorpayController@payment')->name('payment_succe
 Route::post('payment', 'RazorpayController@payment')->name('payment');
 Route::post('dopayment', 'RazorpayController@dopayment')->name('dopayment');
 Route::get('receipt/{order}/success', 'RazorpayController@receipt')->name('receipt');
+Route::get('receiptdata/{order}', 'RazorpayController@downloadReceipt')->name('download_receipt');
 
+/// Rest Api Dta 
+Route::get('viewList', 'GuestController@viewList')->name('viewList');
+Route::get('delEvent', 'GuestController@delEvent')->name('delEvent');
+Route::get('createUser', 'GuestController@createUser')->name('createUser');

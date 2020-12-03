@@ -12,8 +12,12 @@ $(document).ready(function () {
         var finalAmt = freal_amt.subtract(nper).subtract(gateAmt);
         ele.find('.finalAmt').text(finalAmt);
     });
+if(messages.ticketCount == 1){
+    var FromID = $( "#accordion" ).find('form').attr( "id" );
+    callCalc(FromID);
+}
 
-    function callCalc(val) {
+function callCalc(val) {
         var ele = $('#' + val);
         var real_amt = ele.find('.bkk_amt').val();
         var freal_amt = currency(real_amt);
@@ -50,7 +54,7 @@ $(document).ready(function () {
     });
     $('.finalsubmit').on("click", function (event) {
         var formID = $(this).closest('form');
-       formID.append('<input type="text" name="submitVal" value="1">');
+       formID.append('<input type="hidden" name="submitVal" value="1">');
 
     });
 

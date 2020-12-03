@@ -3,7 +3,6 @@
 
 <html lang="en" class="no-js">
 
-<!-- Mirrored from nunforest.com/triptip-demo/user-page.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 17 May 2020 07:11:26 GMT -->
 <head>
 	<title>@yield('page_title')</title>
 
@@ -11,18 +10,17 @@
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	
-	<link rel="stylesheet" href="css/triptip-assets.min.css">
-	<link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" href="{{ asset('eventAdmin/dist/css/AdminLTE.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('event/css/triptip-assets.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('event/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('eventAdmin/plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="{{ asset('eventAdmin/plugins/daterangepicker/daterangepicker-bs3.css') }}">
     <link rel="stylesheet" href="{{ asset('css/date_picker.css') }}">
     <link rel="stylesheet" href="{{ asset('eventAdmin/plugins/timepicker/bootstrap-timepicker.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('eventAdmin/plugins/select2/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('eventAminLTE.min.cssdmin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">') }}">
+    <!--<link rel="stylesheet" href="{{ asset('eventAdmin/plugins/select2/select2.min.css') }}">-->
+    <link rel="stylesheet" href="{{ asset('eventAdmin/plugins/datetimepicker-master/css/bootstrap-datetimepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('eventdmin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
 </head>
 <body>
 
@@ -264,21 +262,22 @@
         
 	<!-- End Container -->
 	
-	<script src="{{ asset('eventAdmin/plugins/jQuery/jQuery-2.1.4.min.js') }} "></script>
+	<script src="{{ asset('event/js/jquery.min.js') }} "></script>
 	<script src="{{ asset('event/js/jquery.migrate.js') }}"></script>
 	<script src="{{ asset('event/js/triptip-plugins.min.js') }}"></script>
 	<script src="{{ asset('event/js/popper.js') }}"></script>
 	<script src="{{ asset('event/js/bootstrap.min.js') }}"></script>
 	<script src="{{ asset('event/js/jquery.countTo.js') }}"></script>
 	<script src="{{ asset('event/js/script.js') }}"></script>
-        
-    <script src="{{ asset('eventAdmin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+
+       <script src="{{ asset('eventAdmin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
      <script src="{{ asset('js/bootstrap-datepicker.js') }}"></script>
      <script src="{{ asset('eventAdmin/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('eventAdmin/plugins/colorpicker/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ asset('eventAdmin/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
-    <script src="{{ asset('eventAdmin/plugins/select2/select2.full.min.js') }}"></script>
+    <script src="{{ asset('eventAdmin/plugins/datetimepicker-master/js/bootstrap-datetimepicker.js') }}"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
     @stack('head')
   
     <script>
@@ -289,12 +288,11 @@
         $('.'+event.target.id).val(select2Value);
     }
       $(function () {
-        $(".select2").select2();
         $('.datepicker').datepicker({ format: 'mm/dd/yyyy',
           todayHighlight: true,
           autoclose: true,
           });
-        $('.datepicker1').datepicker({ format: 'yyyy-mm-dd',
+        $('.datepicker1').datepicker({ format: 'yyyy-mm-dd hh:mm : A',
           todayHighlight: true,
           autoclose: true,
           });
@@ -305,7 +303,16 @@
           showInputs: false
         });
       });
-      
+     $('.form_datetime').datetimepicker({
+        //language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+		autoclose: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0,
+        showMeridian: 1
+    });
     </script>
      <script src="https://cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>
     <script src="{{ asset('eventAdmin/pluginsbootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>
@@ -333,10 +340,12 @@ $(document).ready(function () {
     $('html,body').animate({scrollTop: aTag.offset().top},'slow');
               }
 }
+
+
 </script>
+          
 <!-- Color Setting -->
 
-       
 </body>
 
 </html>

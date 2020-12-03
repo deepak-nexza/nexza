@@ -60,7 +60,6 @@ $('.checkout').on('click',function(e){
         url: messages.payroute,
         data: {_token:messages._token},
         success: function (data) {
-            alert(data.order)
           if(data){
               $('#data').val(data.order);
               $('#finalPayRazor').submit();

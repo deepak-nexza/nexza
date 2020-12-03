@@ -131,7 +131,7 @@
                     <button class="checkout">Pay Now</button>
                    
                         <form action="{{ route('dopayment') }}"method="post" id="finalPayRazor">
-                        <input type="text" name="data" value="" id='data'>
+                        <input type="hidden" name="data" value="" id='data'>
                         <input type="hidden" name="_token" value="{!!csrf_token()!!}">
                     </form>
                 </div>
@@ -143,7 +143,6 @@
 
 </section>
 <!-- End about-block -->
-
 
 
 @endsection
@@ -159,7 +158,7 @@
         tax_rate: "{{ config('common.TAX_RATE') }}",
         checkTicket: "{!! route('check_ticket') !!}",
         candidateRoute: "{!! route('save_candidate') !!}",
-        payroute: "{!! route('pay',['event'=>$eventDetail['event_uid']]) !!}",
+        payroute: "{!! route('pay',['event'=>$eventDetail['event_uid'],'encyt'=>0]) !!}",
     };
 </script>
 <script src="{{ asset('js/eventbackend/currency.min.js')}}"></script>

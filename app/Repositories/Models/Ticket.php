@@ -259,14 +259,16 @@ class Ticket extends BaseModel
                               $query->where('nex_event_ticket.user_id', $arrTr['user_id']);
                             }
                           })
-                        ->where(function($query) use ($arrTr) {
-                            if(!empty($arrTr['user_id'])){
-                              $query->where('nex_event_ticket.user_id', $arrTr['user_id']);
-                            }
-                          })
+                        
                     ->where('nex_event_ticket.ticket_id', $arrTr['ticket_id'])
-                    ->where('nex_event_ticket.user_id', $arrTr['user_id'])->first();
-        return $returnData ? $returnData :false;
+                    ->where('nex_event_ticket.user_id', $arrTr['user_id']);
+                          if(!empty($arrTr['edit'])){
+                                $x = $returnData->get();
+                          }else{
+                              $x = $returnData->first();
+                          }
+                          
+        return $x ? $x :false;
     }
     
           /**

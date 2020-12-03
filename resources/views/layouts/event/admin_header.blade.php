@@ -55,6 +55,32 @@
                       </ul>-->
                 </li>
               </ul>
+                <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Candidates <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ route('event_orders') }}">Event Orders</a></li>
+                     <li class="divider"></li>
+                    <li><a href="{{ route('candidates_registered')}}">Candidates</a></li>
+                     <li class="divider"></li>
+                    <li><a href="{{ route('past_event')}}">Pending Registrations</a></li>
+                      </ul>
+                </li>
+              </ul>
+                <ul class="nav navbar-nav">
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bank Details <span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ route('bank_details') }}">Add Bank</a></li>
+                     <li class="divider"></li>
+                    <li><a href="{{ route('paymentDashboard') }}">Payment Status</a></li>
+                     <li class="divider"></li>
+                    <li><a href="{{ route('requestpayment') }}">Request For Payment</a></li>
+                     <li class="divider"></li>
+                   
+                      </ul>
+                </li>
+              </ul>
                   <ul class="nav navbar-nav">
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Account<span class="caret"></span></a>
@@ -155,6 +181,7 @@
     <script src="{{ asset('eventAdmin/plugins/colorpicker/bootstrap-colorpicker.min.js') }}"></script>
     <script src="{{ asset('eventAdmin/plugins/timepicker/bootstrap-timepicker.min.js') }}"></script>
     <script src="{{ asset('eventAdmin/plugins/select2/select2.full.min.js') }}"></script>
+    <script src="https://malsup.github.io/min/jquery.blockUI.min.js" ></script>  
     @stack('head')
     <script>
         
@@ -167,6 +194,13 @@
         $(".select2").select2();
         $('.datepicker').datepicker({ format: 'mm/dd/yyyy',
           todayHighlight: true,
+          autoclose: true,
+          });
+        var date = new Date();
+        date.setDate(date.getDate()+3);
+        $('.relaseDate').datepicker({ format: 'yyyy-mm-dd',
+          todayHighlight: true,
+           startDate:date,
           autoclose: true,
           });
         $('.datepicker1').datepicker({ format: 'yyyy-mm-dd',
@@ -184,6 +218,7 @@
     </script>
      <script src="https://cdn.ckeditor.com/4.4.3/standard/ckeditor.js"></script>
     <script src="{{ asset('eventAdmin/pluginsbootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>
+    
     <script>
       $(function () {
         CKEDITOR.replace('editor1');

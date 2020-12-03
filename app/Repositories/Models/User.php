@@ -89,6 +89,10 @@ class User extends Authenticatable
         'is_biz_name_update',
         'is_test_user',
         'profile_image',
+        'account_number',
+        'account_name',
+        'ifsc_code',
+        'gst_number'
     ];
 
     /**
@@ -177,96 +181,7 @@ class User extends Authenticatable
     }
 
 
-    /**
-     * Get All User
-     *
-     * @param user object $userRole
-     *
-     * @return array $users
-     */
-    public static function getAllLead($userRole)
-    {
-            $users = self::
-                From('users as u')
-                ->select(
-                    'u.id',
-                    'u.lead_no',
-                    'u.first_name',
-                    'u.last_name',
-                    'u.email',
-                    'app.app_phone',
-                    'app.app_date',
-                    'mst_lead_status.lead_status',
-                    'mst_appointment_time.name as time',
-                    'u.created_at'
-                )
-                ->leftJoin('mst_lead_status', 'u.current_status', '=', 'mst_lead_status.id')
-                ->leftJoin('app', 'u.id', '=', 'app.user_id')
-                ->leftJoin('mst_appointment_time', 'app.app_time', '=', 'mst_appointment_time.id')
-                ->where('u.user_type', config('b2c_common.USER_FRONTEND'))
-                ->orderBy('u.id', 'desc');
-                if ($userRole->is_default_ml != 1) {
-
-                if ($userRole->id == config('b2c_common.ROLE_CENTRAL_SALES_TEAM')) {
-                    $users->Where(function ($query) {
-                           $query->where('u.lead_owner_id', Auth::user()->id);
-                           $query->orWhere(function ($query) {
-                               $query->whereNull('u.lead_owner_id');
-                           });
-                       });
-                } else {
-                    $users->join(
-                    'shareapp', function ($join) {
-                    $join->on('u.id', '=', 'shareapp.user_id')
-                        ->where('shareapp.to_id', '=', Auth::user()->id)
-                        ->where('shareapp.is_owner', '=', config('b2c_common.YES'));
-                }
-                )->groupBy('u.id');
-            }
-            }
-
-        return $users;
-    }
-
-
-    /**
-     * Get backend user list w.r.t role for lead/case assignment process
-     *
-     * @param int $role_id
-     *
-     * @return mixed
-     */
-    public static function getBackendUsersWithSpecificRole($role_id)
-    {
-        //Check id is not blank
-
-        if (empty($role_id)) {
-            throw new BlankDataExceptions(trans('error_message.no_data_found'));
-        }
-        //Check id is not an integer
-
-        if (!is_int($role_id)) {
-            throw new InvalidDataTypeExceptions(trans('error_message.invalid_data_type'));
-        }
-
-        $arrUsers = self::from('users')
-                ->select(
-                    'users.id', 'users.first_name', 'users.last_name','users.email', 'mst_hubs.'.app()->getLocale().'_hubs as hub_name', 'users_detail.region_type'
-                )
-                ->leftJoin('users_detail', 'users_detail.user_id', '=', 'users.id')
-                ->leftJoin('mst_hubs', 'mst_hubs.id', '=', 'users_detail.hub_id')
-                ->where('users.user_type', '=', 1)
-                ->where('users.block_status', 0)
-                ->with('roles')->whereHas(
-                    'roles',
-                    function ($query) use($role_id){
-                        $query->where('id', $role_id);
-                    }
-                )
-                ->get();
-
-        return ( $arrUsers ? : false );
-    }
+    
 
 
 

@@ -4,9 +4,11 @@ namespace Nexza\Core\Support\ServiceProvider;
 
 use Illuminate\Support\ServiceProvider;
 use Nexza\Core\Support\UrlParamProtector;
+use Illuminate\Support\Facades\Request;
 
 class CoreServiceProvider extends ServiceProvider
 {
+
 
     /**
      * Bootstrap any application services.
@@ -16,7 +18,7 @@ class CoreServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->app->make('Illuminate\Contracts\Http\Kernel')
-            ->pushMiddleware('Nexza\Core\Support\Middleware\UrlParamRevealerMiddleware');
+        ->pushMiddleware('Nexza\Core\Support\Middleware\UrlParamRevealerMiddleware');
     }
 
     /**
@@ -34,6 +36,7 @@ class CoreServiceProvider extends ServiceProvider
      */
     protected function registerUrlProtector()
     {
+        
         $this->app->singleton('urlprotector', function () {
             return new UrlParamProtector();
         });

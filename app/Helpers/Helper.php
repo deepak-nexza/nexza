@@ -31,6 +31,17 @@ class Helper
      * @return type
      * 
      */
+    public static  function cityList($state_id)
+    {
+         return App\Repositories\Models\Master\City::getAllCities($state_id);
+    }
+    
+    /**
+     * All states
+     * 
+     * @return type
+     * 
+     */
     public static  function getAllEvent()
     {
          return App\Repositories\Models\Master\Eventype::getAllEvent();
@@ -261,7 +272,7 @@ class Helper
     }
     public static function getTicketDetails($arr) 
     {
-        $data = \App\Repositories\Models\ticket::getTicketDetails($arr);
+        $data = \App\Repositories\Models\Ticket::getTicketDetails($arr);
         return $data ? $data : false;
     }
     

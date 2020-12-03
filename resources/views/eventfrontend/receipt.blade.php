@@ -26,9 +26,7 @@
 
 					
 					<div class="widget-toolbar hidden-480">
-						<a href="#" class="print">
-							<i class="ace-icon fa fa-print"></i>
-						</a>
+                                                    <a href="{{ route('download_receipt',['order'=>$order['gatway_order_id'],'encyt'=>0]) }}">Download Reciept</a>
 					</div>
 				</div>
 
@@ -57,10 +55,10 @@
 										<td class="center">{{++$key}}</td>
 
 										<td>
-											<a href="#">{{$ticketHelp['title']}}</a>
+											{{$ticketHelp['title']}}
 										</td>
 										<td>
-											<a href="#">{{$val['full_name']}}</a>
+											{{$val['full_name']}}
 										</td>
 										<td class="hidden-xs">
 											{{$val['email']}}

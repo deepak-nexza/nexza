@@ -26,6 +26,7 @@ return [
     'DATA_LIMITER'=>10,
     'TAX_RATE'=>18,
     'STATUS'=>['Progress'=>1,'description'=>2,'Ticket'=>3,'Submitted'=>4,],
+    'ACTIVE'=>1,
 
    
 ];

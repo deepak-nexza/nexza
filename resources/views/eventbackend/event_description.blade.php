@@ -21,6 +21,7 @@
                 </div>
                 @endif
                 <!-- SELECT2 EXAMPLE -->
+             
 
                 {!!
                 Form::open(
@@ -48,13 +49,24 @@
                     </div>
                 </div>
                 <br>
-                <div class="row">
+            
+                <div class="add-listing__form-box" id="gallery-box">
+
+						<h2 class="add-listing__form-title">
+							Gallery:
+						</h2>
+
+						<div class="add-listing__form-content">
+								<input class="" type="file" name="banner_image" id="imgInp" onchange="showLocalImage(this.value)" >
+						</div>
+
+					</div>
+                @php $imag = !empty($eventDetail->banner_image)?$eventDetail->banner_image:'' @endphp
+                <div class="row imgclass {{ !empty($eventDetail->banner_image)?'':'hidden' }} ">
                     <div class="col-md-12">
-                        @if(!empty($eventDetail->banner_image))
                         <div class="form-group">
-                            <img class="img-responsive" src="{{ asset(config('common.uploadDir').'/'.$eventDetail->banner_image)}}" style="width:1100px;height:200px;border:10px solid black">
+                            <img class="img-responsive" id="blah" src="{{ asset(config('common.uploadDir').'/'.$imag)}}" style="width:1100px;height:300px;border:10px solid black">
                         </div><!-- /.form group --> 
-                        @endif
                     </div>
                 </div>
 
@@ -100,9 +112,21 @@ var messages = {
     city_route: "{!! route('statelist') !!}",
     state_route: "{!! route('stateindividual') !!}",
 };
-$(function () {
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+        $('.imgclass').removeClass('hidden');
+      $('#blah').attr('src', e.target.result);
+    }
+    
+    reader.readAsDataURL(input.files[0]); // convert to base64 string
+  }
+}
 
-
+$("#imgInp").change(function() {
+  readURL(this);
 });
 </script>
 @endpush

@@ -293,10 +293,30 @@ class GuestController extends Controller
             $retData = $this->event->saveOrder($data,null);
             $this->event->updateCandidate(['order_id'=>$retData['order_id']],['session_id'=>$retData['session_id']]);
             $this->event->updateCandidate(['session_id'=>null],['order_id'=>$retData['order_id']]);
-            $this->event->updateOrder(['session_id'=>null],['order_id'=>$retData['order_id']]);
+            $this->event->updateOrder(['session_id'=>null,'user_id'=>$eventDetail['user_id'],'event_id'=>$eventDetail['event_id']],['order_id'=>$retData['order_id']]);
             return ['order' => \Scramble::encrypt($retData['order_id'])];
        } catch (\Exception $ex) {
                 return response(Helpers::getExceptionMessage($ex));
        }
     }
+    public function viewList(Request $request){
+        
+             $eventlist = $this->event->getAllEventWithDetails(null);
+            return json_encode($eventlist);
+    }
+      public function delEvent(Request $request){
+        
+             $eventlist = $this->event->delEventdata($request->get('id'));
+            return json_encode($eventlist);
+    }
+      public function createUser(Request $request){
+        
+//        $eventid = (int) $request->get('event_id');
+        $data['event_name'] = (int) $request->get('event_name');
+        
+        $datas = $this->event->saveEvent($data,null);
+        return json_encode($datas);
+    }
+    
+    
 }

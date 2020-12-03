@@ -10,6 +10,7 @@ use App\Repositories\Models\Ticket as ticket;
 use App\Repositories\Models\Candidate as candidate;
 use App\Repositories\Models\Order as order;
 use App\Repositories\Models\Master\State as state;
+use App\Repositories\Models\Master\City as city;
 use App\Repositories\Models\Master\Eventype as Eventype;
 use App\Repositories\Entities\User\Exceptions\BlankDataExceptions;
 use App\Repositories\Entities\User\Exceptions\InvalidDataTypeExceptions;
@@ -103,13 +104,13 @@ class EventRepository implements EventInterface
     public static function getstatetList($country_id,$selected=null) 
         {  
             $statelist =   state::getStateData($country_id);
-            $readyOption = '';
-            if(!empty($statelist)) {
+            $readyOption = '<option>Select State</option>';
+            if(!empty($statelist) && sizeof($statelist)>0) {
                  foreach ($statelist as $state) {
                        $readyOption .= "<option value='".$state['id']."'>".$state['name']."</option>";
                        }
                }else{
-                   $readyOption .= "<option value=''>No result found</option>";
+                   $readyOption = 0;
                }
             return $readyOption;
         }
@@ -142,10 +143,10 @@ class EventRepository implements EventInterface
         {  
         $stateDatta = state::stateDetails($id);
             $readyOption = '';
-            if(!empty($stateDatta)) {
+            if(!empty($stateDatta) && sizeof($stateDatta)>0) {
                        $readyOption .= "<option value='".$stateDatta['id']."' selected>".$stateDatta['name']."</option>";
                        }else { 
-                   $readyOption .= "<option value=''>No result found</option>";
+                   $readyOption .= 0;
                }
             return $readyOption;
         }
@@ -294,6 +295,26 @@ class EventRepository implements EventInterface
         public static function getEventDetailsByID($eventid) 
         {  
             return Venue::getEventDetailsByID($eventid);
+        }
+        
+          public static function getCityList($state_id) 
+        {  
+            $cityList =   city::getAllCityByStateData($state_id);
+            
+             $readyOption = '<option>Select City</option>';
+            if(!empty($cityList)) {
+                 foreach ($cityList as $city) {
+                       $readyOption .= "<option value='".$city['id']."'>".$city['name']."</option>";
+                       }
+               }else{
+                   $readyOption = 0;
+               }
+            return $readyOption;
+        }
+        
+           public static function getEventListWithArr($arr, $user_id) 
+        {  
+            return Venue::getEventListWithArr($arr, $user_id);
         }
         
 }

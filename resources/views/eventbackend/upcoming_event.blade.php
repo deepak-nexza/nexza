@@ -55,7 +55,7 @@
                       @else
                       <td><span class="label label-danger">InActive</span></td>
                       @endif
-                      <td><a href="{{route('update_event',['event_uid'=>$val['event_uid']])}}"> Edit</a>/<a href="{{ route('delete_event',['delid'=>$val['event_id']]) }}">Delete</a></td>
+                      <td><a href="{{route('create_event',['event_id'=>$val['event_id']])}}"> Edit</a>/<a href="{{ route('delete_event',['delid'=>$val['event_id']]) }}">Delete</a></td>
                       
                     </tr>
                     @endforeach

@@ -1,5 +1,6 @@
 @extends('layouts.event.layout_event')
 @section('contentData')
+ss
 <!-- about-block
                 ================================================== -->
 <section class="about" style="background: none">
@@ -50,7 +51,7 @@
                     array(
                     'id' => 'book_now_form',
                     'method'=>'POST',
-                    'url'=>route('book_event_candidates',['name'=>$preg_replace.'-'.$eventDetail['event_uid']]),
+                    'url'=>route('book_event_candidates',['name'=>$preg_replace.'-'.$eventDetail['event_uid'],'encyt'=>0]),
                     'autocomplete' => 'off',
                     Form::pkey() => [
                     'event_id' => $eventDetail['event_id'],

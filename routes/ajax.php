@@ -17,6 +17,8 @@ Route::group(
         Route::post('/getstatelist',['as'=> 'statelist','uses'=>'Event\AjaxController@stateList']);
         Route::post('/stateindividual',['as'=> 'stateindividual','uses'=>'Event\AjaxController@stateDetails']);
         Route::post('/get-event-ticket',['as'=> 'get_event_ticket','uses'=>'Event\AjaxController@getTicketList']);
+        Route::post('/getCityList',['as'=> 'get_city_list','uses'=>'Event\AjaxController@getCityList']);
+        Route::post('/candidates-event', 'Event\AjaxController@serachCandiByEvent')->name('candidates_event');
         
 });
 });

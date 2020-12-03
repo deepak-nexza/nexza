@@ -455,7 +455,7 @@ class UserEventsListener extends BaseEvent
         //$user['user_id'] = \Scramble::encrypt($user['user_id']);
         $user['user_id'] = \Crypt::encrypt($user['user_id']);
         $reset_link_a = "https://".config('event.event_frontend_url').'/password/reset/'.$user['token']."/". $user['user_id'];
-        $reset_link = '<a href="'.$reset_link_a.'" target="_blank">'.trans('headings.click_here').'</a>';
+        $reset_link = '<a href="'.$reset_link_a.'" target="_blank">Click Here</a>';
         $activity = [];
         $activity['app_user_id'] = $user['user_id'];
         $activity['email'] = $user['email'];
@@ -470,7 +470,6 @@ class UserEventsListener extends BaseEvent
                 $reset_link],
                 $email_content->en_mail_body
             );
-            dd($mail_body);
             $subject =  $email_content->en_mail_subject;
             \Mail::send('email', ['varContent' => $mail_body,  'to' => $user["email"]
             ], function ($message) use ($user, $subject) {

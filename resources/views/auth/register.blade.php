@@ -13,39 +13,6 @@
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
 					<div class="tab-pane fade" id="nav-sign" role="tabpanel" aria-labelledby="nav-sign-tab">
-
-						<!-- sign-form-module -->
-<!--						<form class="sign-form">
-							<label class="sign-form__label" for="username">
-								Email address or Username:
-							</label>
-							<input class="sign-form__input-text" type="text" name="username" id="username" placeholder="Email or Username">
-							<label class="sign-form__label" for="password">
-								Password:
-							</label>
-							<input class="sign-form__input-text" type="password" name="password"     placeholder="Password">
-							<div class="sign-form__checkbox">
-								<input class="sign-form__input-checkbox" type="checkbox" name="rememb-check" id="rememb-check">
-								<span class="sign-form__checkbox-style"></span>
-								<span class="sign-form__checkbox-text">Remember me</span>
-							</div>
-							<a class="sign-form__forget-link" href="#">Forget password?</a>
-
-							<button class="sign-form__submit" id="submit-loggin" type="submit">
-								<i class="fa fa-sign-in" aria-hidden="true"></i>
-								Login
-							</button>
-							<p class="sign-form__text">
-								or Login With
-							</p>
-							<ul class="sign-form__social">
-								<li><a href="#" class="facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-								<li><a href="#" class="google"><i class="fa fa-google" aria-hidden="true"></i></a></li>
-							</ul>
-						</form>-->
-
-						<!-- End sign-form-module -->
-
 					</div>
 					<div class="tab-pane fade active show"  id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
 

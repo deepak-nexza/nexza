@@ -29,11 +29,16 @@ class UrlGenerator extends BaseUrlGenerator
     public function route($name, $parameters = [], $absolute = true)
     {
         $encryptedParameters = $parameters;
-
-        if (Auth::guest() === false && Config::get('common.url_encrypted', false) === true) {
-            $encryptedParameters = is_array($parameters) ? $this->encrypt($name, $parameters) : $parameters;
+            if (Auth::guest() === false && Config::get('common.url_encrypted', false) === true ) {
+                if(!isset($parameters['encyt']))
+                {
+                    $encryptedParameters = is_array($parameters) ? $this->encrypt($name, $parameters) : $parameters;
+                    
+                }else{
+                    unset($encryptedParameters['encyt']);
+                }
         }
-
+        unset($encryptedParameters['encyt']);
         return parent::route($name, $encryptedParameters, $absolute);
     }
 
