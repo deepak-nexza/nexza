@@ -1,4 +1,5 @@
 <?php
+die(111111111);
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
