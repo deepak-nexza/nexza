@@ -25,6 +25,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\VerifyCsrfToken::class,
        // \App\Http\Middleware\CleanInputs::class,
         \App\Http\Middleware\EncryptCookies::class,
+        \App\Http\Middleware\HttpsProtocol::class,
     ];
 
     /**
@@ -36,7 +37,7 @@ class Kernel extends HttpKernel
         'web' => [
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\HttpsProtocol::class,
+            
         ],
 
         'api' => [
