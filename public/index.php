@@ -1,5 +1,5 @@
 <?php
-die(1111111119999999994);
+
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
