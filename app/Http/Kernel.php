@@ -25,7 +25,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\VerifyCsrfToken::class,
        // \App\Http\Middleware\CleanInputs::class,
         \App\Http\Middleware\EncryptCookies::class,
-        \App\Http\Middleware\HttpsProtocol::class,
+//        \App\Http\Middleware\HttpsProtocol::class,
     ];
 
     /**
