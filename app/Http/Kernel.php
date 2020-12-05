@@ -36,6 +36,7 @@ class Kernel extends HttpKernel
         'web' => [
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\HttpsProtocol::class,
         ],
 
         'api' => [
