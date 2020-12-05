@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', ''),
+    'url' => env('APP_URL', 'https://nexzoa.com/'),
 
     'asset_url' => env('ASSET_URL', null),
 
