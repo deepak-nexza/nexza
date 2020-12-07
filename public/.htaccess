@@ -4,11 +4,16 @@
     </IfModule>
 
 
-RewriteEngine On
-RewriteCond %{HTTP_HOST} ^nexzoa\.com [NC]
-RewriteCond %{SERVER_PORT} 443
-RewriteRule ^(.*)$ https://www.nexzoa.com/$1 [R,L]
+#RewriteEngine On
+#RewriteCond %{HTTP_HOST} ^nexzoa\.com [NC]
+#RewriteCond %{SERVER_PORT} 443
+#RewriteRule ^(.*)$ https://www.nexzoa.com/$1 [R,L]
+#
 
+RewriteEngine On
+RewriteCond %{SERVER_PORT} 80
+RewriteCond %{REQUEST_URI} /public/
+RewriteRule ^(.*)$ https://www.nexzoa.com/public/$1 [R,L]
 
 #RewriteEngine On 
 #RewriteCond %{HTTPS} off 
