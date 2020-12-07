@@ -22,5 +22,6 @@ composer.lock
 /storage/debugbar/
 /storage/*
 /config/geoip.php
+*.htaccess
 
 
