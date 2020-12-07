@@ -18,7 +18,6 @@ class AppServiceProvider extends ServiceProvider
     {
         
            \URL::forceScheme('https');
-        dd(23);
         /**
          * Somehow PHP is not able to write in default /tmp directory and SwiftMailer was failing.
          * To overcome this situation, we set the TMPDIR environment variable to a new value.
