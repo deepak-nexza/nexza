@@ -25,6 +25,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\VerifyCsrfToken::class,
        // \App\Http\Middleware\CleanInputs::class,
         \App\Http\Middleware\EncryptCookies::class,
+        \App\Http\Middleware\HttpsProtocol,
     ];
 
     /**
@@ -62,7 +63,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'ssl' => \App\Http\Middleware\HttpsProtocol::class,
+        
     ];
 
     /**
