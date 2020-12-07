@@ -1,8 +1,8 @@
 <IfModule mod_rewrite.c>
   # Check if HTTPS is enabled
-#RewriteCond %{HTTPS} ^on$ [NC]
-#RewriteCond %{QUERY_STRING} !https-is-on [NC]
-#RewriteRule (.*) /?https-is-on [R,L]
+RewriteCond %{HTTPS} ^on$ [NC]
+RewriteCond %{QUERY_STRING} !https-is-on [NC]
+RewriteRule (.*) /?https-is-on [R,L]
 
 # Redirect all HTTP to HTTPS requests
 RewriteCond %{HTTPS} off
