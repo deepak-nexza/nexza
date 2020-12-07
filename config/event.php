@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'event_frontend_url' => env('EVENT_FRONTEND_URL', 'https://nexzoa.com/'),
+    'event_frontend_url' => env('EVENT_FRONTEND_URL', 'localhost'),
     'sms_key' => env('SMS_KEY', ''),
     'sms_url' => env('SMS_URL', ''),
 
