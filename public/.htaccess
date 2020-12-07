@@ -7,21 +7,21 @@ RewriteCond %{SERVER_PORT} 80
 RewriteRule ^(.*)$ https://nexzoa.com/$1 [R,L]
 
 
-#    RewriteEngine On 
-#    Header set Access-Control-Allow-Origin "*"
-#    # Handle Authorization Header
-#    RewriteCond %{HTTP:Authorization} .
-#    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-#
-#    # Redirect Trailing Slashes If Not A Folder...
-#    RewriteCond %{REQUEST_FILENAME} !-d
-#    RewriteCond %{REQUEST_URI} (.+)/$
-#    RewriteRule ^ %1 [L,R=301]
-#
-#    # Handle Front Controller...
-#    RewriteCond %{REQUEST_FILENAME} !-d
-#    RewriteCond %{REQUEST_FILENAME} !-f
-#    RewriteRule ^ index.php [L]
+    RewriteEngine On 
+    Header set Access-Control-Allow-Origin "*"
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Handle Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
 </IfModule>
 
 
