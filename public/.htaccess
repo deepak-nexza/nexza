@@ -2,15 +2,26 @@
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
+RewriteEngine On
 
-    RewriteEngine On
-    RewriteCond %{HTTPS} !on 
+# If we receive a forwarded http request from a proxy...
+RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
+
+# ...or just a plain old http request directly from the client
+RewriteCond %{HTTP:X-Forwarded-Proto} =""
+RewriteCond %{HTTPS} !=on
+
+# Redirect to https version
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#
+#    RewriteEngine On
+#    RewriteCond %{HTTPS} !on 
     # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
+#    RewriteCond %{HTTP:Authorization} .
 #    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 #    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-RewriteCond %{SERVER_PORT} 80
-RewriteRule ^(.*)$ https://nexzoa.com/$1 [R,L]
+#RewriteCond %{SERVER_PORT} 80
+#RewriteRule ^(.*)$ https://nexzoa.com/$1 [R,L]
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
