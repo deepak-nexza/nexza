@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $environment = \App::environment();
-       if($environment=='procuction') {
+       if($environment=='production') {
            \URL::forceScheme('https');
        }
         /**
@@ -58,7 +58,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
          $environment = \App::environment();
-       if($environment=='procuction') {
+       if($environment=='production') {
         $this->app['request']->server->set('HTTPS', true);
        }
         $this->setCustomUrlGenerator();
