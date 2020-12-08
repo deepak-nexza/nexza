@@ -9,7 +9,7 @@
 
 <!------ Include the above in your HEAD tag ---------->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-         <link rel="icon"  href="{{asset( 'event/'. $val['banner_image']) }}" type="image/gif" sizes="16x16"> 
+         <link rel="icon"  href="{{asset( 'event/images/favicon-32x32.png') }}" type="image/gif" sizes="16x16"> 
 	<link rel="stylesheet" href="{{ asset('event/css/triptip-assets.min.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ asset('event/css/style.css') }}">
         @yield('headDatajsorcss')

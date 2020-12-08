@@ -16,8 +16,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        
+        $environment = \App::environment();
+       if($environment=='procuction') {
            \URL::forceScheme('https');
+       }
         /**
          * Somehow PHP is not able to write in default /tmp directory and SwiftMailer was failing.
          * To overcome this situation, we set the TMPDIR environment variable to a new value.
@@ -55,7 +57,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+         $environment = \App::environment();
+       if($environment=='procuction') {
         $this->app['request']->server->set('HTTPS', true);
+       }
         $this->setCustomUrlGenerator();
     }
 
