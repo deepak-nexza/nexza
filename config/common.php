@@ -20,7 +20,7 @@ return [
     'url_encrypted'=>env('URL_ENCRYPTED',false),
     'nexzoa_per'=>9,
     'nexzoa_Gateway_fee'=>2.9,
-    'FROM_EMAIL'=>'no_reply@gmail.com',
+    'FROM_EMAIL'=>'nexzoa@gmail.com',
     'ADMIN_ID'=>'36',
     'EVENT_STATUS'=>['1'=>'Upcoming status','2'=>'Closed status'],
     'DATA_LIMITER'=>10,
